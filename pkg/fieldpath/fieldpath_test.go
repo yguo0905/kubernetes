@@ -88,6 +88,16 @@ func TestExtractFieldPathAsString(t *testing.T) {
 			},
 			expectedValue: "builder=\"john-doe\"",
 		},
+		{
+			name:      "ok - annotation",
+			fieldPath: "metadata.annotations['spec.pod.beta.kubernetes.io/statefulset-index']",
+			obj: &v1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Annotations: map[string]string{"spec.pod.beta.kubernetes.io/statefulset-index": "1"},
+				},
+			},
+			expectedValue: "1",
+		},
 
 		{
 			name:      "invalid expression",
@@ -95,6 +105,16 @@ func TestExtractFieldPathAsString(t *testing.T) {
 			obj: &v1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace: "object-namespace",
+				},
+			},
+			expectedMessageFragment: "unsupported fieldPath",
+		},
+		{
+			name:      "invalid annotation",
+			fieldPath: "metadata.annotations['unknown.key']",
+			obj: &v1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Annotations: map[string]string{"foo": "bar"},
 				},
 			},
 			expectedMessageFragment: "unsupported fieldPath",
@@ -113,6 +133,86 @@ func TestExtractFieldPathAsString(t *testing.T) {
 			}
 		} else if e := tc.expectedValue; e != "" && e != actual {
 			t.Errorf("%v: unexpected result; got %q, expected %q", tc.name, actual, e)
+		}
+	}
+}
+
+func TestSplitMaybeSubscriptedPath(t *testing.T) {
+	cases := []struct {
+		fieldPath             string
+		expectedPath          string
+		expectedSubscript     string
+		expectedIsSubscripted bool
+	}{
+		{
+			fieldPath:             "metadata.annotations['key']",
+			expectedPath:          "metadata.annotations",
+			expectedSubscript:     "key",
+			expectedIsSubscripted: true,
+		},
+		{
+			fieldPath:             "metadata.annotations['a[b']c']",
+			expectedPath:          "metadata.annotations",
+			expectedSubscript:     "a[b']c",
+			expectedIsSubscripted: true,
+		},
+		{
+			fieldPath:             "metadata.labels['['key']",
+			expectedPath:          "metadata.labels",
+			expectedSubscript:     "['key",
+			expectedIsSubscripted: true,
+		},
+		{
+			fieldPath:             "metadata.labels['key']']",
+			expectedPath:          "metadata.labels",
+			expectedSubscript:     "key']",
+			expectedIsSubscripted: true,
+		},
+		{
+			fieldPath:             "metadata.labels['']",
+			expectedPath:          "metadata.labels['']",
+			expectedSubscript:     "",
+			expectedIsSubscripted: false,
+		},
+		{
+			fieldPath:             "metadata.labels[]",
+			expectedPath:          "metadata.labels[]",
+			expectedSubscript:     "",
+			expectedIsSubscripted: false,
+		},
+		{
+			fieldPath:             "metadata.labels[']",
+			expectedPath:          "metadata.labels[']",
+			expectedSubscript:     "",
+			expectedIsSubscripted: false,
+		},
+		{
+			fieldPath:             "metadata.labels['key']foo",
+			expectedPath:          "metadata.labels['key']foo",
+			expectedSubscript:     "",
+			expectedIsSubscripted: false,
+		},
+		{
+			fieldPath:             "['key']",
+			expectedPath:          "['key']",
+			expectedSubscript:     "",
+			expectedIsSubscripted: false,
+		},
+		{
+			fieldPath:             "metadata.labels",
+			expectedPath:          "metadata.labels",
+			expectedSubscript:     "",
+			expectedIsSubscripted: false,
+		},
+	}
+	for _, tc := range cases {
+		path, subscript, isSubscripted := SplitMaybeSubscriptedPath(tc.fieldPath)
+		if path != tc.expectedPath ||
+			subscript != tc.expectedSubscript ||
+			isSubscripted != tc.expectedIsSubscripted {
+			t.Errorf("SplitMaybeSubscriptedPath(%q) = (%q, %q, %t), expect (%q, %q, %t)",
+				tc.fieldPath, path, subscript, isSubscripted,
+				tc.expectedPath, tc.expectedSubscript, tc.expectedIsSubscripted)
 		}
 	}
 }
