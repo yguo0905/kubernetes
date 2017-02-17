@@ -18,6 +18,7 @@ go_library(
     ],
     deps = [
         "//pkg/api:go_default_library",
+        "//pkg/api/util:go_default_library",
         "//pkg/apis/extensions:go_default_library",
         "//pkg/util/parsers:go_default_library",
         "//pkg/util/pointer:go_default_library",

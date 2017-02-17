@@ -9,23 +9,16 @@ load(
 go_library(
     name = "go_default_library",
     srcs = [
-        "doc.go",
-        "fieldpath.go",
-    ],
-    deps = [
-        "//pkg/api/util:go_default_library",
-        "//vendor/k8s.io/apimachinery/pkg/api/meta:go_default_library",
+        "annotations.go",
     ],
 )
 
 go_test(
     name = "go_default_test",
-    srcs = ["fieldpath_test.go"],
-    library = ":go_default_library",
-    deps = [
-        "//vendor/k8s.io/api/core/v1:go_default_library",
-        "//vendor/k8s.io/apimachinery/pkg/apis/meta/v1:go_default_library",
+    srcs = [
+        "annotations_test.go",
     ],
+    library = ":go_default_library",
 )
 
 filegroup(
