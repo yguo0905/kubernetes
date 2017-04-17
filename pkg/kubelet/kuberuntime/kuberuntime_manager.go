@@ -126,7 +126,7 @@ func NewKubeGenericRuntimeManager(
 	osInterface kubecontainer.OSInterface,
 	networkPlugin network.NetworkPlugin,
 	runtimeHelper kubecontainer.RuntimeHelper,
-	httpClient types.HttpGetter,
+	httpClient types.HttpClient,
 	imageBackOff *flowcontrol.Backoff,
 	serializeImagePulls bool,
 	imagePullQPS float32,

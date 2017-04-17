@@ -191,6 +191,11 @@ func DeepCopy_v1_DeleteOptions(in interface{}, out interface{}, c *conversion.Cl
 			*out = new(DeletionPropagation)
 			**out = **in
 		}
+		if in.Reason != nil {
+			in, out := &in.Reason, &out.Reason
+			*out = new(TerminationReason)
+			**out = **in
+		}
 		return nil
 	}
 }
@@ -402,6 +407,11 @@ func DeepCopy_v1_ObjectMeta(in interface{}, out interface{}, c *conversion.Clone
 			in, out := &in.Finalizers, &out.Finalizers
 			*out = make([]string, len(*in))
 			copy(*out, *in)
+		}
+		if in.TerminationReason != nil {
+			in, out := &in.TerminationReason, &out.TerminationReason
+			*out = new(TerminationReason)
+			**out = **in
 		}
 		return nil
 	}

@@ -39,6 +39,11 @@ type fakeHTTP struct {
 	err error
 }
 
+func (f *fakeHTTP) Do(req *http.Request) (*http.Response, error) {
+	f.url = req.URL.String()
+	return nil, f.err
+}
+
 func (f *fakeHTTP) Get(url string) (*http.Response, error) {
 	f.url = url
 	return nil, f.err

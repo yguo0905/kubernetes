@@ -229,7 +229,7 @@ func NewDockerManager(
 	osInterface kubecontainer.OSInterface,
 	networkPlugin knetwork.NetworkPlugin,
 	runtimeHelper kubecontainer.RuntimeHelper,
-	httpClient types.HttpGetter,
+	httpClient types.HttpClient,
 	execHandler ExecHandler,
 	oomAdjuster *oom.OOMAdjuster,
 	procFs procfs.ProcFSInterface,
@@ -1604,7 +1604,7 @@ func (dm *DockerManager) killContainer(containerID kubecontainer.ContainerID, co
 		go func() {
 			defer close(done)
 			defer utilruntime.HandleCrash()
-			if msg, err := dm.runner.Run(containerID, pod, container, container.Lifecycle.PreStop); err != nil {
+			if msg, err := dm.runner.RunPreStop(containerID, pod, container, container.Lifecycle.PreStop); err != nil {
 				glog.Errorf("preStop hook for container %q failed: %v", name, err)
 				dm.generateFailedContainerEvent(containerID, pod.Name, events.FailedPreStopHook, msg)
 			}
@@ -1779,7 +1779,7 @@ func (dm *DockerManager) runContainerInPod(pod *v1.Pod, container *v1.Container,
 	}
 
 	if container.Lifecycle != nil && container.Lifecycle.PostStart != nil {
-		msg, handlerErr := dm.runner.Run(id, pod, container, container.Lifecycle.PostStart)
+		msg, handlerErr := dm.runner.RunPostStart(id, pod, container, container.Lifecycle.PostStart)
 		if handlerErr != nil {
 			err := fmt.Errorf("PostStart handler: %v", handlerErr)
 			dm.generateFailedContainerEvent(id, pod.Name, events.FailedPostStartHook, msg)

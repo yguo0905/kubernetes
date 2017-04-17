@@ -277,6 +277,8 @@ func RegisterConversions(scheme *runtime.Scheme) error {
 		Convert_api_PodTemplateSpec_To_v1_PodTemplateSpec,
 		Convert_v1_PortworxVolumeSource_To_api_PortworxVolumeSource,
 		Convert_api_PortworxVolumeSource_To_v1_PortworxVolumeSource,
+		Convert_v1_PreStopHandler_To_api_PreStopHandler,
+		Convert_api_PreStopHandler_To_v1_PreStopHandler,
 		Convert_v1_Preconditions_To_api_Preconditions,
 		Convert_api_Preconditions_To_v1_Preconditions,
 		Convert_v1_PreferAvoidPodsEntry_To_api_PreferAvoidPodsEntry,
@@ -357,6 +359,8 @@ func RegisterConversions(scheme *runtime.Scheme) error {
 		Convert_api_TCPSocketAction_To_v1_TCPSocketAction,
 		Convert_v1_Taint_To_api_Taint,
 		Convert_api_Taint_To_v1_Taint,
+		Convert_v1_TerminationReasonDelivery_To_api_TerminationReasonDelivery,
+		Convert_api_TerminationReasonDelivery_To_v1_TerminationReasonDelivery,
 		Convert_v1_Toleration_To_api_Toleration,
 		Convert_api_Toleration_To_v1_Toleration,
 		Convert_v1_Volume_To_api_Volume,
@@ -1752,7 +1756,7 @@ func Convert_api_KeyToPath_To_v1_KeyToPath(in *api.KeyToPath, out *KeyToPath, s 
 
 func autoConvert_v1_Lifecycle_To_api_Lifecycle(in *Lifecycle, out *api.Lifecycle, s conversion.Scope) error {
 	out.PostStart = (*api.Handler)(unsafe.Pointer(in.PostStart))
-	out.PreStop = (*api.Handler)(unsafe.Pointer(in.PreStop))
+	out.PreStop = (*api.PreStopHandler)(unsafe.Pointer(in.PreStop))
 	return nil
 }
 
@@ -1762,7 +1766,7 @@ func Convert_v1_Lifecycle_To_api_Lifecycle(in *Lifecycle, out *api.Lifecycle, s 
 
 func autoConvert_api_Lifecycle_To_v1_Lifecycle(in *api.Lifecycle, out *Lifecycle, s conversion.Scope) error {
 	out.PostStart = (*Handler)(unsafe.Pointer(in.PostStart))
-	out.PreStop = (*Handler)(unsafe.Pointer(in.PreStop))
+	out.PreStop = (*PreStopHandler)(unsafe.Pointer(in.PreStop))
 	return nil
 }
 
@@ -3441,6 +3445,30 @@ func Convert_api_PortworxVolumeSource_To_v1_PortworxVolumeSource(in *api.Portwor
 	return autoConvert_api_PortworxVolumeSource_To_v1_PortworxVolumeSource(in, out, s)
 }
 
+func autoConvert_v1_PreStopHandler_To_api_PreStopHandler(in *PreStopHandler, out *api.PreStopHandler, s conversion.Scope) error {
+	if err := Convert_v1_Handler_To_api_Handler(&in.Handler, &out.Handler, s); err != nil {
+		return err
+	}
+	out.ReasonDelivery = (*api.TerminationReasonDelivery)(unsafe.Pointer(in.ReasonDelivery))
+	return nil
+}
+
+func Convert_v1_PreStopHandler_To_api_PreStopHandler(in *PreStopHandler, out *api.PreStopHandler, s conversion.Scope) error {
+	return autoConvert_v1_PreStopHandler_To_api_PreStopHandler(in, out, s)
+}
+
+func autoConvert_api_PreStopHandler_To_v1_PreStopHandler(in *api.PreStopHandler, out *PreStopHandler, s conversion.Scope) error {
+	if err := Convert_api_Handler_To_v1_Handler(&in.Handler, &out.Handler, s); err != nil {
+		return err
+	}
+	out.ReasonDelivery = (*TerminationReasonDelivery)(unsafe.Pointer(in.ReasonDelivery))
+	return nil
+}
+
+func Convert_api_PreStopHandler_To_v1_PreStopHandler(in *api.PreStopHandler, out *PreStopHandler, s conversion.Scope) error {
+	return autoConvert_api_PreStopHandler_To_v1_PreStopHandler(in, out, s)
+}
+
 func autoConvert_v1_Preconditions_To_api_Preconditions(in *Preconditions, out *api.Preconditions, s conversion.Scope) error {
 	out.UID = (*types.UID)(unsafe.Pointer(in.UID))
 	return nil
@@ -4493,6 +4521,26 @@ func autoConvert_api_Taint_To_v1_Taint(in *api.Taint, out *Taint, s conversion.S
 
 func Convert_api_Taint_To_v1_Taint(in *api.Taint, out *Taint, s conversion.Scope) error {
 	return autoConvert_api_Taint_To_v1_Taint(in, out, s)
+}
+
+func autoConvert_v1_TerminationReasonDelivery_To_api_TerminationReasonDelivery(in *TerminationReasonDelivery, out *api.TerminationReasonDelivery, s conversion.Scope) error {
+	out.Env = (*string)(unsafe.Pointer(in.Env))
+	out.Header = (*string)(unsafe.Pointer(in.Header))
+	return nil
+}
+
+func Convert_v1_TerminationReasonDelivery_To_api_TerminationReasonDelivery(in *TerminationReasonDelivery, out *api.TerminationReasonDelivery, s conversion.Scope) error {
+	return autoConvert_v1_TerminationReasonDelivery_To_api_TerminationReasonDelivery(in, out, s)
+}
+
+func autoConvert_api_TerminationReasonDelivery_To_v1_TerminationReasonDelivery(in *api.TerminationReasonDelivery, out *TerminationReasonDelivery, s conversion.Scope) error {
+	out.Env = (*string)(unsafe.Pointer(in.Env))
+	out.Header = (*string)(unsafe.Pointer(in.Header))
+	return nil
+}
+
+func Convert_api_TerminationReasonDelivery_To_v1_TerminationReasonDelivery(in *api.TerminationReasonDelivery, out *TerminationReasonDelivery, s conversion.Scope) error {
+	return autoConvert_api_TerminationReasonDelivery_To_v1_TerminationReasonDelivery(in, out, s)
 }
 
 func autoConvert_v1_Toleration_To_api_Toleration(in *Toleration, out *api.Toleration, s conversion.Scope) error {

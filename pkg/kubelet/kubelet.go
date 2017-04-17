@@ -866,7 +866,7 @@ type Kubelet struct {
 	// Optional, defaults to simple Docker implementation
 	runner kubecontainer.ContainerCommandRunner
 	// Optional, client for http requests, defaults to empty client
-	httpClient kubetypes.HttpGetter
+	httpClient kubetypes.HttpClient
 
 	// cAdvisor used for container information.
 	cadvisor cadvisor.Interface

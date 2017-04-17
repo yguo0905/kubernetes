@@ -207,7 +207,7 @@ func New(
 	containerRefManager *kubecontainer.RefManager,
 	podGetter podGetter,
 	livenessManager proberesults.Manager,
-	httpClient types.HttpGetter,
+	httpClient types.HttpClient,
 	networkPlugin network.NetworkPlugin,
 	hairpinMode bool,
 	execer utilexec.Interface,
@@ -1410,7 +1410,7 @@ func (r *Runtime) RunPod(pod *v1.Pod, pullSecrets []v1.Secret) error {
 
 func (r *Runtime) runPreStopHook(containerID kubecontainer.ContainerID, pod *v1.Pod, container *v1.Container) error {
 	glog.V(4).Infof("rkt: Running pre-stop hook for container %q of pod %q", container.Name, format.Pod(pod))
-	msg, err := r.runner.Run(containerID, pod, container, container.Lifecycle.PreStop)
+	msg, err := r.runner.RunPreStop(containerID, pod, container, container.Lifecycle.PreStop)
 	if err != nil {
 		ref, ok := r.containerRefManager.GetRef(containerID)
 		if !ok {
@@ -1452,7 +1452,7 @@ func (r *Runtime) runPostStartHook(containerID kubecontainer.ContainerID, pod *v
 		return fmt.Errorf("rkt: Pod %q doesn't become running in %v: %v", format.Pod(pod), timeout, err)
 	}
 
-	msg, err := r.runner.Run(containerID, pod, container, container.Lifecycle.PostStart)
+	msg, err := r.runner.RunPostStart(containerID, pod, container, container.Lifecycle.PostStart)
 	if err != nil {
 		ref, ok := r.containerRefManager.GetRef(containerID)
 		if !ok {

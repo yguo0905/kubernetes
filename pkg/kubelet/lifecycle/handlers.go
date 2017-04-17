@@ -34,7 +34,7 @@ import (
 )
 
 type HandlerRunner struct {
-	httpGetter       kubetypes.HttpGetter
+	httpClient       kubetypes.HttpClient
 	commandRunner    kubecontainer.ContainerCommandRunner
 	containerManager podStatusProvider
 }
@@ -43,15 +43,42 @@ type podStatusProvider interface {
 	GetPodStatus(uid types.UID, name, namespace string) (*kubecontainer.PodStatus, error)
 }
 
-func NewHandlerRunner(httpGetter kubetypes.HttpGetter, commandRunner kubecontainer.ContainerCommandRunner, containerManager podStatusProvider) kubecontainer.HandlerRunner {
+func NewHandlerRunner(httpClient kubetypes.HttpClient, commandRunner kubecontainer.ContainerCommandRunner, containerManager podStatusProvider) kubecontainer.HandlerRunner {
 	return &HandlerRunner{
-		httpGetter:       httpGetter,
+		httpClient:       httpClient,
 		commandRunner:    commandRunner,
 		containerManager: containerManager,
 	}
 }
 
-func (hr *HandlerRunner) Run(containerID kubecontainer.ContainerID, pod *v1.Pod, container *v1.Container, handler *v1.Handler) (string, error) {
+func (hr *HandlerRunner) RunPostStart(containerID kubecontainer.ContainerID, pod *v1.Pod, container *v1.Container, handler *v1.Handler) (string, error) {
+	return hr.run(containerID, pod, container, handler)
+}
+
+func (hr *HandlerRunner) RunPreStop(containerID kubecontainer.ContainerID, pod *v1.Pod, container *v1.Container, preStopHandler *v1.PreStopHandler) (string, error) {
+	var terminationReason string
+	if pod.TerminationReason != nil {
+		terminationReason = string(*pod.TerminationReason)
+	}
+	switch {
+	case preStopHandler.Handler.Exec != nil:
+		if preStopHandler.ReasonDelivery != nil && preStopHandler.ReasonDelivery.Env != nil {
+			setEnvCommand := []string{"set", fmt.Sprintf("%s=%s", preStopHandler.ReasonDelivery.Env, terminationReason)}
+			if output, err := hr.commandRunner.RunInContainer(containerID, setEnvCommand, 0); err != nil {
+				msg := fmt.Sprintf("Exec lifecycle hook (%v) for Container %q in Pod %q failed - error: %v, message: %q", preStopHandler.Exec.Command, container.Name, format.Pod(pod), err, string(output))
+				glog.V(1).Infof(msg)
+				return msg, err
+			}
+		}
+	case preStopHandler.HTTPGet != nil:
+		if preStopHandler.ReasonDelivery != nil && preStopHandler.ReasonDelivery.Header != nil {
+			preStopHandler.Handler.HTTPGet.HTTPHeaders = append(preStopHandler.Handler.HTTPGet.HTTPHeaders, v1.HTTPHeader{*preStopHandler.ReasonDelivery.Header, terminationReason})
+		}
+	}
+	return hr.run(containerID, pod, container, &preStopHandler.Handler)
+}
+
+func (hr *HandlerRunner) run(containerID kubecontainer.ContainerID, pod *v1.Pod, container *v1.Container, handler *v1.Handler) (string, error) {
 	switch {
 	case handler.Exec != nil:
 		var msg string
@@ -124,7 +151,14 @@ func (hr *HandlerRunner) runHTTPHandler(pod *v1.Pod, container *v1.Container, ha
 		}
 	}
 	url := fmt.Sprintf("http://%s/%s", net.JoinHostPort(host, strconv.Itoa(port)), handler.HTTPGet.Path)
-	resp, err := hr.httpGetter.Get(url)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return "", fmt.Errorf("failed to create HTTP request for lifecycle hook: %v", err)
+	}
+	for _, h := range handler.HTTPGet.HTTPHeaders {
+		req.Header.Add(h.Name, h.Value)
+	}
+	resp, err := hr.httpClient.Do(req)
 	return getHttpRespBody(resp), err
 }
 

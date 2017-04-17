@@ -139,6 +139,11 @@ message DeleteOptions {
   // metadata.finalizers and the resource-specific default policy.
   // +optional
   optional string propagationPolicy = 4;
+
+  // Reason indicates the reason for the Pod's termination. This field may be
+  // supplied by a user or a controller.
+  // +optional
+  optional string reason = 5;
 }
 
 // Duration is a wrapper around time.Duration which supports correct
@@ -459,6 +464,10 @@ message ObjectMeta {
   // This field is not set anywhere right now and apiserver is going to ignore it if set in create or update request.
   // +optional
   optional string clusterName = 15;
+
+  // TerminationReason indicates the reason for the Pod's termination. This
+  // field may be supplied by a user or a controller.
+  optional string terminationReason = 16;
 }
 
 // OwnerReference contains enough information to let you identify an owning

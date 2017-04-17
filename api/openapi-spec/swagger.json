@@ -1069,6 +1069,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -1472,6 +1478,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -1877,6 +1889,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -2281,6 +2299,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -2684,6 +2708,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -3224,6 +3254,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -4695,6 +4731,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -5098,6 +5140,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -5775,6 +5823,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -6315,6 +6369,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -6718,6 +6778,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -7760,6 +7826,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -8333,6 +8405,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -9296,6 +9374,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -15344,6 +15428,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -16085,6 +16175,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -17970,6 +18066,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -18874,6 +18976,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -19813,6 +19921,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -20718,6 +20832,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -21257,6 +21377,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -22443,6 +22569,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -23414,6 +23546,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -23953,6 +24091,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -24696,6 +24840,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -25236,6 +25386,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -25639,6 +25795,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -26521,6 +26683,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -26985,6 +27153,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -29047,6 +29221,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -29961,6 +30141,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -30332,6 +30518,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -30712,6 +30904,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -31100,6 +31298,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -32502,6 +32706,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -32873,6 +33083,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -33253,6 +33469,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -33641,6 +33863,12 @@
        "type": "string",
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
+       "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
        "in": "query"
       }
      ],
@@ -35100,6 +35328,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -35894,6 +36128,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -36477,6 +36717,12 @@
        "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
        "name": "propagationPolicy",
        "in": "query"
+      },
+      {
+       "uniqueItems": true,
+       "type": "string",
+       "name": "reason",
+       "in": "query"
       }
      ],
      "responses": {
@@ -36979,6 +37225,10 @@
      "propagationPolicy": {
       "description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy.",
       "type": "string"
+     },
+     "reason": {
+      "description": "Reason indicates the reason for the Pod's termination. This field may be supplied by a user or a controller.",
+      "type": "string"
      }
     }
    },
@@ -37119,6 +37369,10 @@
       "items": {
        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.OwnerReference"
       }
+     },
+     "reason": {
+      "description": "TerminationReason indicates the reason for the Pod's termination. This field may be supplied by a user or a controller.",
+      "type": "string"
      },
      "resourceVersion": {
       "description": "An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.\n\nPopulated by the system. Read-only. Value must be treated as opaque by clients and . More info: http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#concurrency-control-and-consistency",
@@ -38769,7 +39023,7 @@
      },
      "preStop": {
       "description": "PreStop is called immediately before a container is terminated. The container is terminated after the handler completes. The reason for termination is passed to the handler. Regardless of the outcome of the handler, the container is eventually terminated. Other management of the container blocks until the hook completes. More info: http://kubernetes.io/docs/user-guide/container-environment#hook-details",
-      "$ref": "#/definitions/io.k8s.kubernetes.pkg.api.v1.Handler"
+      "$ref": "#/definitions/io.k8s.kubernetes.pkg.api.v1.PreStopHandler"
      }
     }
    },
@@ -40223,6 +40477,27 @@
      }
     }
    },
+   "io.k8s.kubernetes.pkg.api.v1.PreStopHandler": {
+    "description": "PreStopHandler aggregates Handler and a TerminationReasonDelivery to allow for configuration of the delivery method for a termination reason consumed by the hook.",
+    "properties": {
+     "exec": {
+      "description": "One and only one of the following should be specified. Exec specifies the action to take.",
+      "$ref": "#/definitions/io.k8s.kubernetes.pkg.api.v1.ExecAction"
+     },
+     "httpGet": {
+      "description": "HTTPGet specifies the http request to perform.",
+      "$ref": "#/definitions/io.k8s.kubernetes.pkg.api.v1.HTTPGetAction"
+     },
+     "reasonDelivery": {
+      "description": "ReasonDelivery provides configuration for the delivery of a termination reason to the PreStopHandler. If nil, the termination reason will be delivered to the preStop lifecycle hook by setting the KUBE_POD_TERM_REASON environment variable to the value of the termination reason.",
+      "$ref": "#/definitions/io.k8s.kubernetes.pkg.api.v1.TerminationReasonDelivery"
+     },
+     "tcpSocket": {
+      "description": "TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported",
+      "$ref": "#/definitions/io.k8s.kubernetes.pkg.api.v1.TCPSocketAction"
+     }
+    }
+   },
    "io.k8s.kubernetes.pkg.api.v1.PreferredSchedulingTerm": {
     "description": "An empty preferred scheduling term matches all objects with implicit weight 0 (i.e. it's a no-op). A null preferred scheduling term matches no objects (i.e. is also a no-op).",
     "required": [
@@ -41214,6 +41489,23 @@
      },
      "value": {
       "description": "Required. The taint value corresponding to the taint key.",
+      "type": "string"
+     }
+    }
+   },
+   "io.k8s.kubernetes.pkg.api.v1.TerminationReasonDelivery": {
+    "description": "TerminationReasonDelivery is used to configure the delivery method for termination reasons. It is a union type, and exactly one of the fields may be non-nil. The Env field is compatible with command preStop lifecycle hooks, and the Header field is compatible with HTTP GET hooks.",
+    "required": [
+     "env",
+     "header"
+    ],
+    "properties": {
+     "env": {
+      "description": "Env is the name of the environment variable that will be set with the termination reason. Env must only be set when used with a command Action, and it must be a valid environment variable name.",
+      "type": "string"
+     },
+     "header": {
+      "description": "Header is the name of the header that will be set to the termination reason. It must only be set when used with a HTTP GET Action.",
       "type": "string"
      }
     }

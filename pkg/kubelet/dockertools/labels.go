@@ -239,7 +239,7 @@ func supplyContainerInfoWithOldLabel(labels map[string]string, containerInfo *la
 		return
 	}
 	if containerInfo.PreStopHandler == nil && container.Lifecycle != nil {
-		containerInfo.PreStopHandler = container.Lifecycle.PreStop
+		containerInfo.PreStopHandler = &container.Lifecycle.PreStop.Handler
 	}
 }
 

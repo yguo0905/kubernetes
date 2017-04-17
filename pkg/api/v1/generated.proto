@@ -1266,7 +1266,7 @@ message Lifecycle {
   // Other management of the container blocks until the hook completes.
   // More info: http://kubernetes.io/docs/user-guide/container-environment#hook-details
   // +optional
-  optional Handler preStop = 2;
+  optional PreStopHandler preStop = 2;
 }
 
 // LimitRange sets resource usage limits for each kind of resource in a Namespace.
@@ -2822,6 +2822,20 @@ message PortworxVolumeSource {
   optional bool readOnly = 3;
 }
 
+// PreStopHandler aggregates Handler and a TerminationReasonDelivery to allow
+// for configuration of the delivery method for a termination reason consumed
+// by the hook.
+message PreStopHandler {
+  optional Handler handler = 1;
+
+  // ReasonDelivery provides configuration for the delivery of a termination
+  // reason to the PreStopHandler. If nil, the termination reason will be
+  // delivered to the preStop lifecycle hook by setting the
+  // KUBE_POD_TERM_REASON environment variable to the value of the termination
+  // reason.
+  optional TerminationReasonDelivery reasonDelivery = 2;
+}
+
 // Preconditions must be fulfilled before an operation (update, delete, etc.) is carried out.
 // +k8s:openapi-gen=false
 message Preconditions {
@@ -3693,6 +3707,21 @@ message Taint {
   // It is only written for NoExecute taints.
   // +optional
   optional k8s.io.apimachinery.pkg.apis.meta.v1.Time timeAdded = 4;
+}
+
+// TerminationReasonDelivery is used to configure the delivery method for
+// termination reasons. It is a union type, and exactly one of the fields may
+// be non-nil. The Env field is compatible with command preStop lifecycle
+// hooks, and the Header field is compatible with HTTP GET hooks.
+message TerminationReasonDelivery {
+  // Env is the name of the environment variable that will be set with the
+  // termination reason. Env must only be set when used with a command
+  // Action, and it must be a valid environment variable name.
+  optional string env = 1;
+
+  // Header is the name of the header that will be set to the termination
+  // reason. It must only be set when used with a HTTP GET Action.
+  optional string header = 2;
 }
 
 // The pod this Toleration is attached to tolerates any taint that matches

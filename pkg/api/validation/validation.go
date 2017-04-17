@@ -1753,13 +1753,28 @@ func validateHandler(handler *api.Handler, fldPath *field.Path) field.ErrorList 
 	return allErrors
 }
 
+func validatePreStopHandler(preStopHandler *api.PreStopHandler, fldPath *field.Path) field.ErrorList {
+	allErrors := validateHandler(&preStopHandler.Handler, fldPath.Child("Handler"))
+	if preStopHandler.Handler.Exec != nil {
+		if preStopHandler.ReasonDelivery != nil && preStopHandler.ReasonDelivery.Header != nil {
+			allErrors = append(allErrors, field.Forbidden(fldPath.Child("reasonDelivery"), "may not specify header when handler.exec is set"))
+		}
+	}
+	if preStopHandler.Handler.HTTPGet != nil {
+		if preStopHandler.ReasonDelivery != nil && preStopHandler.ReasonDelivery.Env != nil {
+			allErrors = append(allErrors, field.Forbidden(fldPath.Child("reasonDelivery"), "may not specify env when handler.httpGet is set"))
+		}
+	}
+	return allErrors
+}
+
 func validateLifecycle(lifecycle *api.Lifecycle, fldPath *field.Path) field.ErrorList {
 	allErrs := field.ErrorList{}
 	if lifecycle.PostStart != nil {
 		allErrs = append(allErrs, validateHandler(lifecycle.PostStart, fldPath.Child("postStart"))...)
 	}
 	if lifecycle.PreStop != nil {
-		allErrs = append(allErrs, validateHandler(lifecycle.PreStop, fldPath.Child("preStop"))...)
+		allErrs = append(allErrs, validatePreStopHandler(lifecycle.PreStop, fldPath.Child("preStop"))...)
 	}
 	return allErrs
 }

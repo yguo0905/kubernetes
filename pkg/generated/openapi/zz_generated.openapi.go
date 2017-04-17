@@ -370,6 +370,13 @@ func GetOpenAPIDefinitions(ref openapi.ReferenceCallback) map[string]openapi.Ope
 								Format:      "",
 							},
 						},
+						"reason": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Reason indicates the reason for the Pod's termination. This field may be supplied by a user or a controller.",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
 					},
 				},
 			},
@@ -930,6 +937,13 @@ func GetOpenAPIDefinitions(ref openapi.ReferenceCallback) map[string]openapi.Ope
 						"clusterName": {
 							SchemaProps: spec.SchemaProps{
 								Description: "The name of the cluster which the object belongs to. This is used to distinguish resources with same name and namespace in different clusters. This field is not set anywhere right now and apiserver is going to ignore it if set in create or update request.",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"reason": {
+							SchemaProps: spec.SchemaProps{
+								Description: "TerminationReason indicates the reason for the Pod's termination. This field may be supplied by a user or a controller.",
 								Type:        []string{"string"},
 								Format:      "",
 							},
@@ -4023,14 +4037,14 @@ func GetOpenAPIDefinitions(ref openapi.ReferenceCallback) map[string]openapi.Ope
 						"preStop": {
 							SchemaProps: spec.SchemaProps{
 								Description: "PreStop is called immediately before a container is terminated. The container is terminated after the handler completes. The reason for termination is passed to the handler. Regardless of the outcome of the handler, the container is eventually terminated. Other management of the container blocks until the hook completes. More info: http://kubernetes.io/docs/user-guide/container-environment#hook-details",
-								Ref:         ref("k8s.io/kubernetes/pkg/api/v1.Handler"),
+								Ref:         ref("k8s.io/kubernetes/pkg/api/v1.PreStopHandler"),
 							},
 						},
 					},
 				},
 			},
 			Dependencies: []string{
-				"k8s.io/kubernetes/pkg/api/v1.Handler"},
+				"k8s.io/kubernetes/pkg/api/v1.Handler", "k8s.io/kubernetes/pkg/api/v1.PreStopHandler"},
 		},
 		"k8s.io/kubernetes/pkg/api/v1.LimitRange": {
 			Schema: spec.Schema{
@@ -6915,6 +6929,41 @@ func GetOpenAPIDefinitions(ref openapi.ReferenceCallback) map[string]openapi.Ope
 			},
 			Dependencies: []string{},
 		},
+		"k8s.io/kubernetes/pkg/api/v1.PreStopHandler": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "PreStopHandler aggregates Handler and a TerminationReasonDelivery to allow for configuration of the delivery method for a termination reason consumed by the hook.",
+					Properties: map[string]spec.Schema{
+						"exec": {
+							SchemaProps: spec.SchemaProps{
+								Description: "One and only one of the following should be specified. Exec specifies the action to take.",
+								Ref:         ref("k8s.io/kubernetes/pkg/api/v1.ExecAction"),
+							},
+						},
+						"httpGet": {
+							SchemaProps: spec.SchemaProps{
+								Description: "HTTPGet specifies the http request to perform.",
+								Ref:         ref("k8s.io/kubernetes/pkg/api/v1.HTTPGetAction"),
+							},
+						},
+						"tcpSocket": {
+							SchemaProps: spec.SchemaProps{
+								Description: "TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported",
+								Ref:         ref("k8s.io/kubernetes/pkg/api/v1.TCPSocketAction"),
+							},
+						},
+						"reasonDelivery": {
+							SchemaProps: spec.SchemaProps{
+								Description: "ReasonDelivery provides configuration for the delivery of a termination reason to the PreStopHandler. If nil, the termination reason will be delivered to the preStop lifecycle hook by setting the KUBE_POD_TERM_REASON environment variable to the value of the termination reason.",
+								Ref:         ref("k8s.io/kubernetes/pkg/api/v1.TerminationReasonDelivery"),
+							},
+						},
+					},
+				},
+			},
+			Dependencies: []string{
+				"k8s.io/kubernetes/pkg/api/v1.ExecAction", "k8s.io/kubernetes/pkg/api/v1.HTTPGetAction", "k8s.io/kubernetes/pkg/api/v1.TCPSocketAction", "k8s.io/kubernetes/pkg/api/v1.TerminationReasonDelivery"},
+		},
 		"k8s.io/kubernetes/pkg/api/v1.PreferAvoidPodsEntry": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
@@ -8653,6 +8702,31 @@ func GetOpenAPIDefinitions(ref openapi.ReferenceCallback) map[string]openapi.Ope
 			},
 			Dependencies: []string{
 				"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+		},
+		"k8s.io/kubernetes/pkg/api/v1.TerminationReasonDelivery": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "TerminationReasonDelivery is used to configure the delivery method for termination reasons. It is a union type, and exactly one of the fields may be non-nil. The Env field is compatible with command preStop lifecycle hooks, and the Header field is compatible with HTTP GET hooks.",
+					Properties: map[string]spec.Schema{
+						"env": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Env is the name of the environment variable that will be set with the termination reason. Env must only be set when used with a command Action, and it must be a valid environment variable name.",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+						"header": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Header is the name of the header that will be set to the termination reason. It must only be set when used with a HTTP GET Action.",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
+					},
+					Required: []string{"env", "header"},
+				},
+			},
+			Dependencies: []string{},
 		},
 		"k8s.io/kubernetes/pkg/api/v1.Toleration": {
 			Schema: spec.Schema{

@@ -223,6 +223,10 @@ type ObjectMeta struct {
 	// This field is not set anywhere right now and apiserver is going to ignore it if set in create or update request.
 	// +optional
 	ClusterName string `json:"clusterName,omitempty" protobuf:"bytes,15,opt,name=clusterName"`
+
+	// TerminationReason indicates the reason for the Pod's termination. This
+	// field may be supplied by a user or a controller.
+	TerminationReason *TerminationReason `json:"reason,omitempty" protobuf:"bytes,16,opt,name=terminationReason"`
 }
 
 const (
@@ -332,6 +336,29 @@ const (
 	DeletePropagationForeground DeletionPropagation = "Foreground"
 )
 
+// TerminationReason is a string type used to indicate the reason for
+// termination to the preStop lifecycle hook of a Pod's containers.
+type TerminationReason string
+
+const (
+	// ReasonEviction is the default reason used to communicate that a Pod has
+	// been terminated due to an eviction.
+	ReasonEviction TerminationReason = "Eviction"
+	// ReasonIntolerableTaint is the default reason used to communicate that a
+	// Pod has been terminated due to a taint for which it has no declared
+	// toleration.
+	ReasonIntolerableTaint = "IntolerableTaint"
+	// ReasonDecommissioned is the default reason sent by controllers to
+	// indicate that a Pod has been terminated due to a horizontal scaling
+	// event. Pods receiving this reason should not expect to be rescheduled.
+	ReasonDecommissioned = "Decommissioned"
+	// ReasonUpdate is the reason sent by a controller or User to indicate that
+	// a Pod has been terminated for the purposes of a destructive update. Pods
+	// receiving this signal should expect to be rescheduled immediately. Note
+	// that this DOES NOT imply that scheduling will succeed.
+	ReasonUpdate = "Update"
+)
+
 // DeleteOptions may be provided when deleting an API object.
 type DeleteOptions struct {
 	TypeMeta `json:",inline"`
@@ -361,6 +388,11 @@ type DeleteOptions struct {
 	// metadata.finalizers and the resource-specific default policy.
 	// +optional
 	PropagationPolicy *DeletionPropagation `json:"propagationPolicy,omitempty" protobuf:"varint,4,opt,name=propagationPolicy"`
+
+	// Reason indicates the reason for the Pod's termination. This field may be
+	// supplied by a user or a controller.
+	// +optional
+	Reason *TerminationReason `json:"reason,omitempty" protobuf:"bytes,5,opt,name=reason"`
 }
 
 // Preconditions must be fulfilled before an operation (update, delete, etc.) is carried out.

@@ -159,6 +159,7 @@ func RegisterDeepCopies(scheme *runtime.Scheme) error {
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_PodTemplateList, InType: reflect.TypeOf(&PodTemplateList{})},
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_PodTemplateSpec, InType: reflect.TypeOf(&PodTemplateSpec{})},
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_PortworxVolumeSource, InType: reflect.TypeOf(&PortworxVolumeSource{})},
+		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_PreStopHandler, InType: reflect.TypeOf(&PreStopHandler{})},
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_Preconditions, InType: reflect.TypeOf(&Preconditions{})},
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_PreferAvoidPodsEntry, InType: reflect.TypeOf(&PreferAvoidPodsEntry{})},
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_PreferredSchedulingTerm, InType: reflect.TypeOf(&PreferredSchedulingTerm{})},
@@ -199,6 +200,7 @@ func RegisterDeepCopies(scheme *runtime.Scheme) error {
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_Sysctl, InType: reflect.TypeOf(&Sysctl{})},
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_TCPSocketAction, InType: reflect.TypeOf(&TCPSocketAction{})},
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_Taint, InType: reflect.TypeOf(&Taint{})},
+		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_TerminationReasonDelivery, InType: reflect.TypeOf(&TerminationReasonDelivery{})},
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_Toleration, InType: reflect.TypeOf(&Toleration{})},
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_Volume, InType: reflect.TypeOf(&Volume{})},
 		conversion.GeneratedDeepCopyFunc{Fn: DeepCopy_api_VolumeMount, InType: reflect.TypeOf(&VolumeMount{})},
@@ -1258,8 +1260,8 @@ func DeepCopy_api_Lifecycle(in interface{}, out interface{}, c *conversion.Clone
 		}
 		if in.PreStop != nil {
 			in, out := &in.PreStop, &out.PreStop
-			*out = new(Handler)
-			if err := DeepCopy_api_Handler(*in, *out, c); err != nil {
+			*out = new(PreStopHandler)
+			if err := DeepCopy_api_PreStopHandler(*in, *out, c); err != nil {
 				return err
 			}
 		}
@@ -2585,6 +2587,25 @@ func DeepCopy_api_PortworxVolumeSource(in interface{}, out interface{}, c *conve
 	}
 }
 
+func DeepCopy_api_PreStopHandler(in interface{}, out interface{}, c *conversion.Cloner) error {
+	{
+		in := in.(*PreStopHandler)
+		out := out.(*PreStopHandler)
+		*out = *in
+		if err := DeepCopy_api_Handler(&in.Handler, &out.Handler, c); err != nil {
+			return err
+		}
+		if in.ReasonDelivery != nil {
+			in, out := &in.ReasonDelivery, &out.ReasonDelivery
+			*out = new(TerminationReasonDelivery)
+			if err := DeepCopy_api_TerminationReasonDelivery(*in, *out, c); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+}
+
 func DeepCopy_api_Preconditions(in interface{}, out interface{}, c *conversion.Cloner) error {
 	{
 		in := in.(*Preconditions)
@@ -3275,6 +3296,25 @@ func DeepCopy_api_Taint(in interface{}, out interface{}, c *conversion.Cloner) e
 		out := out.(*Taint)
 		*out = *in
 		out.TimeAdded = in.TimeAdded.DeepCopy()
+		return nil
+	}
+}
+
+func DeepCopy_api_TerminationReasonDelivery(in interface{}, out interface{}, c *conversion.Cloner) error {
+	{
+		in := in.(*TerminationReasonDelivery)
+		out := out.(*TerminationReasonDelivery)
+		*out = *in
+		if in.Env != nil {
+			in, out := &in.Env, &out.Env
+			*out = new(string)
+			**out = **in
+		}
+		if in.Header != nil {
+			in, out := &in.Header, &out.Header
+			*out = new(string)
+			**out = **in
+		}
 		return nil
 	}
 }

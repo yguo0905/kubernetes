@@ -99,8 +99,10 @@ var _ = framework.KubeDescribe("Container Lifecycle Hook", func() {
 					[]string{"tail", "-f", "/dev/null"},
 				)
 				podWithHook.Spec.Containers[0].Lifecycle = &v1.Lifecycle{
-					PreStop: &v1.Handler{
-						Exec: &v1.ExecAction{Command: []string{"touch", file}},
+					PreStop: &v1.PreStopHandler{
+						Handler: v1.Handler{
+							Exec: &v1.ExecAction{Command: []string{"touch", file}},
+						},
 					},
 				}
 				testPodWithExecHook(podWithHook)
@@ -189,11 +191,13 @@ var _ = framework.KubeDescribe("Container Lifecycle Hook", func() {
 								Name:  "pod-with-prestop-http-hook",
 								Image: framework.GetPauseImageNameForHostArch(),
 								Lifecycle: &v1.Lifecycle{
-									PreStop: &v1.Handler{
-										HTTPGet: &v1.HTTPGetAction{
-											Path: "/echo?msg=prestop",
-											Host: targetIP,
-											Port: intstr.FromInt(8080),
+									PreStop: &v1.PreStopHandler{
+										Handler: v1.Handler{
+											HTTPGet: &v1.HTTPGetAction{
+												Path: "/echo?msg=prestop",
+												Host: targetIP,
+												Port: intstr.FromInt(8080),
+											},
 										},
 									},
 								},

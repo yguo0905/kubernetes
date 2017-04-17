@@ -1564,6 +1564,43 @@ type Handler struct {
 	TCPSocket *TCPSocketAction
 }
 
+// TerminationReasonDelivery is used to configure the delivery method for
+// termination reasons. It is a union type, and exactly one of the fields may
+// be non-nil. The Env field is compatible with command preStop lifecycle
+// hooks, and the Header field is compatible with HTTP GET hooks.
+type TerminationReasonDelivery struct {
+	// Env is the name of the environment variable that will be set with the
+	// termination reason. Env must only be set when used with a command
+	// Action, and it must be a valid environment variable name.
+	Env *string `json:"env,ommitempty"`
+	// Header is the name of the header that will be set to the termination
+	// reason. It must only be set when used with a HTTP GET Action.
+	Header *string `json:"header,ommitempty"`
+}
+
+const (
+	// DefaultTerminationReasonEnv is the default environment variable that is
+	// used to communicate a termination reason to a command Action.
+	DefaultTerminationReasonEnv string = "KUBE_POD_TERM_REASON"
+	// DefaultTerminationReasonHeader is the default header used to communicate
+	// a termination reason to a HTTP GET Action.
+	DefaultTerminationReasonHeader string = "KUBE-POD-TERM-REASON"
+)
+
+// PreStopHandler aggregates Handler and a TerminationReasonDelivery to allow
+// for configuration of the delivery method for a termination reason consumed
+// by the hook.
+type PreStopHandler struct {
+	Handler
+	// ReasonDelivery provides configuration for the delivery of a termination
+	// reason to the PreStopHandler. If nil, the termination reason will be
+	// delivered to the preStop lifecycle hook by setting the
+	// KUBE_POD_TERM_REASON environment variable to the value of the termination
+	// reason.
+	// +optional
+	ReasonDelivery *TerminationReasonDelivery `json:"reasonDelivery,ommitempty"`
+}
+
 // Lifecycle describes actions that the management system should take in response to container lifecycle
 // events.  For the PostStart and PreStop lifecycle handlers, management of the container blocks
 // until the action is complete, unless the container process fails, in which case the handler is aborted.
@@ -1575,7 +1612,7 @@ type Lifecycle struct {
 	// PreStop is called immediately before a container is terminated.  The reason for termination is
 	// passed to the handler.  Regardless of the outcome of the handler, the container is eventually terminated.
 	// +optional
-	PreStop *Handler
+	PreStop *PreStopHandler
 }
 
 // The below types are used by kube_client and api_server.
