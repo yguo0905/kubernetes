@@ -135,8 +135,10 @@ function validate-cluster {
 #   HEAPSTER_MACHINE_TYPE (optional)
 #   CLUSTER_IP_RANGE (optional)
 #   GKE_CREATE_FLAGS (optional, space delineated)
+#   ENABLE_KUBERNETES_ALPHA (optional)
 function kube-up() {
-  echo "... in gke:kube-up()" >&2
+  set -x
+  echo "... in gke:kube-up() yggygg" >&2
   detect-project >&2
 
   # Make the specified network if we need to.
@@ -184,6 +186,10 @@ function kube-up() {
     "--machine-type=${MACHINE_TYPE}"
   )
 
+  if [[ ! -z "${ENABLE_KUBERNETES_ALPHA:-}" ]]; then
+    create_args+=("--enable-kubernetes-alpha")
+  fi
+
   if [[ ! -z "${ADDITIONAL_ZONES:-}" ]]; then
     create_args+=("--additional-zones=${ADDITIONAL_ZONES}")
   fi
@@ -193,6 +199,8 @@ function kube-up() {
   fi
 
   create_args+=( ${GKE_CREATE_FLAGS:-} )
+
+  echo "... in gke:kube-up() yggygg: ${GCLOUD} ${CMD_GROUP:-} container clusters create ${CLUSTER_NAME} ${create_args[@]}" >&2
 
   # Bring up the cluster.
   "${GCLOUD}" ${CMD_GROUP:-} container clusters create "${CLUSTER_NAME}" "${create_args[@]}"
