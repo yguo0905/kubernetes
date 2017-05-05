@@ -892,3 +892,21 @@ func TestSetDefaultSchedulerName(t *testing.T) {
 		t.Errorf("Expected scheduler name: %+v\ngot: %+v\n", v1.DefaultSchedulerName, output.Spec.SchedulerName)
 	}
 }
+
+func TestDeleteExecAction(t *testing.T) {
+	action := &v1.DeleteExecAction{}
+
+	output := roundTrip(t, runtime.Object(action)).(*v1.DeleteExecAction)
+	if output.ReasonEnv != v1.DefaultDeleteReasonEnv {
+		t.Errorf("Expected reason env name: %+v\ngot: %+v\n", v1.DefaultDeleteReasonEnv, output.ReasonEnv)
+	}
+}
+
+func TestDeleteHTTPGetAction(t *testing.T) {
+	action := &v1.DeleteHTTPGetAction{}
+
+	output := roundTrip(t, runtime.Object(action)).(*v1.DeleteHTTPGetAction)
+	if output.ReasonEnv != v1.DefaultDeleteReasonHeader {
+		t.Errorf("Expected reason header name: %+v\ngot: %+v\n", v1.DefaultDeleteReasonHeader, output.ReasonHeader)
+	}
+}

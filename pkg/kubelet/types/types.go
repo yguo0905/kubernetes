@@ -25,7 +25,8 @@ import (
 
 // TODO: Reconcile custom types in kubelet/types and this subpackage
 
-type HttpGetter interface {
+type HttpClient interface {
+	Do(req *http.Request) (*http.Response, error)
 	Get(url string) (*http.Response, error)
 }
 

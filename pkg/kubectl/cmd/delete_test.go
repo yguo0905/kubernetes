@@ -22,6 +22,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 	"strings"
 	"testing"
 	"time"
@@ -215,6 +216,11 @@ func TestDeleteObject(t *testing.T) {
 		APIRegistry:          api.Registry,
 		NegotiatedSerializer: unstructuredSerializer,
 		Client: fake.CreateHTTPClient(func(req *http.Request) (*http.Response, error) {
+			body, err := httputil.DumpRequest(req, true)
+			if err != nil {
+				t.Logf("err when parsing request body: %v", err)
+			}
+			t.Logf("got request body: %v", string(body))
 			switch p, m := req.URL.Path, req.Method; {
 			case p == "/namespaces/test/replicationcontrollers/redis-master" && m == "DELETE":
 				return &http.Response{StatusCode: 200, Header: defaultHeader(), Body: objBody(codec, &rc.Items[0])}, nil
@@ -231,6 +237,8 @@ func TestDeleteObject(t *testing.T) {
 	cmd.Flags().Set("filename", "../../../examples/guestbook/legacy/redis-master-controller.yaml")
 	cmd.Flags().Set("cascade", "false")
 	cmd.Flags().Set("output", "name")
+	cmd.Flags().Set("grace-period", "10")
+	cmd.Flags().Set("reason", "yggyggygg")
 	cmd.Run(cmd, []string{})
 
 	// uses the name from the file, not the response
@@ -246,10 +254,10 @@ type fakeReaper struct {
 	err             error
 }
 
-func (r *fakeReaper) Stop(namespace, name string, timeout time.Duration, gracePeriod *metav1.DeleteOptions) error {
+func (r *fakeReaper) Stop(namespace, name string, timeout time.Duration, deleteOptions *metav1.DeleteOptions) error {
 	r.namespace, r.name = namespace, name
 	r.timeout = timeout
-	r.deleteOptions = gracePeriod
+	r.deleteOptions = deleteOptions
 	return r.err
 }
 
@@ -275,6 +283,11 @@ func TestDeleteObjectGraceZero(t *testing.T) {
 		NegotiatedSerializer: unstructuredSerializer,
 		Client: fake.CreateHTTPClient(func(req *http.Request) (*http.Response, error) {
 			t.Logf("got request %s %s", req.Method, req.URL.Path)
+			body, err := httputil.DumpRequest(req, true)
+			if err != nil {
+				t.Logf("err when parsing request body: %v", err)
+			}
+			t.Logf("got request body: %v", string(body))
 			switch p, m := req.URL.Path, req.Method; {
 			case p == "/namespaces/test/pods/nginx" && m == "GET":
 				count++
@@ -312,7 +325,7 @@ func TestDeleteObjectGraceZero(t *testing.T) {
 		t.Errorf("unexpected reaper options: %#v", reaper)
 	}
 	if count != 4 {
-		t.Errorf("unexpected calls to GET: %d", count)
+		t.Errorf("unexpected calls to GET: %", count)
 	}
 }
 

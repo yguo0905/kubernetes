@@ -98,6 +98,7 @@ type DeleteOptions struct {
 	DeleteNow       bool
 	ForceDeletion   bool
 	WaitForDeletion bool
+	Reason          string
 
 	GracePeriod int
 	Timeout     time.Duration
@@ -158,6 +159,7 @@ func NewCmdDelete(f cmdutil.Factory, out, errOut io.Writer) *cobra.Command {
 	cmd.Flags().BoolVar(&options.DeleteNow, "now", false, "If true, resources are signaled for immediate shutdown (same as --grace-period=1).")
 	cmd.Flags().BoolVar(&options.ForceDeletion, "force", false, "Immediate deletion of some resources may result in inconsistency or data loss and requires confirmation.")
 	cmd.Flags().DurationVar(&options.Timeout, "timeout", 0, "The length of time to wait before giving up on a delete, zero means determine a timeout from the size of the object")
+	cmd.Flags().StringVarP(&options.Reason, "reason", "r", "", "Reason of the deletion that can be propagated to preStop handler.")
 	cmdutil.AddOutputVarFlagsForMutation(cmd, &options.Output)
 	cmdutil.AddInclude3rdPartyVarFlags(cmd, &options.Include3rdParty)
 	return cmd
@@ -234,12 +236,12 @@ func (o *DeleteOptions) RunDelete() error {
 	shortOutput := o.Output == "name"
 	// By default use a reaper to delete all related resources.
 	if o.Cascade {
-		return ReapResult(o.Result, o.f, o.Out, true, o.IgnoreNotFound, o.Timeout, o.GracePeriod, o.WaitForDeletion, shortOutput, o.Mapper, false)
+		return ReapResult(o.Result, o.f, o.Out, true, o.IgnoreNotFound, o.Timeout, o.GracePeriod, o.Reason, o.WaitForDeletion, shortOutput, o.Mapper, false)
 	}
 	return DeleteResult(o.Result, o.Out, o.IgnoreNotFound, shortOutput, o.Mapper)
 }
 
-func ReapResult(r *resource.Result, f cmdutil.Factory, out io.Writer, isDefaultDelete, ignoreNotFound bool, timeout time.Duration, gracePeriod int, waitForDeletion, shortOutput bool, mapper meta.RESTMapper, quiet bool) error {
+func ReapResult(r *resource.Result, f cmdutil.Factory, out io.Writer, isDefaultDelete, ignoreNotFound bool, timeout time.Duration, gracePeriod int, reason string, waitForDeletion, shortOutput bool, mapper meta.RESTMapper, quiet bool) error {
 	found := 0
 	if ignoreNotFound {
 		r = r.IgnoreErrors(errors.IsNotFound)
@@ -260,8 +262,13 @@ func ReapResult(r *resource.Result, f cmdutil.Factory, out io.Writer, isDefaultD
 		}
 		var options *metav1.DeleteOptions
 		if gracePeriod >= 0 {
-			options = metav1.NewDeleteOptions(int64(gracePeriod))
+			p := int64(gracePeriod)
+			options = &metav1.DeleteOptions{
+				GracePeriodSeconds: &p,
+				Reason:             reason,
+			}
 		}
+		//fmt.Fprintf(out, "options = %v\n", options)
 		if err := reaper.Stop(info.Namespace, info.Name, timeout, options); err != nil {
 			return cmdutil.AddSourceToErr("stopping", info.Source, err)
 		}

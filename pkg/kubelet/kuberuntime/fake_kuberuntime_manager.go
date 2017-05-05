@@ -43,6 +43,11 @@ func (f *fakeHTTP) Get(url string) (*http.Response, error) {
 	return nil, f.err
 }
 
+func (f *fakeHTTP) Do(req *http.Request) (*http.Response, error) {
+	f.url = req.URL.String()
+	return nil, f.err
+}
+
 type fakePodGetter struct {
 	pods map[types.UID]*v1.Pod
 }

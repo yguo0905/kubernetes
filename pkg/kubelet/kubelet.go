@@ -823,7 +823,7 @@ type Kubelet struct {
 	// Optional, defaults to simple Docker implementation
 	runner kubecontainer.ContainerCommandRunner
 	// Optional, client for http requests, defaults to empty client
-	httpClient kubetypes.HttpGetter
+	httpClient kubetypes.HttpClient
 
 	// cAdvisor used for container information.
 	cadvisor cadvisor.Interface
@@ -1760,6 +1760,10 @@ func (kl *Kubelet) syncLoopIteration(configCh <-chan kubetypes.PodUpdate, handle
 		if !open {
 			glog.Errorf("Update channel is closed. Exiting the sync loop.")
 			return false
+		}
+
+		for _, pp := range u.Pods {
+			glog.V(1).Infof("yggygg pod: %+v\n", pp)
 		}
 
 		switch u.Op {

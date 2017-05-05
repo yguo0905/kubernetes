@@ -105,5 +105,5 @@ func RunStop(f cmdutil.Factory, cmd *cobra.Command, args []string, out io.Writer
 		gracePeriod = 1
 		waitForDeletion = true
 	}
-	return ReapResult(r, f, out, false, cmdutil.GetFlagBool(cmd, "ignore-not-found"), cmdutil.GetFlagDuration(cmd, "timeout"), gracePeriod, waitForDeletion, shortOutput, mapper, false)
+	return ReapResult(r, f, out, false, cmdutil.GetFlagBool(cmd, "ignore-not-found"), cmdutil.GetFlagDuration(cmd, "timeout"), gracePeriod, "", waitForDeletion, shortOutput, mapper, false)
 }

@@ -2644,6 +2644,42 @@ func TestValidateHandler(t *testing.T) {
 	}
 }
 
+func TestValidatePreStopHandler(t *testing.T) {
+	successCases := []api.PreStopHandler{
+		{Exec: &api.DeleteExecAction{Command: []string{"echo"}}},
+		{Exec: &api.DeleteExecAction{Command: []string{"echo"}, ReasonEnv: "MY_REASON"}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "/", Port: intstr.FromInt(1), Host: "", Scheme: "HTTP"}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "/foo", Port: intstr.FromInt(65535), Host: "host", Scheme: "HTTP"}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "/", Port: intstr.FromString("port"), Host: "", Scheme: "HTTP"}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "/", Port: intstr.FromString("port"), Host: "", Scheme: "HTTP", HTTPHeaders: []api.HTTPHeader{{Name: "Host", Value: "foo.example.com"}}}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "/", Port: intstr.FromString("port"), Host: "", Scheme: "HTTP", HTTPHeaders: []api.HTTPHeader{{Name: "X-Forwarded-For", Value: "1.2.3.4"}, {Name: "X-Forwarded-For", Value: "5.6.7.8"}}}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "/", Port: intstr.FromInt(1), Host: "", Scheme: "HTTP", ReasonHeader: "My-Reason"}},
+	}
+	for _, h := range successCases {
+		if errs := validatePreStopHandler(&h, field.NewPath("field")); len(errs) != 0 {
+			t.Errorf("expected success: %v", errs)
+		}
+	}
+
+	errorCases := []api.PreStopHandler{
+		{},
+		{Exec: &api.DeleteExecAction{Command: []string{}}},
+		{Exec: &api.DeleteExecAction{Command: []string{"echo"}, ReasonEnv: "invalid env name"}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "", Port: intstr.FromInt(0), Host: ""}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "/foo", Port: intstr.FromInt(65536), Host: "host"}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "", Port: intstr.FromString(""), Host: ""}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "/", Port: intstr.FromString("port"), Host: "", Scheme: "HTTP", HTTPHeaders: []api.HTTPHeader{{Name: "Host:", Value: "foo.example.com"}}}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "/", Port: intstr.FromString("port"), Host: "", Scheme: "HTTP", HTTPHeaders: []api.HTTPHeader{{Name: "X_Forwarded_For", Value: "foo.example.com"}}}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "", Port: intstr.FromInt(0), Host: "", ReasonHeader: "My_Reason"}},
+		{HTTPGet: &api.DeleteHTTPGetAction{Path: "/", Port: intstr.FromString("port"), Host: "", Scheme: "HTTP", HTTPHeaders: []api.HTTPHeader{{Name: "My-Reason", Value: "reason"}}, ReasonHeader: "My-Reason"}},
+	}
+	for _, h := range errorCases {
+		if errs := validatePreStopHandler(&h, field.NewPath("field")); len(errs) == 0 {
+			t.Errorf("expected failure for %#v", h)
+		}
+	}
+}
+
 func TestValidatePullPolicy(t *testing.T) {
 	type T struct {
 		Container      api.Container
