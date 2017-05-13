@@ -20,6 +20,7 @@
 # TODO(random-liu): Add this into release progress.
 REGISTRY?=gcr.io/google_containers
 ARCH?=amd64
+KUBERNETES_VERSION?=1.7
 # BIN_DIR is the directory to find binaries, overwrite with ../../../../_output/bin
 # for local development.
 BIN_DIR?=../../../../_output/dockerized/bin/linux/${ARCH}
@@ -52,12 +53,12 @@ endif
 		e2e_node.test \
 		ginkgo
 
-	docker build --pull -t ${REGISTRY}/node-test-${ARCH}:${VERSION} ${TEMP_DIR}
+	docker build --pull -t ${REGISTRY}/node-test-k8s-${KUBERNETES_VERSION}-${ARCH}:${VERSION} ${TEMP_DIR}
 
 push: build
-	gcloud docker -- push ${REGISTRY}/node-test-${ARCH}:${VERSION}
+	gcloud docker -- push ${REGISTRY}/node-test-k8s-${KUBERNETES_VERSION}-${ARCH}:${VERSION}
 ifeq ($(ARCH),amd64)
-	docker tag ${REGISTRY}/node-test-${ARCH}:${VERSION} ${REGISTRY}/node-test:${VERSION}
+	docker tag ${REGISTRY}/node-test-k8s-${KUBERNETES_VERSION}-${ARCH}:${VERSION} ${REGISTRY}/node-test:${VERSION}
 	gcloud docker -- push ${REGISTRY}/node-test:${VERSION}
 endif
 

@@ -46,12 +46,16 @@ TEST_ARGS=${TEST_ARGS:-""}
 # REGISTRY is the image registry for node test image.
 REGISTRY=${REGISTRY:-"gcr.io/google_containers"}
 
+# KUBERNETES_VERSION is the version of the Kubernetes whose requirements will be
+# checked by this test.
+KUBERNETES_VERSION=${KUBERNETES_VERSION:-"1.7"}
+
 # ARCH is the architecture of current machine, the script will use this to
 # select corresponding test container image.
 ARCH=${ARCH:-"amd64"}
 
 # VERSION is the version of the test container image.
-VERSION=${VERSION:-"0.2"}
+VERSION=${VERSION:-"0.1"}
 
 # KUBELET_BIN is the kubelet binary name. If it is not specified, use the
 # default binary name "kubelet".
@@ -133,7 +137,7 @@ run_test() {
   # * log collect directory is mounted to /var/result;
   # * root file system is mounted to /rootfs.
   sudo sh -c "docker run -it --rm --privileged=true --net=host -v /:/rootfs \
-    -v $config_dir:$config_dir -v $LOG_DIR:/var/result ${env} $REGISTRY/node-test-$ARCH:$VERSION"
+    -v $config_dir:$config_dir -v $LOG_DIR:/var/result ${env} $REGISTRY/node-test-k8s-$KUBERNETES_VERSION-$ARCH:$VERSION"
 }
 
 # Check whether kubelet is running. If kubelet is running, tell the user to stop
