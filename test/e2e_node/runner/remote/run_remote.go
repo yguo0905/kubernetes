@@ -544,11 +544,11 @@ func createInstance(imageConfig *internalGCEImage) (string, error) {
 		var output string
 		output, err = remote.SSH(name, "docker", "version")
 		if err != nil {
-			err = fmt.Errorf("instance %s not running docker daemon - Command failed: %s", name, output)
+			err = fmt.Errorf("instance %s not running docker daemon - Command failed: %s, err = %s", name, output, err)
 			continue
 		}
 		if !strings.Contains(output, "Server") {
-			err = fmt.Errorf("instance %s not running docker daemon - Server not found: %s", name, output)
+			err = fmt.Errorf("instance %s not running docker daemon - Server not found: %s, err = %s", name, output, err)
 			continue
 		}
 		instanceRunning = true

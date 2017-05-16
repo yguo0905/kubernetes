@@ -136,7 +136,7 @@ func (rt *resourceTest) getTestName() string {
 func runResourceUsageTest(f *framework.Framework, rc *ResourceCollector, testArg resourceTest) {
 	const (
 		// The monitoring time for one test
-		monitoringTime = 10 * time.Minute
+		monitoringTime = 6 * time.Minute
 		// The periodic reporting period
 		reportingPeriod = 5 * time.Minute
 		// sleep for an interval here to measure steady data
