@@ -65,6 +65,11 @@ type RuntimeSpec struct {
 	*DockerSpec
 }
 
+type PackageSpec struct {
+	Name         string
+	VersionRange string
+}
+
 // SysSpec defines the requirement of supported system. Currently, it only contains
 // spec for OS, Kernel and Cgroups.
 type SysSpec struct {
@@ -76,6 +81,8 @@ type SysSpec struct {
 	Cgroups []string
 	// RuntimeSpec defines the spec for runtime.
 	RuntimeSpec RuntimeSpec
+	// PackageSpec
+	PackageSpecs []PackageSpec
 }
 
 // DefaultSysSpec is the default SysSpec.
@@ -86,23 +93,63 @@ var DefaultSysSpec = SysSpec{
 		// TODO(random-liu): Add more config
 		// TODO(random-liu): Add description for each kernel configuration:
 		Required: []KernelConfig{
+			{Name: "BOOTPARAM_HARDLOCKUP_PANIC"},
+			{Name: "BOOTPARAM_SOFTLOCKUP_PANIC"},
+			{Name: "PANIC_ON_OOPS"},
+			{Name: "PVPANIC"},
+			{Name: "DMIID"},
+			{Name: "ACPI_BUTTON"},
+			{Name: "INET"},
+			{Name: "VXLAN"},
+			{Name: "IP_SET"},
+			{Name: "IP_SET_HASH_IP"},
+			{Name: "IPVLAN"},
+			{Name: "IPV6"},
+			{Name: "IP6_NF_IPTABLES"},
+			{Name: "IP_NF_TARGET_REDIRECT"},
+			{Name: "NETFILTER_XT_TARGET_REDIRECT"},
+			{Name: "NETFILTER_XT_MATCH_COMMENT"},
+			{Name: "PACKET_DIAG"},
+			{Name: "UNIX_DIAG"},
+			{Name: "INET_DIAG"},
+			{Name: "INET_TCP_DIAG"},
+			{Name: "INET_UDP_DIAG"},
+			{Name: "NETLINK_DIAG"},
+			{Name: "EXT4_FS"},
+			{Name: "DEBUG_FS"},
+			{Name: "PROC_FS"},
+			{Name: "XFS_FS"},
+			{Name: "SCSI_PROC_FS"},
+			{Name: "OVERLAY_FS"},
+			{Name: "NFS_FS"},
+			{Name: "AUTOFS4_FS"},
+			{Name: "NFS_FSCACHE"},
+			{Name: "FSCACHE"},
+			{Name: "CACHEFILES"},
+			{Name: "FUSE_FS"},
+			{Name: "BCACHE"},
 			{Name: "NAMESPACES"},
+			{Name: "IPC_NS"},
 			{Name: "NET_NS"},
 			{Name: "PID_NS"},
-			{Name: "IPC_NS"},
 			{Name: "UTS_NS"},
 			{Name: "CGROUPS"},
 			{Name: "CGROUP_CPUACCT"},
 			{Name: "CGROUP_DEVICE"},
-			{Name: "CGROUP_FREEZER"},
 			{Name: "CGROUP_SCHED"},
 			{Name: "CPUSETS"},
 			{Name: "MEMCG"},
-			{Name: "INET"},
-			{Name: "EXT4_FS"},
-			{Name: "PROC_FS"},
-			{Name: "NETFILTER_XT_TARGET_REDIRECT", Aliases: []string{"IP_NF_TARGET_REDIRECT"}},
-			{Name: "NETFILTER_XT_MATCH_COMMENT"},
+			{Name: "QUOTA"},
+			{Name: "SECCOMP"},
+			{Name: "SECURITY_APPARMOR"},
+			{Name: "CC_STACKPROTECTOR_STRONG"},
+			{Name: "STRICT_DEVMEM"},
+			{Name: "IMA"},
+			{Name: "AUDIT"},
+			{Name: "AUDITSYSCALL"},
+			{Name: "MODULES"},
+			{Name: "PRINTK"},
+			{Name: "MMU"},
 		},
 		Optional: []KernelConfig{
 			{Name: "OVERLAY_FS", Aliases: []string{"OVERLAYFS_FS"}, Description: "Required for overlayfs."},
@@ -118,5 +165,33 @@ var DefaultSysSpec = SysSpec{
 			// TODO(random-liu): Validate overlay2.
 			GraphDriver: []string{"aufs", "overlay", "devicemapper"},
 		},
+	},
+	PackageSpecs: []PackageSpec{
+		{Name: "sudo", VersionRange: ">=1.8.12"},
+		{Name: "tar", VersionRange: ">=1.28"},
+		{Name: "vim", VersionRange: ">=7.4.712"},
+		{Name: "cloud-init", VersionRange: ">=0.7.6"},
+		{Name: "bash", VersionRange: ">=4.3"},
+		{Name: "python", VersionRange: ">=2.7.10"},
+		{Name: "netcat", VersionRange: ">=1.10"},
+		{Name: "ebtables", VersionRange: ">=2.0.10"},
+		{Name: "autofs", VersionRange: ">=5.0.7"},
+		{Name: "bridge-utils", VersionRange: ">=1.5"},
+		{Name: "wget", VersionRange: ">=1.18"},
+		{Name: "apparmor-profiles", VersionRange: ">=2.10.1"},
+		{Name: "apparmor", VersionRange: ">=2.10.1"},
+		{Name: "coreutils", VersionRange: ">=8.24"},
+		{Name: "dbus", VersionRange: ">=1.6.8"},
+		{Name: "ethtool", VersionRange: ">=3.18"},
+		{Name: "iproute2", VersionRange: ">=4.2.0"},
+		{Name: "less", VersionRange: ">=481"},
+		{Name: "pv", VersionRange: ">=1.3.4"},
+		{Name: "systemd", VersionRange: ">=225"},
+		{Name: "util-linux", VersionRange: ">=2.27.1"},
+		{Name: "e2fsprogs", VersionRange: ">=1.4.3"},
+		{Name: "linux-headers", VersionRange: ">=4.0"},
+		{Name: "auditd", VersionRange: ">=2.5.0"},
+		{Name: "gce-compute-image-packages", VersionRange: ">=20170227"},
+		{Name: "watchdog"},
 	},
 }
