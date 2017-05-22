@@ -1443,7 +1443,8 @@ func TestLifeCycleHooks(t *testing.T) {
 		runtimePod    *kubecontainer.Pod
 		postStartRuns []string
 		preStopRuns   []string
-		err           error
+		postStartErr  error
+		preStopErr    error
 	}{
 		{
 			// Case 0, container without any hooks.
@@ -1466,6 +1467,7 @@ func TestLifeCycleHooks(t *testing.T) {
 			},
 			[]string{},
 			[]string{},
+			nil,
 			nil,
 		},
 		{
@@ -1497,16 +1499,16 @@ func TestLifeCycleHooks(t *testing.T) {
 						{
 							Name: "container-name-3",
 							Lifecycle: &v1.Lifecycle{
-								PreStop: &v1.Handler{
-									Exec: &v1.ExecAction{},
+								PreStop: &v1.PreStopHandler{
+									Exec: &v1.DeleteExecAction{ExecAction: v1.ExecAction{}},
 								},
 							},
 						},
 						{
 							Name: "container-name-4",
 							Lifecycle: &v1.Lifecycle{
-								PreStop: &v1.Handler{
-									HTTPGet: &v1.HTTPGetAction{},
+								PreStop: &v1.PreStopHandler{
+									HTTPGet: &v1.DeleteHTTPGetAction{HTTPGetAction: v1.HTTPGetAction{}},
 								},
 							},
 						},
@@ -1542,6 +1544,7 @@ func TestLifeCycleHooks(t *testing.T) {
 				"http-get on pod: pod-1_ns-1(uid-1), container: container-name-4: rkt://uuid:container-name-4",
 			},
 			nil,
+			nil,
 		},
 		{
 			// Case 2, one container with invalid hooks.
@@ -1557,7 +1560,7 @@ func TestLifeCycleHooks(t *testing.T) {
 							Name: "container-name-1",
 							Lifecycle: &v1.Lifecycle{
 								PostStart: &v1.Handler{},
-								PreStop:   &v1.Handler{},
+								PreStop:   &v1.PreStopHandler{},
 							},
 						},
 					},
@@ -1574,6 +1577,7 @@ func TestLifeCycleHooks(t *testing.T) {
 			[]string{},
 			[]string{},
 			errors.NewAggregate([]error{fmt.Errorf("Invalid handler: %v", &v1.Handler{})}),
+			errors.NewAggregate([]error{fmt.Errorf("Invalid handler: %v", &v1.PreStopHandler{})}),
 		},
 	}
 
@@ -1591,7 +1595,7 @@ func TestLifeCycleHooks(t *testing.T) {
 
 		// Run post-start hooks
 		err := rkt.runLifecycleHooks(tt.pod, tt.runtimePod, lifecyclePostStartHook)
-		assert.Equal(t, tt.err, err, testCaseHint)
+		assert.Equal(t, tt.postStartErr, err, testCaseHint)
 
 		sort.Sort(sortedStringList(tt.postStartRuns))
 		sort.Sort(sortedStringList(runner.HandlerRuns))
@@ -1602,7 +1606,7 @@ func TestLifeCycleHooks(t *testing.T) {
 
 		// Run pre-stop hooks.
 		err = rkt.runLifecycleHooks(tt.pod, tt.runtimePod, lifecyclePreStopHook)
-		assert.Equal(t, tt.err, err, testCaseHint)
+		assert.Equal(t, tt.preStopErr, err, testCaseHint)
 
 		sort.Sort(sortedStringList(tt.preStopRuns))
 		sort.Sort(sortedStringList(runner.HandlerRuns))
