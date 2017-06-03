@@ -29,7 +29,7 @@ type TestSuite interface {
 	// * create a tarball with the directory.
 	// * deploy the tarball to the testing host.
 	// * untar the tarball to the testing workspace on the testing host.
-	SetupTestPackage(path string) error
+	SetupTestPackage(path, systemSpecName string) error
 	// RunTest runs test on the node in the given workspace and returns test output
 	// and test error if there is any.
 	// * host is the target node to run the test.
@@ -41,5 +41,5 @@ type TestSuite interface {
 	// * testArgs is the arguments passed to test.
 	// * ginkgoArgs is the arguments passed to ginkgo.
 	// * timeout is the test timeout.
-	RunTest(host, workspace, results, junitFilePrefix, testArgs, ginkgoArgs string, timeout time.Duration) (string, error)
+	RunTest(host, workspace, results, junitFilePrefix, testArgs, ginkgoArgs, systemSpecName string, timeout time.Duration) (string, error)
 }
