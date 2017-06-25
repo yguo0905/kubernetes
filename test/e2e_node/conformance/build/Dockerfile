@@ -43,5 +43,5 @@ ENTRYPOINT ginkgo --focus="$FOCUS" \
 	--prepull-images=false \
 	--report-dir="$REPORT_PATH" \
 	# This is a placeholder that will be substituted in the Makefile.
-	--system-spec-file=SYSTEM_SPEC_FILE_NAME \
+	--system-spec-file=SYSTEM_SPEC_FILE_PATH \
 	$TEST_ARGS

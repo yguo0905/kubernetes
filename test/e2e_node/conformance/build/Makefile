@@ -39,11 +39,11 @@ BASEIMAGE?=${BASEIMAGE_${ARCH}}
 
 IMAGE_NAME:=${REGISTRY}/node-test
 COPY_SYSTEM_SPEC_FILE=
-SYSTEM_SPEC_FILE_NAME=
+SYSTEM_SPEC_FILE_PATH=
 ifneq ($(strip $(SYSTEM_SPEC_NAME)),)
     IMAGE_NAME:=${IMAGE_NAME}-${SYSTEM_SPEC_NAME}
-    COPY_SYSTEM_SPEC_FILE="'COPY system-spec.yaml /etc/'"
-    SYSTEM_SPEC_FILE_NAME="'/etc/system-spec.yaml'"
+    COPY_SYSTEM_SPEC_FILE="'COPY system-spec.yaml /usr/local/etc/'"
+    SYSTEM_SPEC_FILE_PATH="'/usr/local/etc/system-spec.yaml'"
 endif
 
 all: build
@@ -64,7 +64,7 @@ endif
 	cd ${TEMP_DIR} && sed -i.back \
 	    "s|BASEIMAGE|${BASEIMAGE}|g;\
 	     s|COPY_SYSTEM_SPEC_FILE|${COPY_SYSTEM_SPEC_FILE}|g;\
-	     s|SYSTEM_SPEC_FILE_NAME|${SYSTEM_SPEC_FILE_NAME}|g" Dockerfile
+	     s|SYSTEM_SPEC_FILE_PATH|${SYSTEM_SPEC_FILE_PATH}|g" Dockerfile
 
 	# Make scripts executable before they are copied into the Docker image. If we make them executable later, in another layer
 	# they'll take up twice the space because the new executable binary differs from the old one, but everything is cached in layers.
