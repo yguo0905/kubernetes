@@ -53,6 +53,50 @@ var (
 	creationTime = timestamp.Add(-5 * time.Minute)
 )
 
+func TestRemoveTerminatedContainerInfo(t *testing.T) {
+	const (
+		namespace0 = "test0"
+		namespace2 = "test2"
+	)
+	const (
+		seedPast           = -100
+		seedRoot           = 0
+		seedRuntime        = 100
+		seedKubelet        = 200
+		seedMisc           = 300
+		seedPod0Infra      = 1000
+		seedPod0Container0 = 2000
+		seedPod0Container1 = 2001
+		seedPod1Infra      = 3000
+		seedPod1Container  = 4000
+		seedPod2Infra      = 5000
+		seedPod2Container  = 6000
+	)
+	const (
+		pName0 = "pod0"
+		pName1 = "pod1"
+		pName2 = "pod0" // ensure pName2 conflicts with pName0, but is in a different namespace
+	)
+	const (
+		cName00 = "c0"
+		cName01 = "c1"
+		cName10 = "c0" // ensure cName10 conflicts with cName02, but is in a different pod
+		cName20 = "c1" // ensure cName20 conflicts with cName01, but is in a different pod + namespace
+	)
+	infos := map[string]v2.ContainerInfo{
+		"/pod0-i-terminated": summaryTestContainerInfo(seedPast, pName0, namespace0, leaky.PodInfraContainerName),
+		"/pod0-i":            summaryTestContainerInfo(seedPod0Infra, pName0, namespace0, leaky.PodInfraContainerName),
+		"/pod0-c0":           summaryTestContainerInfo(seedPod0Container0, pName0, namespace0, cName00),
+		"/pod0-c1":           summaryTestContainerInfo(seedPod0Container1, pName0, namespace0, cName01),
+		"/pod1-i":            summaryTestContainerInfo(seedPod1Infra, pName1, namespace0, leaky.PodInfraContainerName),
+		"/pod1-c0":           summaryTestContainerInfo(seedPod1Container, pName1, namespace0, cName10),
+	}
+	output := removeTerminatedContainerInfo(infos)
+	for k, _ := range output {
+		t.Errorf("k=%v\n", k)
+	}
+}
+
 func TestBuildSummary(t *testing.T) {
 	node := k8sv1.Node{}
 	node.Name = "FooNode"

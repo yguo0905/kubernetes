@@ -18,6 +18,7 @@ package stats
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 
@@ -128,7 +129,7 @@ func (sb *summaryBuilder) build() (*stats.Summary, error) {
 	}
 
 	rootStats := sb.containerInfoV2ToStats("", &rootInfo)
-	cStats, _ := sb.latestContainerStats(&rootInfo)
+	cStats, _ := latestContainerStats(&rootInfo)
 	nodeStats := stats.NodeStats{
 		NodeName: sb.node.Name,
 		CPU:      rootStats.CPU,
@@ -184,7 +185,7 @@ func (sb *summaryBuilder) containerInfoV2FsStats(
 	info *cadvisorapiv2.ContainerInfo,
 	cs *stats.ContainerStats) {
 
-	lcs, found := sb.latestContainerStats(info)
+	lcs, found := latestContainerStats(info)
 	if !found {
 		return
 	}
@@ -230,7 +231,7 @@ func (sb *summaryBuilder) containerInfoV2FsStats(
 }
 
 // latestContainerStats returns the latest container stats from cadvisor, or nil if none exist
-func (sb *summaryBuilder) latestContainerStats(info *cadvisorapiv2.ContainerInfo) (*cadvisorapiv2.ContainerStats, bool) {
+func latestContainerStats(info *cadvisorapiv2.ContainerInfo) (*cadvisorapiv2.ContainerStats, bool) {
 	stats := info.Stats
 	if len(stats) < 1 {
 		return nil, false
@@ -242,12 +243,98 @@ func (sb *summaryBuilder) latestContainerStats(info *cadvisorapiv2.ContainerInfo
 	return latest, true
 }
 
+type containerInfoID struct {
+	podRef        stats.PodReference
+	containerName string
+}
+
+type containerInfoRef struct {
+	cinfo cadvisorapiv2.ContainerInfo
+	key   string
+}
+
+// ByCreationTime implements sort.Interface for []containerInfoRef based on the
+// cinfo.Spec.CreationTime field.
+type ByCreationTime []containerInfoRef
+
+func (a ByCreationTime) Len() int      { return len(a) }
+func (a ByCreationTime) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a ByCreationTime) Less(i, j int) bool {
+	return a[i].cinfo.Spec.CreationTime.Before(a[j].cinfo.Spec.CreationTime)
+}
+
+func hasCPUInstUsage(info *cadvisorapiv2.ContainerInfo) bool {
+	//fmt.Printf("%+v\n", info)
+	if !info.Spec.HasCpu {
+		return false
+	}
+	cstat, found := latestContainerStats(info)
+	if !found {
+		return false
+	}
+	if cstat.CpuInst == nil {
+		return false
+	}
+	return cstat.CpuInst.Usage.Total != 0
+}
+
+func removeTerminatedContainerInfo(containerInfo map[string]cadvisorapiv2.ContainerInfo) map[string]cadvisorapiv2.ContainerInfo {
+	//	fmt.Printf("input size = %v\n", len(containerInfo))
+	//	for key, _ := range containerInfo {
+	//		fmt.Printf("input = %v, %v\n", key, containerInfo[key])
+	//	}
+	cinfoMap := make(map[containerInfoID][]containerInfoRef)
+	for key, cinfo := range containerInfo {
+		if !isPodManagedContainer(&cinfo) {
+			continue
+		}
+		cinfoID := containerInfoID{
+			podRef:        buildPodRef(&cinfo),
+			containerName: types.GetContainerName(cinfo.Spec.Labels),
+		}
+		cinfoMap[cinfoID] = append(cinfoMap[cinfoID], containerInfoRef{
+			cinfo: cinfo,
+			key:   key,
+		})
+	}
+	for _, vs := range cinfoMap {
+		fmt.Printf("\n------\n")
+		for _, v := range vs {
+			fmt.Printf("%v:%v:%v\n", v.key, v.cinfo.Spec.CreationTime, hasCPUInstUsage(&v.cinfo))
+		}
+	}
+	//	fmt.Printf("map = \n%v\n", cinfoMap)
+	result := make(map[string]cadvisorapiv2.ContainerInfo)
+	for _, refs := range cinfoMap {
+		if len(refs) == 1 {
+			result[refs[0].key] = refs[0].cinfo
+			continue
+		}
+		sort.Sort(ByCreationTime(refs))
+		i := 0
+		for ; i < len(refs)-1; i++ {
+			if hasCPUInstUsage(&refs[i].cinfo) {
+				break
+			}
+		}
+		for ; i < len(refs); i++ {
+			result[refs[i].key] = refs[i].cinfo
+		}
+	}
+	//	fmt.Printf("output size = %v\n", len(result))
+	//	for key, _ := range result {
+	//		fmt.Printf("output = %v, %v\n", key, result[key])
+	//	}
+	return result
+}
+
 // buildSummaryPods aggregates and returns the container stats in cinfos by the Pod managing the container.
 // Containers not managed by a Pod are omitted.
 func (sb *summaryBuilder) buildSummaryPods() []stats.PodStats {
 	// Map each container to a pod and update the PodStats with container data
 	podToStats := map[stats.PodReference]*stats.PodStats{}
-	for key, cinfo := range sb.infos {
+	infos := removeTerminatedContainerInfo(sb.infos)
+	for key, cinfo := range infos {
 		// on systemd using devicemapper each mount into the container has an associated cgroup.
 		// we ignore them to ensure we do not get duplicate entries in our summary.
 		// for details on .mount units: http://man7.org/linux/man-pages/man5/systemd.mount.5.html
@@ -255,10 +342,13 @@ func (sb *summaryBuilder) buildSummaryPods() []stats.PodStats {
 			continue
 		}
 		// Build the Pod key if this container is managed by a Pod
-		if !sb.isPodManagedContainer(&cinfo) {
+		if !isPodManagedContainer(&cinfo) {
 			continue
 		}
-		ref := sb.buildPodRef(&cinfo)
+		ref := buildPodRef(&cinfo)
+
+		fmt.Printf("key = %v\n", key)
+		fmt.Printf("ref = %v\n", ref)
 
 		// Lookup the PodStats for the pod using the PodRef.  If none exists, initialize a new entry.
 		podStats, found := podToStats[ref]
@@ -292,7 +382,7 @@ func (sb *summaryBuilder) buildSummaryPods() []stats.PodStats {
 }
 
 // buildPodRef returns a PodReference that identifies the Pod managing cinfo
-func (sb *summaryBuilder) buildPodRef(cinfo *cadvisorapiv2.ContainerInfo) stats.PodReference {
+func buildPodRef(cinfo *cadvisorapiv2.ContainerInfo) stats.PodReference {
 	podName := types.GetPodName(cinfo.Spec.Labels)
 	podNamespace := types.GetPodNamespace(cinfo.Spec.Labels)
 	podUID := types.GetPodUID(cinfo.Spec.Labels)
@@ -300,7 +390,7 @@ func (sb *summaryBuilder) buildPodRef(cinfo *cadvisorapiv2.ContainerInfo) stats.
 }
 
 // isPodManagedContainer returns true if the cinfo container is managed by a Pod
-func (sb *summaryBuilder) isPodManagedContainer(cinfo *cadvisorapiv2.ContainerInfo) bool {
+func isPodManagedContainer(cinfo *cadvisorapiv2.ContainerInfo) bool {
 	podName := types.GetPodName(cinfo.Spec.Labels)
 	podNamespace := types.GetPodNamespace(cinfo.Spec.Labels)
 	managed := podName != "" && podNamespace != ""
@@ -319,7 +409,7 @@ func (sb *summaryBuilder) containerInfoV2ToStats(
 		StartTime: metav1.NewTime(info.Spec.CreationTime),
 		Name:      name,
 	}
-	cstat, found := sb.latestContainerStats(info)
+	cstat, found := latestContainerStats(info)
 	if !found {
 		return cStats
 	}
@@ -371,7 +461,7 @@ func (sb *summaryBuilder) containerInfoV2ToNetworkStats(name string, info *cadvi
 	if !info.Spec.HasNetwork {
 		return nil
 	}
-	cstat, found := sb.latestContainerStats(info)
+	cstat, found := latestContainerStats(info)
 	if !found {
 		return nil
 	}
