@@ -208,7 +208,7 @@ function kube-up() {
   create_args+=( ${GKE_CREATE_FLAGS:-} )
 
   # Bring up the cluster.
-  "${GCLOUD}" ${CMD_GROUP:-} container clusters create "${CLUSTER_NAME}" "${create_args[@]}"
+  "${GCLOUD}" ${CMD_GROUP:-} container clusters create "${CLUSTER_NAME}" "${create_args[@]}" "-q"
 
   create-kubeconfig-for-federation
 
