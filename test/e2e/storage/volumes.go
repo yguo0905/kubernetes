@@ -140,8 +140,6 @@ var _ = SIGDescribe("Volumes", func() {
 
 	SIGDescribe("GlusterFS [Feature:Volumes]", func() {
 		It("should be mountable", func() {
-			//TODO (copejon) GFS is not supported on debian image.
-			framework.SkipUnlessNodeOSDistroIs("gci")
 
 			config := framework.VolumeTestConfig{
 				Namespace:   namespace.Name,

@@ -637,7 +637,7 @@ func testPDPod(diskNames []string, targetNode types.NodeName, readOnly bool, num
 			pod.Spec.Volumes[k].VolumeSource = v1.VolumeSource{
 				GCEPersistentDisk: &v1.GCEPersistentDiskVolumeSource{
 					PDName:   diskName,
-					FSType:   "ext4",
+					FSType:   "xfs",
 					ReadOnly: readOnly,
 				},
 			}
