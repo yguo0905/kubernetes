@@ -81,13 +81,13 @@ func getSSHCommand(sep string, args ...string) string {
 // SSH executes ssh command with runSSHCommand as root. The `sudo` makes sure that all commands
 // are executed by root, so that there won't be permission mismatch between different commands.
 func SSH(host string, cmd ...string) (string, error) {
-	return runSSHCommand("ssh", append([]string{GetHostnameOrIp(host), "--", "sudo"}, cmd...)...)
+	return runSSHCommand("ssh", "-v", append([]string{GetHostnameOrIp(host), "--", "sudo"}, cmd...)...)
 }
 
 // SSHNoSudo executes ssh command with runSSHCommand as normal user. Sometimes we need this,
 // for example creating a directory that we'll copy files there with scp.
 func SSHNoSudo(host string, cmd ...string) (string, error) {
-	return runSSHCommand("ssh", append([]string{GetHostnameOrIp(host), "--"}, cmd...)...)
+	return runSSHCommand("ssh", "-v", append([]string{GetHostnameOrIp(host), "--"}, cmd...)...)
 }
 
 // runSSHCommand executes the ssh or scp command, adding the flag provided --ssh-options
