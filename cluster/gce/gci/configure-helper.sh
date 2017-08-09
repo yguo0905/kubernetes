@@ -933,6 +933,10 @@ function start-kubelet {
     flags+=" --feature-gates=${FEATURE_GATES}"
   fi
 
+  # Disables shared PID namespace until we are confident that this won't cause
+  # any issues (e.g., https://github.com/kubernetes/kubernetes/issues/48937).
+  flags+=" --docker-disable-shared-pid"
+
   local -r kubelet_env_file="/etc/default/kubelet"
   echo "KUBELET_OPTS=\"${flags}\"" > "${kubelet_env_file}"
 
