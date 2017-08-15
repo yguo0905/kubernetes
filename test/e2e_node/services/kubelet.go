@@ -168,6 +168,7 @@ func (e *E2EServices) startKubelet() (*server, error) {
 		"--eviction-hard", "memory.available<250Mi,nodefs.available<10%,nodefs.inodesFree<5%", // The hard eviction thresholds.
 		"--eviction-minimum-reclaim", "nodefs.available=5%,nodefs.inodesFree=5%", // The minimum reclaimed resources after eviction.
 		"--v", LOG_VERBOSITY_LEVEL, "--logtostderr",
+		"--fail-swap-on=false",
 	)
 
 	if utilfeature.DefaultFeatureGate.Enabled(features.DynamicKubeletConfig) {
