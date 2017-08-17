@@ -2525,6 +2525,22 @@ func (r *Runtime) GetPodStatus(uid kubetypes.UID, name, namespace string) (*kube
 	return podStatus, nil
 }
 
+func (m *kubeGenericRuntimeManager) ListContainerStats(req *runtimeapi.ListContainerStatsRequest) (*runtimeapi.ListContainerStatsResponse, error) {
+	resp, err := m.runtimeService.ListContainerStats(req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (m *kubeGenericRuntimeManager) ListPodSandbox(filter *runtimeapi.PodSandboxFilter) ([]*runtimeapi.PodSandbox, error) {
+	resp, err := m.runtimeService.ListPodSandbox(filter)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 // getOSReleaseInfo reads /etc/os-release and returns a map
 // that contains the key value pairs in that file.
 func getOSReleaseInfo() (map[string]string, error) {
