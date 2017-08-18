@@ -19,6 +19,7 @@ go_library(
         "kuberuntime_logs.go",
         "kuberuntime_manager.go",
         "kuberuntime_sandbox.go",
+        "kuberuntime_stats.go",
         "labels.go",
         "legacy.go",
         "security_context.go",
