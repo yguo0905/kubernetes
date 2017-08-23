@@ -43,9 +43,6 @@ type containerStatsProvider interface {
 	ImageFsStats() (*statsapi.FsStats, error)
 }
 
-var _ containerStatsProvider = &criStatsProvider{}
-var _ containerStatsProvider = &cadvisorStatsProvider{}
-
 // criStatsProvider implements the containerStatsProvider interface by getting
 // the container stats from CRI.
 type criStatsProvider struct {
@@ -66,24 +63,24 @@ func newCRIStatsProvider(runtimeService internalapi.RuntimeService, imageService
 	}
 }
 
-func (self *criStatsProvider) ListPodStats() ([]statsapi.PodStats, error) {
+func (p *criStatsProvider) ListPodStats() ([]statsapi.PodStats, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-func (self *criStatsProvider) ImageFsStats() (*statsapi.FsStats, error) {
+func (p *criStatsProvider) ImageFsStats() (*statsapi.FsStats, error) {
 	return nil, fmt.Errorf("not implemented")
 }
 
-// criStatsProvider implements the containerStatsProvider interface by getting
-// the container stats from CRI.
+// cadvisorStatsProvider implements the containerStatsProvider interface by
+// getting the container stats from cAdvisor.
 type cadvisorStatsProvider struct {
 	cadvisor         cadvisor.Interface
 	imageService     kubecontainer.ImageService
 	resourceAnalyzer stats.ResourceAnalyzer
 }
 
-// newCRIStatsProvider returns a containerStatsProvider that extracts container
-// stats from cadvisor.
+// newCadvisorStatsProvider returns a containerStatsProvider that extracts
+// container stats from cAdvisor.
 func newCadvisorStatsProvider(cadvisor cadvisor.Interface, imageService kubecontainer.ImageService, resourceAnalyzer stats.ResourceAnalyzer) containerStatsProvider {
 	return &cadvisorStatsProvider{
 		cadvisor:         cadvisor,
@@ -94,20 +91,20 @@ func newCadvisorStatsProvider(cadvisor cadvisor.Interface, imageService kubecont
 
 // ListPodStats returns the stats (from cAdvisor) of all the pod-managed
 // containers.
-func (self *cadvisorStatsProvider) ListPodStats() ([]statsapi.PodStats, error) {
+func (p *cadvisorStatsProvider) ListPodStats() ([]statsapi.PodStats, error) {
 	// Gets node root filesystem information and image filesystem stats, which
 	// will be used to populate the available and capacity bytes/inodes in
 	// container stats.
-	rootFsInfo, err := self.cadvisor.RootFsInfo()
+	rootFsInfo, err := p.cadvisor.RootFsInfo()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get rootFs info: %v", err)
 	}
-	imageFsInfo, err := self.cadvisor.ImagesFsInfo()
+	imageFsInfo, err := p.cadvisor.ImagesFsInfo()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get imageFs info: %v", err)
 	}
 
-	infos, err := self.cadvisor.ContainerInfoV2("/", cadvisorapiv2.RequestOptions{
+	infos, err := p.cadvisor.ContainerInfoV2("/", cadvisorapiv2.RequestOptions{
 		IdType:    cadvisorapiv2.TypeName,
 		Count:     2, // 2 samples are needed to compute "instantaneous" CPU
 		Recursive: true,
@@ -166,7 +163,7 @@ func (self *cadvisorStatsProvider) ListPodStats() ([]statsapi.PodStats, error) {
 	for _, podStats := range podToStats {
 		// Lookup the volume stats for each pod.
 		podUID := types.UID(podStats.PodRef.UID)
-		if vstats, found := self.resourceAnalyzer.GetPodVolumeStats(podUID); found {
+		if vstats, found := p.resourceAnalyzer.GetPodVolumeStats(podUID); found {
 			podStats.VolumeStats = vstats.Volumes
 		}
 		result = append(result, *podStats)
@@ -177,12 +174,12 @@ func (self *cadvisorStatsProvider) ListPodStats() ([]statsapi.PodStats, error) {
 
 // ImageFsStats returns the stats (from cAdvisor) of the filesystem for storing
 // images.
-func (self *cadvisorStatsProvider) ImageFsStats() (*statsapi.FsStats, error) {
-	imageFsInfo, err := self.cadvisor.ImagesFsInfo()
+func (p *cadvisorStatsProvider) ImageFsStats() (*statsapi.FsStats, error) {
+	imageFsInfo, err := p.cadvisor.ImagesFsInfo()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get imageFs info: %v", err)
 	}
-	imageStats, err := self.imageService.ImageStats()
+	imageStats, err := p.imageService.ImageStats()
 	if err != nil || imageStats == nil {
 		return nil, fmt.Errorf("failed to get image stats: %v", err)
 	}
@@ -195,7 +192,7 @@ func (self *cadvisorStatsProvider) ImageFsStats() (*statsapi.FsStats, error) {
 
 	// Get the root container stats's timestamp, which will be used as the
 	// imageFs stats timestamp.
-	rootStats, err := getCgroupStats(self.cadvisor, "/")
+	rootStats, err := getCgroupStats(p.cadvisor, "/")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get root container stats: %v", err)
 	}

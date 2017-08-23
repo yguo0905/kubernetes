@@ -39,19 +39,44 @@ import (
 
 // Host methods required by stats handlers.
 type StatsProvider interface {
+	// The following stats are provided by either CRI or cadvisor.
+	//
+	// ListPodStats returns the stats of all the containers managed by pods.
 	ListPodStats() ([]statsapi.PodStats, error)
+	// ImageFsStats returns the stats of the image filesystem.
 	ImageFsStats() (*statsapi.FsStats, error)
 
+	// The following stats are provided by cadvisor.
+	//
+	// GetCgroupStats returns the stats and the networking usage of the cgroup
+	// with the specified cgroupName.
 	GetCgroupStats(cgroupName string) (*statsapi.ContainerStats, *statsapi.NetworkStats, error)
+	// RootFsStats returns the stats of the node root filesystem.
 	RootFsStats() (*statsapi.FsStats, error)
 
+	// The following stats are provided by cadvisor for legacy usage.
+	//
+	// GetContainerInfo returns the information (from cAdvisor) of the
+	// container with the containerName managed by the pod with the uid.
 	GetContainerInfo(podFullName string, uid types.UID, containerName string, req *cadvisorapi.ContainerInfoRequest) (*cadvisorapi.ContainerInfo, error)
+	// GetRawContainerInfo returns the information (from cAdvisor) of the
+	// container with the containerName. If subcontainers is true, this
+	// function will return the information of all the sub-containers as well.
 	GetRawContainerInfo(containerName string, req *cadvisorapi.ContainerInfoRequest, subcontainers bool) (map[string]*cadvisorapi.ContainerInfo, error)
 
+	// The following stats are provided by Kubelet.
+	//
+	// GetPodByName returns the spec of the pod with the name in the specified
+	// namespace.
 	GetPodByName(namespace, name string) (*v1.Pod, bool)
+	// GetNode returns the spec of the local node.
 	GetNode() (*v1.Node, error)
+	// GetNodeConfig returns the configuration of the local node.
 	GetNodeConfig() cm.NodeConfig
+	// ListVolumesForPod returns the stats of the volume used by the pod with
+	// the podUID.
 	ListVolumesForPod(podUID types.UID) (map[string]volume.Volume, bool)
+	// GetPods returns the specs of all the pods running on this node.
 	GetPods() []*v1.Pod
 }
 
