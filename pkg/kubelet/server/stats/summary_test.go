@@ -17,7 +17,6 @@ limitations under the License.
 package stats
 
 import (
-	"reflect"
 	"testing"
 	"time"
 
@@ -88,41 +87,56 @@ func TestSummaryProvider(t *testing.T) {
 	assert.Equal(summary.Node.Runtime, &statsapi.RuntimeStats{ImageFs: imageFsStats})
 
 	assert.Equal(len(summary.Node.SystemContainers), 3)
-	names := make(map[string]bool)
-	for _, c := range summary.Node.SystemContainers {
-		names[c.Name] = true
-		assert.Nil(c.Logs)
-		assert.Nil(c.Rootfs)
-	}
-	assert.True(reflect.DeepEqual(names, map[string]bool{"kubelet": true, "runtime": true, "misc": true}))
-
+	assert.Contains(summary.Node.SystemContainers,
+		statsapi.ContainerStats{
+			Name:               "kubelet",
+			StartTime:          cgroupStatsMap["/kubelet"].cs.StartTime,
+			CPU:                cgroupStatsMap["/kubelet"].cs.CPU,
+			Memory:             cgroupStatsMap["/kubelet"].cs.Memory,
+			UserDefinedMetrics: cgroupStatsMap["/kubelet"].cs.UserDefinedMetrics,
+		},
+		statsapi.ContainerStats{
+			Name:               "system",
+			StartTime:          cgroupStatsMap["/system"].cs.StartTime,
+			CPU:                cgroupStatsMap["/system"].cs.CPU,
+			Memory:             cgroupStatsMap["/system"].cs.Memory,
+			UserDefinedMetrics: cgroupStatsMap["/system"].cs.UserDefinedMetrics,
+		},
+		statsapi.ContainerStats{
+			Name:               "runtime",
+			StartTime:          cgroupStatsMap["/runtime"].cs.StartTime,
+			CPU:                cgroupStatsMap["/runtime"].cs.CPU,
+			Memory:             cgroupStatsMap["/runtime"].cs.Memory,
+			UserDefinedMetrics: cgroupStatsMap["/runtime"].cs.UserDefinedMetrics,
+		},
+	)
 	assert.Equal(summary.Pods, podStats)
 }
 
 func getFsStats() *statsapi.FsStats {
-	f := fuzz.New()
-	fsStats := &statsapi.FsStats{}
-	f.Fuzz(fsStats)
-	return fsStats
+	f := fuzz.New().NilChance(0)
+	v := &statsapi.FsStats{}
+	f.Fuzz(v)
+	return v
 }
 
 func getContainerStats() *statsapi.ContainerStats {
-	f := fuzz.New()
-	containerStats := &statsapi.ContainerStats{}
-	f.Fuzz(containerStats)
-	return containerStats
+	f := fuzz.New().NilChance(0)
+	v := &statsapi.ContainerStats{}
+	f.Fuzz(v)
+	return v
 }
 
 func getVolumeStats() *statsapi.VolumeStats {
-	f := fuzz.New()
-	volumeStats := &statsapi.VolumeStats{}
-	f.Fuzz(volumeStats)
-	return volumeStats
+	f := fuzz.New().NilChance(0)
+	v := &statsapi.VolumeStats{}
+	f.Fuzz(v)
+	return v
 }
 
 func getNetworkStats() *statsapi.NetworkStats {
-	f := fuzz.New()
-	networkStats := &statsapi.NetworkStats{}
-	f.Fuzz(networkStats)
-	return networkStats
+	f := fuzz.New().NilChance(0)
+	v := &statsapi.NetworkStats{}
+	f.Fuzz(v)
+	return v
 }

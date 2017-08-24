@@ -39,14 +39,14 @@ import (
 
 // Host methods required by stats handlers.
 type StatsProvider interface {
-	// The following stats are provided by either CRI or cadvisor.
+	// The following stats are provided by either CRI or cAdvisor.
 	//
 	// ListPodStats returns the stats of all the containers managed by pods.
 	ListPodStats() ([]statsapi.PodStats, error)
 	// ImageFsStats returns the stats of the image filesystem.
 	ImageFsStats() (*statsapi.FsStats, error)
 
-	// The following stats are provided by cadvisor.
+	// The following stats are provided by cAdvisor.
 	//
 	// GetCgroupStats returns the stats and the networking usage of the cgroup
 	// with the specified cgroupName.
@@ -54,17 +54,17 @@ type StatsProvider interface {
 	// RootFsStats returns the stats of the node root filesystem.
 	RootFsStats() (*statsapi.FsStats, error)
 
-	// The following stats are provided by cadvisor for legacy usage.
+	// The following stats are provided by cAdvisor for legacy usage.
 	//
-	// GetContainerInfo returns the information (from cAdvisor) of the
-	// container with the containerName managed by the pod with the uid.
+	// GetContainerInfo returns the information of the container with the
+	// containerName managed by the pod with the uid.
 	GetContainerInfo(podFullName string, uid types.UID, containerName string, req *cadvisorapi.ContainerInfoRequest) (*cadvisorapi.ContainerInfo, error)
-	// GetRawContainerInfo returns the information (from cAdvisor) of the
-	// container with the containerName. If subcontainers is true, this
-	// function will return the information of all the sub-containers as well.
+	// GetRawContainerInfo returns the information of the container with the
+	// containerName. If subcontainers is true, this function will return the
+	// information of all the sub-containers as well.
 	GetRawContainerInfo(containerName string, req *cadvisorapi.ContainerInfoRequest, subcontainers bool) (map[string]*cadvisorapi.ContainerInfo, error)
 
-	// The following stats are provided by Kubelet.
+	// The following information is provided by Kubelet.
 	//
 	// GetPodByName returns the spec of the pod with the name in the specified
 	// namespace.
