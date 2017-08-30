@@ -103,6 +103,7 @@ func (podStrategy) AllowUnconditionalUpdate() bool {
 // CheckGracefulDelete allows a pod to be gracefully deleted. It updates the DeleteOptions to
 // reflect the desired grace value.
 func (podStrategy) CheckGracefulDelete(ctx genericapirequest.Context, obj runtime.Object, options *metav1.DeleteOptions) bool {
+	fmt.Printf("yggggggg: podStrategy.CheckGracefulDelete(): %+v\n", options)
 	if options == nil {
 		return false
 	}

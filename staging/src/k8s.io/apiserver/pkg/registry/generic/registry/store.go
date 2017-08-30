@@ -19,6 +19,7 @@ package registry
 import (
 	"fmt"
 	"reflect"
+	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
@@ -914,6 +915,8 @@ func (e *Store) updateForGracefulDeletionAndFinalizers(ctx genericapirequest.Con
 
 // Delete removes the item from storage.
 func (e *Store) Delete(ctx genericapirequest.Context, name string, options *metav1.DeleteOptions) (runtime.Object, bool, error) {
+	glog.Errorf("ygggggg: Store.Delete(): %+v", options)
+	debug.PrintStack()
 	key, err := e.KeyFunc(ctx, name)
 	if err != nil {
 		return nil, false, err

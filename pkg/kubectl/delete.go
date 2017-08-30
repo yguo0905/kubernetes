@@ -344,7 +344,7 @@ func (reaper *StatefulSetReaper) Stop(namespace, name string, timeout time.Durat
 	return statefulsets.Delete(name, deleteOptions)
 }
 
-func (reaper *JobReaper) Stop(namespace, name string, timeout time.Duration, gracePeriod *metav1.DeleteOptions) error {
+func (reaper *JobReaper) Stop(namespace, name string, timeout time.Duration, deleteOptions *metav1.DeleteOptions) error {
 	jobs := reaper.client.Jobs(namespace)
 	pods := reaper.podClient.Pods(namespace)
 	scaler := &JobScaler{reaper.client}
@@ -373,7 +373,7 @@ func (reaper *JobReaper) Stop(namespace, name string, timeout time.Duration, gra
 	}
 	errList := []error{}
 	for _, pod := range podList.Items {
-		if err := pods.Delete(pod.Name, gracePeriod); err != nil {
+		if err := pods.Delete(pod.Name, deleteOptions); err != nil {
 			// ignores the error when the pod isn't found
 			if !errors.IsNotFound(err) {
 				errList = append(errList, err)
@@ -385,11 +385,10 @@ func (reaper *JobReaper) Stop(namespace, name string, timeout time.Duration, gra
 	}
 	// once we have all the pods removed we can safely remove the job itself.
 	falseVar := false
-	deleteOptions := &metav1.DeleteOptions{OrphanDependents: &falseVar}
-	return jobs.Delete(name, deleteOptions)
+	return jobs.Delete(name, &metav1.DeleteOptions{OrphanDependents: &falseVar})
 }
 
-func (reaper *DeploymentReaper) Stop(namespace, name string, timeout time.Duration, gracePeriod *metav1.DeleteOptions) error {
+func (reaper *DeploymentReaper) Stop(namespace, name string, timeout time.Duration, deleteOptions *metav1.DeleteOptions) error {
 	deployments := reaper.dClient.Deployments(namespace)
 	rsReaper := &ReplicaSetReaper{reaper.rsClient, reaper.pollInterval, reaper.timeout}
 
@@ -431,7 +430,7 @@ func (reaper *DeploymentReaper) Stop(namespace, name string, timeout time.Durati
 
 	errList := []error{}
 	for _, rs := range rss {
-		if err := rsReaper.Stop(rs.Namespace, rs.Name, timeout, gracePeriod); err != nil {
+		if err := rsReaper.Stop(rs.Namespace, rs.Name, timeout, deleteOptions); err != nil {
 			scaleGetErr, ok := err.(ScaleError)
 			if errors.IsNotFound(err) || (ok && errors.IsNotFound(scaleGetErr.ActualError)) {
 				continue
@@ -472,11 +471,11 @@ func (reaper *DeploymentReaper) updateDeploymentWithRetries(namespace, name stri
 	return deployment, err
 }
 
-func (reaper *PodReaper) Stop(namespace, name string, timeout time.Duration, gracePeriod *metav1.DeleteOptions) error {
+func (reaper *PodReaper) Stop(namespace, name string, timeout time.Duration, deleteOptions *metav1.DeleteOptions) error {
 	pods := reaper.client.Pods(namespace)
 	_, err := pods.Get(name, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
-	return pods.Delete(name, gracePeriod)
+	return pods.Delete(name, deleteOptions)
 }

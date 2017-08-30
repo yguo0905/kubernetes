@@ -66,6 +66,9 @@ func (hr *HandlerRunner) RunPostStart(containerID kubecontainer.ContainerID, pod
 }
 
 func (hr *HandlerRunner) RunPreStop(containerID kubecontainer.ContainerID, pod *v1.Pod, container *v1.Container, handler *v1.PreStopHandler) (string, error) {
+	fmt.Printf("yggggggg: %+v\n", pod.ObjectMeta)
+	fmt.Printf("yggggggg: %v\n", *pod.ObjectMeta.DeletionGracePeriodSeconds)
+	fmt.Printf("yggggggg: %v\n", pod.ObjectMeta.DeletionReason)
 	switch {
 	case handler.Exec != nil:
 		return hr.runExec(containerID, pod, container, handler.Exec.Command)

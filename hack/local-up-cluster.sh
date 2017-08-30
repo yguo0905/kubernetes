@@ -529,6 +529,7 @@ function start_apiserver {
       --requestheader-allowed-names=system:auth-proxy \
       --proxy-client-cert-file="${CERT_DIR}/client-auth-proxy.crt" \
       --proxy-client-key-file="${CERT_DIR}/client-auth-proxy.key" \
+      --storage-media-type=application/json \
       --cors-allowed-origins="${API_CORS_ALLOWED_ORIGINS}" >"${APISERVER_LOG}" 2>&1 &
     APISERVER_PID=$!
 
@@ -665,6 +666,7 @@ function start_kubelet {
         --eviction-soft=${EVICTION_SOFT} \
         --eviction-pressure-transition-period=${EVICTION_PRESSURE_TRANSITION_PERIOD} \
         --pod-manifest-path="${POD_MANIFEST_PATH}" \
+        --fail-swap-on=false \
         ${auth_args} \
         ${dns_args} \
         ${cni_conf_dir_args} \
