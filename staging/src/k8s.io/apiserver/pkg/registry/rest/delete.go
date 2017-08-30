@@ -68,10 +68,12 @@ type RESTGracefulDeleteStrategy interface {
 // default values if graceful is true. Second place where we set deletionTimestamp is pkg/registry/generic/registry/store.go
 // this function is responsible for setting deletionTimestamp during gracefulDeletion, other one for cascading deletions.
 func BeforeDelete(strategy RESTDeleteStrategy, ctx genericapirequest.Context, obj runtime.Object, options *metav1.DeleteOptions) (graceful, gracefulPending bool, err error) {
+	glog.Errorf("yggggggggggg: %+v", options)
 	objectMeta, gvk, kerr := objectMetaAndKind(strategy, obj)
 	if kerr != nil {
 		return false, false, kerr
 	}
+	glog.Errorf("yggggggggggg: %+v", objectMeta)
 	if errs := validation.ValidateDeleteOptions(options); len(errs) > 0 {
 		return false, false, errors.NewInvalid(schema.GroupKind{}, "", errs)
 	}
@@ -112,8 +114,7 @@ func BeforeDelete(strategy RESTDeleteStrategy, ctx genericapirequest.Context, ob
 					Add(time.Second * time.Duration(*options.GracePeriodSeconds)))
 			objectMeta.SetDeletionTimestamp(&newDeletionTimestamp)
 			objectMeta.SetDeletionGracePeriodSeconds(&period)
-			objectMeta.SetDeletionReason(options.Reason)
-			glog.Errorf("yggggggggggg: %+v", objectMeta)
+			glog.Errorf("yggggggggggg: DeletionReason: %+v", objectMeta.GetDeletionReason())
 			return true, false, nil
 		}
 		// graceful deletion is pending, do nothing
@@ -128,6 +129,7 @@ func BeforeDelete(strategy RESTDeleteStrategy, ctx genericapirequest.Context, ob
 	objectMeta.SetDeletionTimestamp(&now)
 	objectMeta.SetDeletionGracePeriodSeconds(options.GracePeriodSeconds)
 	objectMeta.SetDeletionReason(options.Reason)
+	glog.Errorf("yggggggggggg: DeletionReason: %+v", objectMeta.GetDeletionReason())
 	// If it's the first graceful deletion we are going to set the DeletionTimestamp to non-nil.
 	// Controllers of the object that's being deleted shouldn't take any nontrivial actions, hence its behavior changes.
 	// Thus we need to bump object's Generation (if set). This handles generation bump during graceful deletion.
@@ -135,6 +137,5 @@ func BeforeDelete(strategy RESTDeleteStrategy, ctx genericapirequest.Context, ob
 	if objectMeta.GetGeneration() > 0 {
 		objectMeta.SetGeneration(objectMeta.GetGeneration() + 1)
 	}
-	glog.Errorf("yggggggggggg: %+v", objectMeta)
 	return true, false, nil
 }
