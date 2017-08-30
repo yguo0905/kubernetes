@@ -20,6 +20,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/golang/glog"
+
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/validation"
@@ -111,6 +113,7 @@ func BeforeDelete(strategy RESTDeleteStrategy, ctx genericapirequest.Context, ob
 			objectMeta.SetDeletionTimestamp(&newDeletionTimestamp)
 			objectMeta.SetDeletionGracePeriodSeconds(&period)
 			objectMeta.SetDeletionReason(options.Reason)
+			glog.Errorf("yggggggggggg: %+v", objectMeta)
 			return true, false, nil
 		}
 		// graceful deletion is pending, do nothing
@@ -132,5 +135,6 @@ func BeforeDelete(strategy RESTDeleteStrategy, ctx genericapirequest.Context, ob
 	if objectMeta.GetGeneration() > 0 {
 		objectMeta.SetGeneration(objectMeta.GetGeneration() + 1)
 	}
+	glog.Errorf("yggggggggggg: %+v", objectMeta)
 	return true, false, nil
 }

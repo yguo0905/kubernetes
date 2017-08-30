@@ -232,6 +232,8 @@ func TestDeleteObject(t *testing.T) {
 	cmd.Flags().Set("filename", "../../../examples/guestbook/legacy/redis-master-controller.yaml")
 	cmd.Flags().Set("cascade", "false")
 	cmd.Flags().Set("output", "name")
+	cmd.Flags().Set("grace-period", "10")
+	cmd.Flags().Set("reason", "delete-reason")
 	cmd.Run(cmd, []string{})
 
 	// uses the name from the file, not the response
@@ -247,10 +249,10 @@ type fakeReaper struct {
 	err             error
 }
 
-func (r *fakeReaper) Stop(namespace, name string, timeout time.Duration, gracePeriod *metav1.DeleteOptions) error {
+func (r *fakeReaper) Stop(namespace, name string, timeout time.Duration, deleteOptions *metav1.DeleteOptions) error {
 	r.namespace, r.name = namespace, name
 	r.timeout = timeout
-	r.deleteOptions = gracePeriod
+	r.deleteOptions = deleteOptions
 	return r.err
 }
 
