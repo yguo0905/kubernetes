@@ -209,12 +209,16 @@ func findNodesThatFit(
 		}
 	}
 
+	glog.Errorf("ygg: extenders = %+v", extenders)
+
 	if len(filtered) > 0 && len(extenders) != 0 {
 		for _, extender := range extenders {
+			glog.Errorf("ygg: in = %+v", filtered)
 			filteredList, failedMap, err := extender.Filter(pod, filtered, nodeNameToInfo)
 			if err != nil {
 				return []*v1.Node{}, FailedPredicateMap{}, err
 			}
+			glog.Errorf("ygg: out = %+v", filteredList)
 
 			for failedNodeName, failedMsg := range failedMap {
 				if _, found := failedPredicateMap[failedNodeName]; !found {

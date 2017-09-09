@@ -154,6 +154,7 @@ func (sc schedulerConfigurator) getSchedulerPolicyConfig() (*schedulerapi.Policy
 		}
 	}
 
+	glog.Errorf("ygg: policy file = %v\n", sc.policyFile)
 	// If we are in legacy mode or ConfigMap name is empty, try to use policy
 	// config file.
 	if !policyConfigMapFound {
@@ -171,6 +172,7 @@ func (sc schedulerConfigurator) getSchedulerPolicyConfig() (*schedulerapi.Policy
 	if err := runtime.DecodeInto(latestschedulerapi.Codec, configData, &policy); err != nil {
 		return nil, fmt.Errorf("invalid configuration: %v", err)
 	}
+	glog.Errorf("ygg: policy = %+v\n", policy)
 	return &policy, nil
 }
 
