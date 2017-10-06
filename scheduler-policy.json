@@ -1,0 +1,12 @@
+{
+  "extenderConfigs": [
+    {
+      "urlPrefix": "http://127.0.0.1:8095/",
+      "filterVerb": "filter",
+      "bindVerb": "bind",
+      "enableHttps": false,
+      "weight": 1,
+      "nodeCacheCapable": true
+    }
+  ]
+}

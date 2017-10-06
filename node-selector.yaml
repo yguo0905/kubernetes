@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-selector-pod
+spec:
+  containers:
+  - name: node-selector-container
+    image: gcr.io/google_containers/busybox
+    command: ["sleep"]
+    args: ["10000"]
+  nodeSelector:
+    nodetype: yang
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: no-node-selector-pod
+spec:
+  containers:
+  - name: no-node-selector-container
+    image: gcr.io/google_containers/busybox
+    command: ["sleep"]
+    args: ["10000"]

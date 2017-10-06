@@ -370,6 +370,10 @@ cleanup()
   [[ -n "${SCHEDULER_PID-}" ]] && SCHEDULER_PIDS=$(pgrep -P ${SCHEDULER_PID} ; ps -o pid= -p ${SCHEDULER_PID})
   [[ -n "${SCHEDULER_PIDS-}" ]] && sudo kill ${SCHEDULER_PIDS}
 
+  # Check if the TPU scheduler is still running
+  [[ -n "${TPU_SCHEDULER_PID-}" ]] && TPU_SCHEDULER_PIDS=$(pgrep -P ${TPU_SCHEDULER_PID} ; ps -o pid= -p ${TPU_SCHEDULER_PID})
+  [[ -n "${TPU_SCHEDULER_PIDS-}" ]] && sudo kill ${TPU_SCHEDULER_PIDS}
+
   # Check if the etcd is still running
   [[ -n "${ETCD_PID-}" ]] && kube::etcd::stop
   [[ -n "${ETCD_DIR-}" ]] && kube::etcd::clean_etcd_dir
@@ -661,7 +665,7 @@ function start_kubelet {
         --cloud-config="${CLOUD_CONFIG}" \
         --address="${KUBELET_HOST}" \
         --kubeconfig "$CERT_DIR"/kubelet.kubeconfig \
-        --feature-gates="${FEATURE_GATES}" \
+        --feature-gates="${FEATURE_GATES},DevicePlugins=true" \
         --cpu-cfs-quota=${CPU_CFS_QUOTA} \
         --enable-controller-attach-detach="${ENABLE_CONTROLLER_ATTACH_DETACH}" \
         --cgroups-per-qos=${CGROUPS_PER_QOS} \
@@ -745,12 +749,29 @@ EOF
       --v=${LOG_LEVEL} 2>&1 &
     PROXY_PID=$!
 
+#    ${KUBECTL} --kubeconfig="${CERT_DIR}/admin.kubeconfig" \
+#      --namespace=kube-system \
+#      create configmap scheduler-policy \
+#      --from-file=/usr/local/google/home/ygg/go/src/k8s.io/kubernetes/policy.cfg
+
     SCHEDULER_LOG=${LOG_DIR}/kube-scheduler.log
     ${CONTROLPLANE_SUDO} "${GO_OUT}/hyperkube" scheduler \
       --v=${LOG_LEVEL} \
       --kubeconfig "$CERT_DIR"/scheduler.kubeconfig \
+      --use-legacy-policy-config \
+      --policy-config-file=/usr/local/google/home/ygg/go/src/k8s.io/kubernetes/scheduler-policy.json \
       --master="https://${API_HOST}:${API_SECURE_PORT}" >"${SCHEDULER_LOG}" 2>&1 &
     SCHEDULER_PID=$!
+#      --policy-configmap=scheduler-policy \
+
+# Options to enable TPU extender
+#      --use-legacy-policy-config \
+#      --policy-config-file=/home/yang/go/src/k8s.io/kubernetes/scheduler-policy.json \
+
+
+#    /usr/local/google/home/ygg/go/src/k8s.io/tpu-scheduler/bin/amd64/tpu-scheduler \
+#      --port=8090
+#    TPU_SCHEDULER_PID=$!
 }
 
 function start_kubedns {

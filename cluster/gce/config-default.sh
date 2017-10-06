@@ -226,6 +226,9 @@ fi
 # Optional: Enable Rescheduler
 ENABLE_RESCHEDULER="${KUBE_ENABLE_RESCHEDULER:-true}"
 
+# Optional: Enable TPU scheduler
+ENABLE_TPU_SCHEDULER="${KUBE_ENABLE_TPU_SCHEDULER:-true}"
+
 # Optional: Enable allocation of pod IPs using IP aliases.
 #
 # BETA FEATURE.

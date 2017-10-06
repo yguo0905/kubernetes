@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: tf-job
+spec:
+  template:
+    metadata:
+      name: tf
+    spec:
+      containers:
+      - name: tf-container
+        image: gcr.io/ygg-gke-dev/gke-tf-tpu:latest
+        command: ["python"]
+        args: ["/usr/local/bin/tf.py"]
+        resources:
+          requests:
+            alpha.google.com/tpu: 1
+          limits:
+            alpha.google.com/tpu: 1
+      restartPolicy: Never

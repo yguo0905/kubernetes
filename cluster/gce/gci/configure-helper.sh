@@ -338,6 +338,9 @@ function create-master-auth {
   if [[ -n "${NODE_PROBLEM_DETECTOR_TOKEN:-}" ]]; then
     append_or_replace_prefixed_line "${known_tokens_csv}" "${NODE_PROBLEM_DETECTOR_TOKEN},"   "system:node-problem-detector,uid:node-problem-detector"
   fi
+  if [[ -n "${TPU_SCHEDULER_TOKEN:-}" ]]; then
+    append_or_replace_prefixed_line "${known_tokens_csv}" "${TPU_SCHEDULER_TOKEN},"           "system:tpu-scheduler,uid:tpu-scheduler"
+  fi
   local use_cloud_config="false"
   cat <<EOF >/etc/gce.conf
 [global]
@@ -772,6 +775,49 @@ contexts:
     user: kube-scheduler
   name: kube-scheduler
 current-context: kube-scheduler
+EOF
+}
+
+function create-tpuscheduler-kubeconfig {
+  echo "Creating tpu-scheduler kubeconfig file"
+  mkdir -p /etc/srv/kubernetes/tpu-scheduler
+  cat <<EOF >/etc/srv/kubernetes/tpu-scheduler/kubeconfig
+apiVersion: v1
+kind: Config
+users:
+- name: tpu-scheduler
+  user:
+    token: ${TPU_SCHEDULER_TOKEN}
+clusters:
+- name: local
+  cluster:
+    insecure-skip-tls-verify: true
+    server: https://localhost:443
+contexts:
+- context:
+    cluster: local
+    user: tpu-scheduler
+  name: tpu-scheduler
+current-context: tpu-scheduler
+EOF
+}
+
+function create-kubescheduler-config {
+  echo "Creating kube-scheduler config file"
+  mkdir -p /etc/srv/kubernetes/kube-scheduler
+  cat <<EOF >/etc/srv/kubernetes/kube-scheduler/config
+{
+  "extenderConfigs": [
+    {
+      "urlPrefix": "http://127.0.0.1:8095/",
+      "filterVerb": "filter",
+      "bindVerb": "bind",
+      "enableHttps": false,
+      "weight": 1,
+      "nodeCacheCapable": true
+    }
+  ]
+}
 EOF
 }
 
@@ -1622,6 +1668,7 @@ function start-kube-controller-manager {
 function start-kube-scheduler {
   echo "Start kubernetes scheduler"
   create-kubescheduler-kubeconfig
+  create-kubescheduler-config
   prepare-log-file /var/log/kube-scheduler.log
 
   # Calculate variables and set them in the manifest.
@@ -1855,6 +1902,10 @@ function start-kube-addons {
     setup-addon-manifests "addons" "metadata-proxy/gce"
   fi
 
+  if [[ "${ENABLE_TPU_SCHEDULER:-}" == "true" ]]; then
+    setup-addon-manifests "addons" "tpu-scheduler"
+  fi
+
   # Place addon manager pod manifest.
   cp "${src_dir}/kube-addon-manager.yaml" /etc/kubernetes/manifests
 }
@@ -1889,6 +1940,17 @@ function start-rescheduler {
     echo "Start Rescheduler"
     prepare-log-file /var/log/rescheduler.log
     cp "${KUBE_HOME}/kube-manifests/kubernetes/gci-trusty/rescheduler.manifest" \
+       /etc/kubernetes/manifests/
+  fi
+}
+
+# Starts tpu-scheduler.
+function start-tpu-scheduler {
+  if [[ "${ENABLE_TPU_SCHEDULER:-}" == "true" ]]; then
+    echo "Start tpu-scheduler"
+    create-tpuscheduler-kubeconfig
+    prepare-log-file /var/log/tpu-scheduler.log
+    cp "${KUBE_HOME}/kube-manifests/kubernetes/gci-trusty/tpu-scheduler.manifest" \
        /etc/kubernetes/manifests/
   fi
 }
@@ -1967,6 +2029,7 @@ fi
 # generate the controller manager and scheduler tokens here since they are only used on the master.
 KUBE_CONTROLLER_MANAGER_TOKEN=$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | dd bs=32 count=1 2>/dev/null)
 KUBE_SCHEDULER_TOKEN=$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | dd bs=32 count=1 2>/dev/null)
+TPU_SCHEDULER_TOKEN=$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | dd bs=32 count=1 2>/dev/null)
 
 setup-os-params
 config-ip-firewall
@@ -2008,6 +2071,7 @@ if [[ "${KUBERNETES_MASTER:-}" == "true" ]]; then
   start-cluster-autoscaler
   start-lb-controller
   start-rescheduler
+  start-tpu-scheduler
 else
   if [[ "${KUBE_PROXY_DAEMONSET:-}" != "true" ]]; then
     start-kube-proxy

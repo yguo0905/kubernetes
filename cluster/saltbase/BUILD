@@ -78,6 +78,7 @@ pkg_tar(
         "salt/kube-scheduler/kube-scheduler.manifest",
         "salt/l7-gcp/glbc.manifest",
         "salt/rescheduler/rescheduler.manifest",
+        "salt/tpu-scheduler/tpu-scheduler.manifest",
     ],
     mode = "0644",
     deps = [

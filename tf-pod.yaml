@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tf-pod
+spec:
+  restartPolicy: Never
+  containers:
+  - name: tf-container-1
+    image: gcr.io/ygg-gke-dev/gke-tf-tpu:latest
+    command: ["sleep"]
+    args: ["10000"]
+    resources:
+      limits:
+        alpha.google.com/tpu: 1
+  - name: tf-container-2
+    image: busybox
+    command: ["sleep"]
+    args: ["10000"]
+    resources:
+      limits:
+        alpha.google.com/tpu: 2
+  - name: tf-container-3
+    image: busybox
+    command: ["sleep"]
+    args: ["10000"]
+    resources:
+      limits:
+        alpha.google.com/tpu: 3
