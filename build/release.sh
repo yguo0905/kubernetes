@@ -35,10 +35,10 @@ kube::build::verify_prereqs
 kube::build::build_image
 kube::build::run_build_command make cross
 
-if [[ $KUBE_RELEASE_RUN_TESTS =~ ^[yY]$ ]]; then
-  kube::build::run_build_command make test
-  kube::build::run_build_command make test-integration
-fi
+#if [[ $KUBE_RELEASE_RUN_TESTS =~ ^[yY]$ ]]; then
+#  kube::build::run_build_command make test
+#  kube::build::run_build_command make test-integration
+#fi
 
 kube::build::copy_output
 
