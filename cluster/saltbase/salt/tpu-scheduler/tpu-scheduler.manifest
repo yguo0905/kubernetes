@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tpu-scheduler-v0.1
+  namespace: kube-system
+  annotations:
+    scheduler.alpha.kubernetes.io/critical-pod: ''
+  labels:
+    k8s-app: tpu-scheduler
+    version: v0.1
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "TPUScheduler"
+spec:
+  hostNetwork: true
+  containers:
+  - image: gcr.io/ygg-gke-dev/tpu-scheduler:latest
+    name: tpu-scheduler
+    volumeMounts:
+    - name: logfile
+      mountPath: /var/log/tpu-scheduler.log
+      readOnly: false
+    - name: srvkube
+      mountPath: /etc/srv/kubernetes
+      readOnly: true
+    resources:
+      requests:
+        cpu: 10m
+        memory: 100Mi
+    command:
+    - sh
+    - -c
+    - '/usr/local/bin/tpu-scheduler --kubeconfig=/etc/srv/kubernetes/tpu-scheduler/kubeconfig --port=8095 --logtostderr --v=3 1>>/var/log/tpu-scheduler.log 2>&1'
+  volumes:
+  - name: logfile
+    hostPath:
+      path: /var/log/tpu-scheduler.log
+      type: FileOrCreate
+  - name: srvkube
+    hostPath:
+      path: /etc/srv/kubernetes

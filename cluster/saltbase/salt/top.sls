@@ -77,3 +77,6 @@ base:
 {% if pillar.get('enable_rescheduler', '').lower() == 'true' %}
     - rescheduler
 {% endif %}
+{% if pillar.get('enable_tpu_scheduler', '').lower() == 'true' %}
+    - tpu-scheduler
+{% endif %}

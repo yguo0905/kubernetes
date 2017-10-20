@@ -51,7 +51,7 @@
     "command": [
                  "/bin/sh",
                  "-c",
-                 "/usr/local/bin/kube-scheduler {{params}} 1>>/var/log/kube-scheduler.log 2>&1"
+                 "/usr/local/bin/kube-scheduler --use-legacy-policy-config --policy-config-file=/etc/srv/kubernetes/kube-scheduler/config {{params}} 1>>/var/log/kube-scheduler.log 2>&1"
                ],
     "livenessProbe": {
       "httpGet": {
