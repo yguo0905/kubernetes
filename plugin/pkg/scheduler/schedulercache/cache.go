@@ -123,6 +123,9 @@ func (cache *schedulerCache) AssumePod(pod *v1.Pod) error {
 
 	cache.mu.Lock()
 	defer cache.mu.Unlock()
+
+	glog.Infof("AssumePod: pod %s/%s key %s", pod.Namespace, pod.Name, key)
+
 	if _, ok := cache.podStates[key]; ok {
 		return fmt.Errorf("pod %v state wasn't initial but get assumed", key)
 	}
@@ -181,6 +184,7 @@ func (cache *schedulerCache) ForgetPod(pod *v1.Pod) error {
 		if err != nil {
 			return err
 		}
+		glog.Infof("forget pod %s/%s", pod.Namespace, pod.Name)
 		delete(cache.assumedPods, key)
 		delete(cache.podStates, key)
 	default:
@@ -239,6 +243,7 @@ func (cache *schedulerCache) AddPod(pod *v1.Pod) error {
 			cache.removePod(currState.pod)
 			cache.addPod(pod)
 		}
+		glog.Infof("add pod")
 		delete(cache.assumedPods, key)
 		cache.podStates[key].deadline = nil
 		cache.podStates[key].pod = pod
@@ -312,6 +317,14 @@ func (cache *schedulerCache) RemovePod(pod *v1.Pod) error {
 }
 
 func (cache *schedulerCache) IsAssumedPod(pod *v1.Pod) (bool, error) {
+	b, err := cache.isAssumedPod(pod)
+	if err != nil {
+		glog.Infof("IsAssumedPod %t: pod %s/%s", b, pod.Namespace, pod.Name)
+	}
+	return b, err
+}
+
+func (cache *schedulerCache) isAssumedPod(pod *v1.Pod) (bool, error) {
 	key, err := getPodKey(pod)
 	if err != nil {
 		return false, err
@@ -320,11 +333,16 @@ func (cache *schedulerCache) IsAssumedPod(pod *v1.Pod) (bool, error) {
 	cache.mu.Lock()
 	defer cache.mu.Unlock()
 
-	b, found := cache.assumedPods[key]
-	if !found {
-		return false, nil
+	_, found := cache.podStates[key]
+	if found {
+		return true, nil
 	}
-	return b, nil
+
+	b, found := cache.assumedPods[key]
+	if found {
+		return b, nil
+	}
+	return false, nil
 }
 
 func (cache *schedulerCache) GetPod(pod *v1.Pod) (*v1.Pod, error) {
@@ -456,6 +474,7 @@ func (cache *schedulerCache) expirePod(key string, ps *podState) error {
 	if err := cache.removePod(ps.pod); err != nil {
 		return err
 	}
+	glog.Infof("expire pod")
 	delete(cache.assumedPods, key)
 	delete(cache.podStates, key)
 	return nil

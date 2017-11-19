@@ -24,6 +24,8 @@ import (
 	"reflect"
 	"time"
 
+	messagediff "gopkg.in/d4l3k/messagediff.v1"
+
 	"github.com/golang/glog"
 
 	"k8s.io/api/core/v1"
@@ -199,10 +201,16 @@ func NewConfigFactory(
 					}
 				},
 				UpdateFunc: func(oldObj, newObj interface{}) {
-					pod := newObj.(*v1.Pod)
-					if c.skipPodUpdate(pod) {
+					oldPod := oldObj.(*v1.Pod)
+					newPod := newObj.(*v1.Pod)
+
+					diff, _ := messagediff.PrettyDiff(oldPod, newPod)
+					glog.Infof("yggyggyggyggyggygg:\n%v", diff)
+
+					if c.skipPodUpdate(newObj.(*v1.Pod)) {
 						return
 					}
+					pod := newObj.(*v1.Pod)
 					if err := c.podQueue.Update(pod); err != nil {
 						runtime.HandleError(fmt.Errorf("unable to update %T: %v", newObj, err))
 					}
@@ -288,9 +296,11 @@ func (c *configFactory) skipPodUpdate(pod *v1.Pod) bool {
 		return false
 	}
 	if !isAssumed {
+		glog.Infof("pod %s/%s is not assumed", pod.Namespace, pod.Name)
 		return false
 	}
 
+	glog.Infof("pod is assumed")
 	// Gets the assumed pod from the cache.
 	assumedPod, err := c.schedulerCache.GetPod(pod)
 	if err != nil {
