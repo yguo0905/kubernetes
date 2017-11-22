@@ -154,7 +154,8 @@ func addConversionFuncs(scheme *runtime.Scheme) error {
 		return err
 	}
 
-	// Add field conversion funcs.
+	// Add field label (used as a reference to a field in an object in Downward
+	// API) conversion funcs.
 	err = scheme.AddFieldLabelConversionFunc("v1", "Pod",
 		func(label, value string) (string, string, error) {
 			path, _ := fieldpath.SplitMaybeSubscriptedPath(label)
@@ -212,13 +213,73 @@ func addConversionFuncs(scheme *runtime.Scheme) error {
 	if err != nil {
 		return err
 	}
+
+	// Add field selector (used as ListOptions.FieldSelector) conversion funcs.
+	err = scheme.AddFieldSelectorConversionFunc("v1", "Pod",
+		func(selector, value string) (string, string, error) {
+			switch selector {
+			case "metadata.name",
+				"metadata.namespace",
+				"spec.nodeName",
+				"spec.restartPolicy",
+				"spec.schedulerName",
+				"status.phase",
+				"status.podIP":
+				return selector, value, nil
+			default:
+				return "", "", fmt.Errorf("field selector not supported: %s", selector)
+			}
+		},
+	)
+	if err != nil {
+		return err
+	}
+	err = scheme.AddFieldSelectorConversionFunc("v1", "Node",
+		func(label, value string) (string, string, error) {
+			switch label {
+			case "metadata.name":
+				return label, value, nil
+			case "spec.unschedulable":
+				return label, value, nil
+			default:
+				return "", "", fmt.Errorf("field label not supported: %s", label)
+			}
+		},
+	)
+	if err != nil {
+		return err
+	}
+	err = scheme.AddFieldSelectorConversionFunc("v1", "ReplicationController",
+		func(label, value string) (string, string, error) {
+			switch label {
+			case "metadata.name",
+				"metadata.namespace",
+				"status.replicas":
+				return label, value, nil
+			default:
+				return "", "", fmt.Errorf("field label not supported: %s", label)
+			}
+		})
+	if err != nil {
+		return err
+	}
+
 	if err := AddFieldLabelConversionsForEvent(scheme); err != nil {
+		return err
+	}
+	if err := AddFieldSelectorConversionsForEvent(scheme); err != nil {
 		return err
 	}
 	if err := AddFieldLabelConversionsForNamespace(scheme); err != nil {
 		return err
 	}
+	if err := AddFieldSelectorConversionsForNamespace(scheme); err != nil {
+		return err
+	}
 	if err := AddFieldLabelConversionsForSecret(scheme); err != nil {
+		return err
+	}
+	if err := AddFieldSelectorConversionsForSecret(scheme); err != nil {
 		return err
 	}
 	return nil
@@ -550,6 +611,29 @@ func AddFieldLabelConversionsForEvent(scheme *runtime.Scheme) error {
 		})
 }
 
+func AddFieldSelectorConversionsForEvent(scheme *runtime.Scheme) error {
+	return scheme.AddFieldSelectorConversionFunc("v1", "Event",
+		func(selector, value string) (string, string, error) {
+			switch selector {
+			case "involvedObject.kind",
+				"involvedObject.namespace",
+				"involvedObject.name",
+				"involvedObject.uid",
+				"involvedObject.apiVersion",
+				"involvedObject.resourceVersion",
+				"involvedObject.fieldPath",
+				"reason",
+				"source",
+				"type",
+				"metadata.namespace",
+				"metadata.name":
+				return selector, value, nil
+			default:
+				return "", "", fmt.Errorf("field selector not supported: %s", selector)
+			}
+		})
+}
+
 func AddFieldLabelConversionsForNamespace(scheme *runtime.Scheme) error {
 	return scheme.AddFieldLabelConversionFunc("v1", "Namespace",
 		func(label, value string) (string, string, error) {
@@ -559,6 +643,19 @@ func AddFieldLabelConversionsForNamespace(scheme *runtime.Scheme) error {
 				return label, value, nil
 			default:
 				return "", "", fmt.Errorf("field label not supported: %s", label)
+			}
+		})
+}
+
+func AddFieldSelectorConversionsForNamespace(scheme *runtime.Scheme) error {
+	return scheme.AddFieldSelectorConversionFunc("v1", "Namespace",
+		func(selector, value string) (string, string, error) {
+			switch selector {
+			case "status.phase",
+				"metadata.name":
+				return selector, value, nil
+			default:
+				return "", "", fmt.Errorf("field selector not supported: %s", selector)
 			}
 		})
 }
@@ -573,6 +670,20 @@ func AddFieldLabelConversionsForSecret(scheme *runtime.Scheme) error {
 				return label, value, nil
 			default:
 				return "", "", fmt.Errorf("field label not supported: %s", label)
+			}
+		})
+}
+
+func AddFieldSelectorConversionsForSecret(scheme *runtime.Scheme) error {
+	return scheme.AddFieldSelectorConversionFunc("v1", "Secret",
+		func(selector, value string) (string, string, error) {
+			switch selector {
+			case "type",
+				"metadata.namespace",
+				"metadata.name":
+				return selector, value, nil
+			default:
+				return "", "", fmt.Errorf("field selector not supported: %s", selector)
 			}
 		})
 }

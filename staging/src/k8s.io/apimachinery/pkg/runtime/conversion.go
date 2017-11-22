@@ -27,10 +27,14 @@ import (
 	"k8s.io/apimachinery/pkg/conversion"
 )
 
-// DefaultFieldSelectorConversion auto-accepts metav1 values for name and namespace.
-// A cluster scoped resource specifying namespace empty works fine and specifying a particular
-// namespace will return no results, as expected.
-func DefaultMetaV1FieldSelectorConversion(label, value string) (string, string, error) {
+// DefaultFieldLabelConversion auto-accepts metav1 values for name and
+// namespace in the field label (a reference to a field in an object in
+// Downward API).
+//
+// A cluster scoped resource specifying namespace empty works
+// fine and specifying a particular namespace will return no results, as
+// expected.
+func DefaultMetaV1FieldLabelConversion(label, value string) (string, string, error) {
 	switch label {
 	case "metadata.name":
 		return label, value, nil
@@ -38,6 +42,22 @@ func DefaultMetaV1FieldSelectorConversion(label, value string) (string, string, 
 		return label, value, nil
 	default:
 		return "", "", fmt.Errorf("%q is not a known field selector: only %q, %q", label, "metadata.name", "metadata.namespace")
+	}
+}
+
+// DefaultFieldSelectorConversion auto-accepts metav1 values for name and
+// namespace in the field selector (ListOptions.FieldSelector).
+//
+// A cluster scoped resource specifying namespace empty works fine and
+// specifying a particular namespace will return no results, as expected.
+func DefaultMetaV1FieldSelectorConversion(selector, value string) (string, string, error) {
+	switch selector {
+	case "metadata.name":
+		return selector, value, nil
+	case "metadata.namespace":
+		return selector, value, nil
+	default:
+		return "", "", fmt.Errorf("%q is not a known field selector: only %q, %q", selector, "metadata.name", "metadata.namespace")
 	}
 }
 

@@ -423,6 +423,18 @@ func (c crdObjectConverter) ConvertFieldLabel(version, kind, label, value string
 	}
 }
 
+func (c crdObjectConverter) ConvertFieldSelector(version, kind, selector, value string) (string, string, error) {
+	// We currently only support metadata.namespace and metadata.name.
+	switch {
+	case selector == "metadata.name":
+		return selector, value, nil
+	case !c.clusterScoped && selector == "metadata.namespace":
+		return selector, value, nil
+	default:
+		return "", "", fmt.Errorf("field selector not supported: %s", selector)
+	}
+}
+
 func (c *crdHandler) updateCustomResourceDefinition(oldObj, newObj interface{}) {
 	oldCRD := oldObj.(*apiextensions.CustomResourceDefinition)
 	newCRD := newObj.(*apiextensions.CustomResourceDefinition)

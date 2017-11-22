@@ -209,8 +209,8 @@ func DeleteCollection(r rest.CollectionDeleter, checkBody bool, scope RequestSco
 		// transform fields
 		// TODO: DecodeParametersInto should do this.
 		if listOptions.FieldSelector != nil {
-			fn := func(label, value string) (newLabel, newValue string, err error) {
-				return scope.Convertor.ConvertFieldLabel(scope.Kind.GroupVersion().String(), scope.Kind.Kind, label, value)
+			fn := func(selector, value string) (newSelector, newValue string, err error) {
+				return scope.Convertor.ConvertFieldSelector(scope.Kind.GroupVersion().String(), scope.Kind.Kind, selector, value)
 			}
 			if listOptions.FieldSelector, err = listOptions.FieldSelector.Transform(fn); err != nil {
 				// TODO: allow bad request to set field causes based on query parameters
