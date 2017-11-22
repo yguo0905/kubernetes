@@ -154,8 +154,9 @@ func addConversionFuncs(scheme *runtime.Scheme) error {
 		return err
 	}
 
-	// Add field conversion funcs.
-	err = scheme.AddFieldLabelConversionFunc("v1", "Pod",
+	// Add Downward API field label (a reference to a field in an object in
+	// Downward API) conversion funcs.
+	err = scheme.AddDownwardAPIFieldLabelConversionFunc("v1", "Pod",
 		func(label, value string) (string, string, error) {
 			path, _ := fieldpath.SplitMaybeSubscriptedPath(label)
 			switch path {
@@ -175,6 +176,26 @@ func addConversionFuncs(scheme *runtime.Scheme) error {
 			// This is for backwards compatibility with old v1 clients which send spec.host
 			case "spec.host":
 				return "spec.nodeName", value, nil
+			default:
+				return "", "", fmt.Errorf("field label not supported: %s", label)
+			}
+		},
+	)
+	if err != nil {
+		return err
+	}
+	// Add field label (ListOptions.FieldSelector) conversion funcs.
+	err = scheme.AddFieldLabelConversionFunc("v1", "Pod",
+		func(label, value string) (string, string, error) {
+			switch label {
+			case "metadata.name",
+				"metadata.namespace",
+				"spec.nodeName",
+				"spec.restartPolicy",
+				"spec.schedulerName",
+				"status.phase",
+				"status.podIP":
+				return label, value, nil
 			default:
 				return "", "", fmt.Errorf("field label not supported: %s", label)
 			}

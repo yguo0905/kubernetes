@@ -423,6 +423,10 @@ func (c crdObjectConverter) ConvertFieldLabel(version, kind, label, value string
 	}
 }
 
+func (c crdObjectConverter) ConvertDownwardAPIFieldLabel(version, kind, label, value string) (string, string, error) {
+	return "", "", fmt.Errorf("field label not supported: %s", label)
+}
+
 func (c *crdHandler) updateCustomResourceDefinition(oldObj, newObj interface{}) {
 	oldCRD := oldObj.(*apiextensions.CustomResourceDefinition)
 	newCRD := newObj.(*apiextensions.CustomResourceDefinition)

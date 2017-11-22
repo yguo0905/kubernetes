@@ -40,6 +40,10 @@ func (fakeConvertor) ConvertFieldLabel(version, kind, label, value string) (stri
 	return label, value, nil
 }
 
+func (fakeConvertor) ConvertDownwardAPIFieldLabel(version, kind, label, value string) (string, string, error) {
+	return label, value, nil
+}
+
 var validAccessor = resourceAccessor{}
 var validConvertor = fakeConvertor{}
 

@@ -309,6 +309,9 @@ func (c *checkConvertor) ConvertToVersion(in runtime.Object, outVersion runtime.
 func (c *checkConvertor) ConvertFieldLabel(version, kind, label, value string) (string, string, error) {
 	return "", "", fmt.Errorf("unexpected call to ConvertFieldLabel")
 }
+func (c *checkConvertor) ConvertDownwardAPIFieldLabel(version, kind, label, value string) (string, string, error) {
+	return "", "", fmt.Errorf("unexpected call to ConvertDownwardAPIFieldLabel")
+}
 
 type mockSerializer struct {
 	err            error

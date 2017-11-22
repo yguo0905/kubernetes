@@ -1964,7 +1964,7 @@ func validateObjectFieldSelector(fs *core.ObjectFieldSelector, expressions *sets
 		return allErrs
 	}
 
-	internalFieldPath, _, err := legacyscheme.Scheme.ConvertFieldLabel(fs.APIVersion, "Pod", fs.FieldPath, "")
+	internalFieldPath, _, err := legacyscheme.Scheme.ConvertDownwardAPIFieldLabel(fs.APIVersion, "Pod", fs.FieldPath, "")
 	if err != nil {
 		allErrs = append(allErrs, field.Invalid(fldPath.Child("fieldPath"), fs.FieldPath, fmt.Sprintf("error converting fieldPath: %v", err)))
 		return allErrs

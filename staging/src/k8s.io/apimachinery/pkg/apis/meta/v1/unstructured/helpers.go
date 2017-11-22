@@ -451,3 +451,7 @@ func (UnstructuredObjectConverter) ConvertToVersion(in runtime.Object, target ru
 func (UnstructuredObjectConverter) ConvertFieldLabel(version, kind, label, value string) (string, string, error) {
 	return "", "", errors.New("unstructured cannot convert field labels")
 }
+
+func (UnstructuredObjectConverter) ConvertDownwardAPIFieldLabel(version, kind, label, value string) (string, string, error) {
+	return "", "", errors.New("unstructured cannot convert field labels")
+}

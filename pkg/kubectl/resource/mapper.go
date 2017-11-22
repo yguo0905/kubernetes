@@ -235,3 +235,7 @@ func (c identityConvertor) ConvertToVersion(in runtime.Object, gv runtime.GroupV
 func (c identityConvertor) ConvertFieldLabel(version string, kind string, label string, value string) (string, string, error) {
 	return "", "", fmt.Errorf("unable to convert field labels")
 }
+
+func (c identityConvertor) ConvertDownwardAPIFieldLabel(version string, kind string, label string, value string) (string, string, error) {
+	return "", "", fmt.Errorf("unable to convert field labels")
+}

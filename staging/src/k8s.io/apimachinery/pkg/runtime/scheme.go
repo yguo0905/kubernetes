@@ -57,9 +57,15 @@ type Scheme struct {
 	// TODO: resolve the status of unversioned types.
 	unversionedKinds map[string]reflect.Type
 
-	// Map from version and resource to the corresponding func to convert
-	// resource field labels in that version to internal version.
+	// Map from version and kind to the corresponding func to convert field
+	// label in ListOptions.FieldSelector in that version to the internal
+	// version.
 	fieldLabelConversionFuncs map[string]map[string]FieldLabelConversionFunc
+
+	// Map from version and kind to the corresponding func to convert field
+	// label (a reference to a field in an object in Downward API) in that
+	// version to the internal version.
+	downwardAPIFieldLabelConversionFuncs map[string]map[string]FieldLabelConversionFunc
 
 	// defaulterFuncs is an array of interfaces to be called with an object to provide defaulting
 	// the provided object must be a pointer.
@@ -76,12 +82,13 @@ type FieldLabelConversionFunc func(label, value string) (internalLabel, internal
 // NewScheme creates a new Scheme. This scheme is pluggable by default.
 func NewScheme() *Scheme {
 	s := &Scheme{
-		gvkToType:                 map[schema.GroupVersionKind]reflect.Type{},
-		typeToGVK:                 map[reflect.Type][]schema.GroupVersionKind{},
-		unversionedTypes:          map[reflect.Type]schema.GroupVersionKind{},
-		unversionedKinds:          map[string]reflect.Type{},
-		fieldLabelConversionFuncs: map[string]map[string]FieldLabelConversionFunc{},
-		defaulterFuncs:            map[reflect.Type]func(interface{}){},
+		gvkToType:                            map[schema.GroupVersionKind]reflect.Type{},
+		typeToGVK:                            map[reflect.Type][]schema.GroupVersionKind{},
+		unversionedTypes:                     map[reflect.Type]schema.GroupVersionKind{},
+		unversionedKinds:                     map[string]reflect.Type{},
+		fieldLabelConversionFuncs:            map[string]map[string]FieldLabelConversionFunc{},
+		downwardAPIFieldLabelConversionFuncs: map[string]map[string]FieldLabelConversionFunc{},
+		defaulterFuncs:                       map[reflect.Type]func(interface{}){},
 	}
 	s.converter = conversion.NewConverter(s.nameFunc)
 
@@ -352,14 +359,27 @@ func (s *Scheme) AddGeneratedConversionFuncs(conversionFuncs ...interface{}) err
 	return nil
 }
 
-// AddFieldLabelConversionFunc adds a conversion function to convert field selectors
-// of the given kind from the given version to internal version representation.
+// AddFieldLabelConversionFunc adds a conversion function to convert field
+// label (ListOptions.FieldSelector) of the given kind from the given version
+// to internal version representation.
 func (s *Scheme) AddFieldLabelConversionFunc(version, kind string, conversionFunc FieldLabelConversionFunc) error {
 	if s.fieldLabelConversionFuncs[version] == nil {
 		s.fieldLabelConversionFuncs[version] = map[string]FieldLabelConversionFunc{}
 	}
 
 	s.fieldLabelConversionFuncs[version][kind] = conversionFunc
+	return nil
+}
+
+// AddDownwardAPIFieldLabelConversionFunc adds a conversion function to convert
+// field label (a reference to a field in an object in Downward API) of the
+// given kind from the given version to internal version representation.
+func (s *Scheme) AddDownwardAPIFieldLabelConversionFunc(version, kind string, conversionFunc FieldLabelConversionFunc) error {
+	if s.downwardAPIFieldLabelConversionFuncs[version] == nil {
+		s.downwardAPIFieldLabelConversionFuncs[version] = map[string]FieldLabelConversionFunc{}
+	}
+
+	s.downwardAPIFieldLabelConversionFuncs[version][kind] = conversionFunc
 	return nil
 }
 
@@ -469,13 +489,28 @@ func (s *Scheme) Convert(in, out interface{}, context interface{}) error {
 	return s.converter.Convert(in, out, flags, meta)
 }
 
-// ConvertFieldLabel alters the given field label and value for an kind field selector from
-// versioned representation to an unversioned one or returns an error.
+// ConvertFieldLabel alters the given field label in ListOptions.FieldSelector
+// and value for the kind from versioned representation to an unversioned one
+// or returns an error.
 func (s *Scheme) ConvertFieldLabel(version, kind, label, value string) (string, string, error) {
 	if s.fieldLabelConversionFuncs[version] == nil {
 		return DefaultMetaV1FieldSelectorConversion(label, value)
 	}
 	conversionFunc, ok := s.fieldLabelConversionFuncs[version][kind]
+	if !ok {
+		return DefaultMetaV1FieldSelectorConversion(label, value)
+	}
+	return conversionFunc(label, value)
+}
+
+// ConvertDownwardAPIFieldLabel alters the given field label (a reference to a
+// field in an object in Downward API) and value for the kind from versioned
+// representation to an unversioned one or returns an error.
+func (s *Scheme) ConvertDownwardAPIFieldLabel(version, kind, label, value string) (string, string, error) {
+	if s.downwardAPIFieldLabelConversionFuncs[version] == nil {
+		return DefaultMetaV1FieldSelectorConversion(label, value)
+	}
+	conversionFunc, ok := s.downwardAPIFieldLabelConversionFuncs[version][kind]
 	if !ok {
 		return DefaultMetaV1FieldSelectorConversion(label, value)
 	}
