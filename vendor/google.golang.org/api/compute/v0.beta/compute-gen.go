@@ -94,6 +94,7 @@ func New(client *http.Client) (*Service, error) {
 	s.InterconnectAttachments = NewInterconnectAttachmentsService(s)
 	s.InterconnectLocations = NewInterconnectLocationsService(s)
 	s.Interconnects = NewInterconnectsService(s)
+	s.LicenseCodes = NewLicenseCodesService(s)
 	s.Licenses = NewLicensesService(s)
 	s.MachineTypes = NewMachineTypesService(s)
 	s.Networks = NewNetworksService(s)
@@ -175,6 +176,8 @@ type Service struct {
 	InterconnectLocations *InterconnectLocationsService
 
 	Interconnects *InterconnectsService
+
+	LicenseCodes *LicenseCodesService
 
 	Licenses *LicensesService
 
@@ -444,6 +447,15 @@ func NewInterconnectsService(s *Service) *InterconnectsService {
 }
 
 type InterconnectsService struct {
+	s *Service
+}
+
+func NewLicenseCodesService(s *Service) *LicenseCodesService {
+	rs := &LicenseCodesService{s: s}
+	return rs
+}
+
+type LicenseCodesService struct {
 	s *Service
 }
 
@@ -729,8 +741,8 @@ type AcceleratorConfig struct {
 }
 
 func (s *AcceleratorConfig) MarshalJSON() ([]byte, error) {
-	type noMethod AcceleratorConfig
-	raw := noMethod(*s)
+	type NoMethod AcceleratorConfig
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -794,8 +806,8 @@ type AcceleratorType struct {
 }
 
 func (s *AcceleratorType) MarshalJSON() ([]byte, error) {
-	type noMethod AcceleratorType
-	raw := noMethod(*s)
+	type NoMethod AcceleratorType
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -848,8 +860,8 @@ type AcceleratorTypeAggregatedList struct {
 }
 
 func (s *AcceleratorTypeAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod AcceleratorTypeAggregatedList
-	raw := noMethod(*s)
+	type NoMethod AcceleratorTypeAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -863,9 +875,13 @@ type AcceleratorTypeAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -876,7 +892,9 @@ type AcceleratorTypeAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -907,8 +925,8 @@ type AcceleratorTypeAggregatedListWarning struct {
 }
 
 func (s *AcceleratorTypeAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod AcceleratorTypeAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod AcceleratorTypeAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -944,8 +962,8 @@ type AcceleratorTypeAggregatedListWarningData struct {
 }
 
 func (s *AcceleratorTypeAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod AcceleratorTypeAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod AcceleratorTypeAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -998,8 +1016,8 @@ type AcceleratorTypeList struct {
 }
 
 func (s *AcceleratorTypeList) MarshalJSON() ([]byte, error) {
-	type noMethod AcceleratorTypeList
-	raw := noMethod(*s)
+	type NoMethod AcceleratorTypeList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1013,9 +1031,13 @@ type AcceleratorTypeListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -1026,7 +1048,9 @@ type AcceleratorTypeListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -1057,8 +1081,8 @@ type AcceleratorTypeListWarning struct {
 }
 
 func (s *AcceleratorTypeListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod AcceleratorTypeListWarning
-	raw := noMethod(*s)
+	type NoMethod AcceleratorTypeListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1094,8 +1118,8 @@ type AcceleratorTypeListWarningData struct {
 }
 
 func (s *AcceleratorTypeListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod AcceleratorTypeListWarningData
-	raw := noMethod(*s)
+	type NoMethod AcceleratorTypeListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1127,8 +1151,8 @@ type AcceleratorTypesScopedList struct {
 }
 
 func (s *AcceleratorTypesScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod AcceleratorTypesScopedList
-	raw := noMethod(*s)
+	type NoMethod AcceleratorTypesScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1142,9 +1166,13 @@ type AcceleratorTypesScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -1155,7 +1183,9 @@ type AcceleratorTypesScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -1186,8 +1216,8 @@ type AcceleratorTypesScopedListWarning struct {
 }
 
 func (s *AcceleratorTypesScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod AcceleratorTypesScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod AcceleratorTypesScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1223,8 +1253,8 @@ type AcceleratorTypesScopedListWarningData struct {
 }
 
 func (s *AcceleratorTypesScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod AcceleratorTypesScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod AcceleratorTypesScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1246,6 +1276,15 @@ type AccessConfig struct {
 	// address pool. If you specify a static external IP address, it must
 	// live in the same region as the zone of the instance.
 	NatIP string `json:"natIP,omitempty"`
+
+	// PublicPtrDomainName: The DNS domain name for the public PTR record.
+	// This field can only be set when the set_public_ptr field is enabled.
+	PublicPtrDomainName string `json:"publicPtrDomainName,omitempty"`
+
+	// SetPublicPtr: Specifies whether a public DNS ?PTR? record should be
+	// created to map the external IP address of the instance to a DNS
+	// domain name.
+	SetPublicPtr bool `json:"setPublicPtr,omitempty"`
 
 	// Type: The type of configuration. The default and only option is
 	// ONE_TO_ONE_NAT.
@@ -1272,18 +1311,18 @@ type AccessConfig struct {
 }
 
 func (s *AccessConfig) MarshalJSON() ([]byte, error) {
-	type noMethod AccessConfig
-	raw := noMethod(*s)
+	type NoMethod AccessConfig
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // Address: A reserved address resource.
 type Address struct {
-	// Address: The static external IP address represented by this resource.
+	// Address: The static IP address represented by this resource.
 	Address string `json:"address,omitempty"`
 
-	// AddressType: The type of address to reserve. If unspecified, defaults
-	// to EXTERNAL.
+	// AddressType: The type of address to reserve, either INTERNAL or
+	// EXTERNAL. If unspecified, defaults to EXTERNAL.
 	//
 	// Possible values:
 	//   "EXTERNAL"
@@ -1349,10 +1388,11 @@ type Address struct {
 	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
-	// Status: [Output Only] The status of the address, which can be either
-	// IN_USE or RESERVED. An address that is RESERVED is currently reserved
-	// and available to use. An IN_USE address is currently being used by
-	// another resource and is not available.
+	// Status: [Output Only] The status of the address, which can be one of
+	// RESERVING, RESERVED, or IN_USE. An address that is RESERVING is
+	// currently in the process of being reserved. A RESERVED address is
+	// currently reserved and available to use. An IN_USE address is
+	// currently being used by another resource and is not available.
 	//
 	// Possible values:
 	//   "IN_USE"
@@ -1392,8 +1432,8 @@ type Address struct {
 }
 
 func (s *Address) MarshalJSON() ([]byte, error) {
-	type noMethod Address
-	raw := noMethod(*s)
+	type NoMethod Address
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1445,8 +1485,8 @@ type AddressAggregatedList struct {
 }
 
 func (s *AddressAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod AddressAggregatedList
-	raw := noMethod(*s)
+	type NoMethod AddressAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1460,9 +1500,13 @@ type AddressAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -1473,7 +1517,9 @@ type AddressAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -1504,8 +1550,8 @@ type AddressAggregatedListWarning struct {
 }
 
 func (s *AddressAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod AddressAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod AddressAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1541,8 +1587,8 @@ type AddressAggregatedListWarningData struct {
 }
 
 func (s *AddressAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod AddressAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod AddressAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1595,8 +1641,8 @@ type AddressList struct {
 }
 
 func (s *AddressList) MarshalJSON() ([]byte, error) {
-	type noMethod AddressList
-	raw := noMethod(*s)
+	type NoMethod AddressList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1609,9 +1655,13 @@ type AddressListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -1622,7 +1672,9 @@ type AddressListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -1653,8 +1705,8 @@ type AddressListWarning struct {
 }
 
 func (s *AddressListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod AddressListWarning
-	raw := noMethod(*s)
+	type NoMethod AddressListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1690,8 +1742,8 @@ type AddressListWarningData struct {
 }
 
 func (s *AddressListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod AddressListWarningData
-	raw := noMethod(*s)
+	type NoMethod AddressListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1721,8 +1773,8 @@ type AddressesScopedList struct {
 }
 
 func (s *AddressesScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod AddressesScopedList
-	raw := noMethod(*s)
+	type NoMethod AddressesScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1736,9 +1788,13 @@ type AddressesScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -1749,7 +1805,9 @@ type AddressesScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -1780,8 +1838,8 @@ type AddressesScopedListWarning struct {
 }
 
 func (s *AddressesScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod AddressesScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod AddressesScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1817,8 +1875,8 @@ type AddressesScopedListWarningData struct {
 }
 
 func (s *AddressesScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod AddressesScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod AddressesScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1856,8 +1914,8 @@ type AliasIpRange struct {
 }
 
 func (s *AliasIpRange) MarshalJSON() ([]byte, error) {
-	type noMethod AliasIpRange
-	raw := noMethod(*s)
+	type NoMethod AliasIpRange
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1951,7 +2009,8 @@ type AttachedDisk struct {
 
 	// Source: Specifies a valid partial or full URL to an existing
 	// Persistent Disk resource. When creating a new instance, one of
-	// initializeParams.sourceImage or disks.source is required.
+	// initializeParams.sourceImage or disks.source is required except for
+	// local SSD.
 	//
 	// If desired, you can also attach existing non-root persistent disks
 	// using this property. This field is only applicable for persistent
@@ -1987,8 +2046,8 @@ type AttachedDisk struct {
 }
 
 func (s *AttachedDisk) MarshalJSON() ([]byte, error) {
-	type noMethod AttachedDisk
-	raw := noMethod(*s)
+	type NoMethod AttachedDisk
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2034,7 +2093,7 @@ type AttachedDiskInitializeParams struct {
 
 	// SourceImage: The source image to create this disk. When creating a
 	// new instance, one of initializeParams.sourceImage or disks.source is
-	// required.
+	// required except for local SSD.
 	//
 	// To create a disk with one of the public operating system images,
 	// specify the image by its family name. For example, specify
@@ -2048,17 +2107,17 @@ type AttachedDiskInitializeParams struct {
 	//
 	// projects/debian-cloud/global/images/debian-8-jessie-vYYYYMMDD
 	//
-	// To create a disk with a private image that you created, specify the
+	// To create a disk with a custom image that you created, specify the
 	// image name in the following format:
 	//
-	// global/images/my-private-image
+	// global/images/my-custom-image
 	//
-	// You can also specify a private image by its image family, which
+	// You can also specify a custom image by its image family, which
 	// returns the latest version of the image in that family. Replace the
 	// image name with
 	// family/family-name:
 	//
-	// global/images/family/my-private-family
+	// global/images/family/my-image-family
 	//
 	// If the source image is deleted later, this field will not be set.
 	SourceImage string `json:"sourceImage,omitempty"`
@@ -2090,8 +2149,8 @@ type AttachedDiskInitializeParams struct {
 }
 
 func (s *AttachedDiskInitializeParams) MarshalJSON() ([]byte, error) {
-	type noMethod AttachedDiskInitializeParams
-	raw := noMethod(*s)
+	type NoMethod AttachedDiskInitializeParams
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2149,8 +2208,8 @@ type AuditConfig struct {
 }
 
 func (s *AuditConfig) MarshalJSON() ([]byte, error) {
-	type noMethod AuditConfig
-	raw := noMethod(*s)
+	type NoMethod AuditConfig
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2197,8 +2256,8 @@ type AuditLogConfig struct {
 }
 
 func (s *AuditLogConfig) MarshalJSON() ([]byte, error) {
-	type noMethod AuditLogConfig
-	raw := noMethod(*s)
+	type NoMethod AuditLogConfig
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2234,8 +2293,8 @@ type AuthorizationLoggingOptions struct {
 }
 
 func (s *AuthorizationLoggingOptions) MarshalJSON() ([]byte, error) {
-	type noMethod AuthorizationLoggingOptions
-	raw := noMethod(*s)
+	type NoMethod AuthorizationLoggingOptions
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2330,8 +2389,8 @@ type Autoscaler struct {
 }
 
 func (s *Autoscaler) MarshalJSON() ([]byte, error) {
-	type noMethod Autoscaler
-	raw := noMethod(*s)
+	type NoMethod Autoscaler
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2383,8 +2442,8 @@ type AutoscalerAggregatedList struct {
 }
 
 func (s *AutoscalerAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalerAggregatedList
-	raw := noMethod(*s)
+	type NoMethod AutoscalerAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2398,9 +2457,13 @@ type AutoscalerAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -2411,7 +2474,9 @@ type AutoscalerAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -2442,8 +2507,8 @@ type AutoscalerAggregatedListWarning struct {
 }
 
 func (s *AutoscalerAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalerAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod AutoscalerAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2479,8 +2544,8 @@ type AutoscalerAggregatedListWarningData struct {
 }
 
 func (s *AutoscalerAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalerAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod AutoscalerAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2533,8 +2598,8 @@ type AutoscalerList struct {
 }
 
 func (s *AutoscalerList) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalerList
-	raw := noMethod(*s)
+	type NoMethod AutoscalerList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2547,9 +2612,13 @@ type AutoscalerListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -2560,7 +2629,9 @@ type AutoscalerListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -2591,8 +2662,8 @@ type AutoscalerListWarning struct {
 }
 
 func (s *AutoscalerListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalerListWarning
-	raw := noMethod(*s)
+	type NoMethod AutoscalerListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2628,8 +2699,8 @@ type AutoscalerListWarningData struct {
 }
 
 func (s *AutoscalerListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalerListWarningData
-	raw := noMethod(*s)
+	type NoMethod AutoscalerListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2675,8 +2746,8 @@ type AutoscalerStatusDetails struct {
 }
 
 func (s *AutoscalerStatusDetails) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalerStatusDetails
-	raw := noMethod(*s)
+	type NoMethod AutoscalerStatusDetails
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2707,8 +2778,8 @@ type AutoscalersScopedList struct {
 }
 
 func (s *AutoscalersScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalersScopedList
-	raw := noMethod(*s)
+	type NoMethod AutoscalersScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2722,9 +2793,13 @@ type AutoscalersScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -2735,7 +2810,9 @@ type AutoscalersScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -2766,8 +2843,8 @@ type AutoscalersScopedListWarning struct {
 }
 
 func (s *AutoscalersScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalersScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod AutoscalersScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2803,8 +2880,8 @@ type AutoscalersScopedListWarningData struct {
 }
 
 func (s *AutoscalersScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalersScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod AutoscalersScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2867,8 +2944,8 @@ type AutoscalingPolicy struct {
 }
 
 func (s *AutoscalingPolicy) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalingPolicy
-	raw := noMethod(*s)
+	type NoMethod AutoscalingPolicy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2908,18 +2985,18 @@ type AutoscalingPolicyCpuUtilization struct {
 }
 
 func (s *AutoscalingPolicyCpuUtilization) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalingPolicyCpuUtilization
-	raw := noMethod(*s)
+	type NoMethod AutoscalingPolicyCpuUtilization
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *AutoscalingPolicyCpuUtilization) UnmarshalJSON(data []byte) error {
-	type noMethod AutoscalingPolicyCpuUtilization
+	type NoMethod AutoscalingPolicyCpuUtilization
 	var s1 struct {
 		UtilizationTarget gensupport.JSONFloat64 `json:"utilizationTarget"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -2933,7 +3010,7 @@ type AutoscalingPolicyCustomMetricUtilization struct {
 	// Filter: A filter string, compatible with a Stackdriver Monitoring
 	// filter string for TimeSeries.list API call. This filter is used to
 	// select a specific TimeSeries for the purpose of autoscaling and to
-	// determine whether the metric is exporting per-instance or global
+	// determine whether the metric is exporting per-instance or per-group
 	// data.
 	//
 	// For the filter to be valid for autoscaling purposes, the following
@@ -2951,8 +3028,8 @@ type AutoscalingPolicyCustomMetricUtilization struct {
 	// If the resource type is any other value, the autoscaler expects this
 	// metric to contain values that apply to the entire autoscaled instance
 	// group and resource label filtering can be performed to point
-	// autoscaler at the correct TimeSeries to scale upon. This is / called
-	// a global metric for the purpose of autoscaling.
+	// autoscaler at the correct TimeSeries to scale upon. This is called a
+	// per-group metric for the purpose of autoscaling.
 	//
 	// If not specified, the type defaults to gce_instance.
 	//
@@ -2964,15 +3041,12 @@ type AutoscalingPolicyCustomMetricUtilization struct {
 	Filter string `json:"filter,omitempty"`
 
 	// Metric: The identifier (type) of the Stackdriver Monitoring metric.
-	// The metric cannot have negative values and should be a utilization
-	// metric, which means that the number of virtual machines handling
-	// requests should increase or decrease proportionally to the
-	// metric.
+	// The metric cannot have negative values.
 	//
 	// The metric must have a value type of INT64 or DOUBLE.
 	Metric string `json:"metric,omitempty"`
 
-	// SingleInstanceAssignment: If scaling is based on a global metric
+	// SingleInstanceAssignment: If scaling is based on a per-group metric
 	// value that represents the total amount of work to be done or resource
 	// usage, set this value to an amount assigned for a single instance of
 	// the scaled group. Autoscaler will keep the number of instances
@@ -2991,7 +3065,9 @@ type AutoscalingPolicyCustomMetricUtilization struct {
 	SingleInstanceAssignment float64 `json:"singleInstanceAssignment,omitempty"`
 
 	// UtilizationTarget: The target value of the metric that autoscaler
-	// should maintain. This must be a positive value.
+	// should maintain. This must be a positive value. A utilization metric
+	// scales number of virtual machines handling requests to increase or
+	// decrease proportionally to the metric.
 	//
 	// For example, a good metric to use as a utilization_target is
 	// compute.googleapis.com/instance/network/received_bytes_count. The
@@ -3028,19 +3104,19 @@ type AutoscalingPolicyCustomMetricUtilization struct {
 }
 
 func (s *AutoscalingPolicyCustomMetricUtilization) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalingPolicyCustomMetricUtilization
-	raw := noMethod(*s)
+	type NoMethod AutoscalingPolicyCustomMetricUtilization
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *AutoscalingPolicyCustomMetricUtilization) UnmarshalJSON(data []byte) error {
-	type noMethod AutoscalingPolicyCustomMetricUtilization
+	type NoMethod AutoscalingPolicyCustomMetricUtilization
 	var s1 struct {
 		SingleInstanceAssignment gensupport.JSONFloat64 `json:"singleInstanceAssignment"`
 		UtilizationTarget        gensupport.JSONFloat64 `json:"utilizationTarget"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -3077,18 +3153,18 @@ type AutoscalingPolicyLoadBalancingUtilization struct {
 }
 
 func (s *AutoscalingPolicyLoadBalancingUtilization) MarshalJSON() ([]byte, error) {
-	type noMethod AutoscalingPolicyLoadBalancingUtilization
-	raw := noMethod(*s)
+	type NoMethod AutoscalingPolicyLoadBalancingUtilization
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *AutoscalingPolicyLoadBalancingUtilization) UnmarshalJSON(data []byte) error {
-	type noMethod AutoscalingPolicyLoadBalancingUtilization
+	type NoMethod AutoscalingPolicyLoadBalancingUtilization
 	var s1 struct {
 		UtilizationTarget gensupport.JSONFloat64 `json:"utilizationTarget"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -3198,20 +3274,20 @@ type Backend struct {
 }
 
 func (s *Backend) MarshalJSON() ([]byte, error) {
-	type noMethod Backend
-	raw := noMethod(*s)
+	type NoMethod Backend
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *Backend) UnmarshalJSON(data []byte) error {
-	type noMethod Backend
+	type NoMethod Backend
 	var s1 struct {
 		CapacityScaler     gensupport.JSONFloat64 `json:"capacityScaler"`
 		MaxRatePerInstance gensupport.JSONFloat64 `json:"maxRatePerInstance"`
 		MaxUtilization     gensupport.JSONFloat64 `json:"maxUtilization"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -3279,8 +3355,8 @@ type BackendBucket struct {
 }
 
 func (s *BackendBucket) MarshalJSON() ([]byte, error) {
-	type noMethod BackendBucket
-	raw := noMethod(*s)
+	type NoMethod BackendBucket
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3332,8 +3408,8 @@ type BackendBucketList struct {
 }
 
 func (s *BackendBucketList) MarshalJSON() ([]byte, error) {
-	type noMethod BackendBucketList
-	raw := noMethod(*s)
+	type NoMethod BackendBucketList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3347,9 +3423,13 @@ type BackendBucketListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -3360,7 +3440,9 @@ type BackendBucketListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -3391,8 +3473,8 @@ type BackendBucketListWarning struct {
 }
 
 func (s *BackendBucketListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod BackendBucketListWarning
-	raw := noMethod(*s)
+	type NoMethod BackendBucketListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3428,8 +3510,8 @@ type BackendBucketListWarningData struct {
 }
 
 func (s *BackendBucketListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod BackendBucketListWarningData
-	raw := noMethod(*s)
+	type NoMethod BackendBucketListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3601,8 +3683,8 @@ type BackendService struct {
 }
 
 func (s *BackendService) MarshalJSON() ([]byte, error) {
-	type noMethod BackendService
-	raw := noMethod(*s)
+	type NoMethod BackendService
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3655,8 +3737,8 @@ type BackendServiceAggregatedList struct {
 }
 
 func (s *BackendServiceAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServiceAggregatedList
-	raw := noMethod(*s)
+	type NoMethod BackendServiceAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3670,9 +3752,13 @@ type BackendServiceAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -3683,7 +3769,9 @@ type BackendServiceAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -3714,8 +3802,8 @@ type BackendServiceAggregatedListWarning struct {
 }
 
 func (s *BackendServiceAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServiceAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod BackendServiceAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3751,8 +3839,8 @@ type BackendServiceAggregatedListWarningData struct {
 }
 
 func (s *BackendServiceAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServiceAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod BackendServiceAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3781,8 +3869,8 @@ type BackendServiceCdnPolicy struct {
 }
 
 func (s *BackendServiceCdnPolicy) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServiceCdnPolicy
-	raw := noMethod(*s)
+	type NoMethod BackendServiceCdnPolicy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3815,8 +3903,8 @@ type BackendServiceGroupHealth struct {
 }
 
 func (s *BackendServiceGroupHealth) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServiceGroupHealth
-	raw := noMethod(*s)
+	type NoMethod BackendServiceGroupHealth
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3850,8 +3938,8 @@ type BackendServiceIAP struct {
 }
 
 func (s *BackendServiceIAP) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServiceIAP
-	raw := noMethod(*s)
+	type NoMethod BackendServiceIAP
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3904,8 +3992,8 @@ type BackendServiceList struct {
 }
 
 func (s *BackendServiceList) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServiceList
-	raw := noMethod(*s)
+	type NoMethod BackendServiceList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3919,9 +4007,13 @@ type BackendServiceListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -3932,7 +4024,9 @@ type BackendServiceListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -3963,8 +4057,8 @@ type BackendServiceListWarning struct {
 }
 
 func (s *BackendServiceListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServiceListWarning
-	raw := noMethod(*s)
+	type NoMethod BackendServiceListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4000,8 +4094,8 @@ type BackendServiceListWarningData struct {
 }
 
 func (s *BackendServiceListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServiceListWarningData
-	raw := noMethod(*s)
+	type NoMethod BackendServiceListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4032,8 +4126,8 @@ type BackendServicesScopedList struct {
 }
 
 func (s *BackendServicesScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServicesScopedList
-	raw := noMethod(*s)
+	type NoMethod BackendServicesScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4047,9 +4141,13 @@ type BackendServicesScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -4060,7 +4158,9 @@ type BackendServicesScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -4091,8 +4191,8 @@ type BackendServicesScopedListWarning struct {
 }
 
 func (s *BackendServicesScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServicesScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod BackendServicesScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4128,8 +4228,8 @@ type BackendServicesScopedListWarningData struct {
 }
 
 func (s *BackendServicesScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod BackendServicesScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod BackendServicesScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4192,8 +4292,8 @@ type Binding struct {
 }
 
 func (s *Binding) MarshalJSON() ([]byte, error) {
-	type noMethod Binding
-	raw := noMethod(*s)
+	type NoMethod Binding
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4222,8 +4322,8 @@ type CacheInvalidationRule struct {
 }
 
 func (s *CacheInvalidationRule) MarshalJSON() ([]byte, error) {
-	type noMethod CacheInvalidationRule
-	raw := noMethod(*s)
+	type NoMethod CacheInvalidationRule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4275,8 +4375,8 @@ type CacheKeyPolicy struct {
 }
 
 func (s *CacheKeyPolicy) MarshalJSON() ([]byte, error) {
-	type noMethod CacheKeyPolicy
-	raw := noMethod(*s)
+	type NoMethod CacheKeyPolicy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4383,8 +4483,8 @@ type Commitment struct {
 }
 
 func (s *Commitment) MarshalJSON() ([]byte, error) {
-	type noMethod Commitment
-	raw := noMethod(*s)
+	type NoMethod Commitment
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4436,8 +4536,8 @@ type CommitmentAggregatedList struct {
 }
 
 func (s *CommitmentAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod CommitmentAggregatedList
-	raw := noMethod(*s)
+	type NoMethod CommitmentAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4451,9 +4551,13 @@ type CommitmentAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -4464,7 +4568,9 @@ type CommitmentAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -4495,8 +4601,8 @@ type CommitmentAggregatedListWarning struct {
 }
 
 func (s *CommitmentAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod CommitmentAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod CommitmentAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4532,8 +4638,8 @@ type CommitmentAggregatedListWarningData struct {
 }
 
 func (s *CommitmentAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod CommitmentAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod CommitmentAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4586,8 +4692,8 @@ type CommitmentList struct {
 }
 
 func (s *CommitmentList) MarshalJSON() ([]byte, error) {
-	type noMethod CommitmentList
-	raw := noMethod(*s)
+	type NoMethod CommitmentList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4600,9 +4706,13 @@ type CommitmentListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -4613,7 +4723,9 @@ type CommitmentListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -4644,8 +4756,8 @@ type CommitmentListWarning struct {
 }
 
 func (s *CommitmentListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod CommitmentListWarning
-	raw := noMethod(*s)
+	type NoMethod CommitmentListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4681,8 +4793,8 @@ type CommitmentListWarningData struct {
 }
 
 func (s *CommitmentListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod CommitmentListWarningData
-	raw := noMethod(*s)
+	type NoMethod CommitmentListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4713,8 +4825,8 @@ type CommitmentsScopedList struct {
 }
 
 func (s *CommitmentsScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod CommitmentsScopedList
-	raw := noMethod(*s)
+	type NoMethod CommitmentsScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4728,9 +4840,13 @@ type CommitmentsScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -4741,7 +4857,9 @@ type CommitmentsScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -4772,8 +4890,8 @@ type CommitmentsScopedListWarning struct {
 }
 
 func (s *CommitmentsScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod CommitmentsScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod CommitmentsScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4809,8 +4927,8 @@ type CommitmentsScopedListWarningData struct {
 }
 
 func (s *CommitmentsScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod CommitmentsScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod CommitmentsScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4877,8 +4995,8 @@ type Condition struct {
 }
 
 func (s *Condition) MarshalJSON() ([]byte, error) {
-	type noMethod Condition
-	raw := noMethod(*s)
+	type NoMethod Condition
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4908,8 +5026,8 @@ type ConnectionDraining struct {
 }
 
 func (s *ConnectionDraining) MarshalJSON() ([]byte, error) {
-	type noMethod ConnectionDraining
-	raw := noMethod(*s)
+	type NoMethod ConnectionDraining
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4956,8 +5074,8 @@ type CustomerEncryptionKey struct {
 }
 
 func (s *CustomerEncryptionKey) MarshalJSON() ([]byte, error) {
-	type noMethod CustomerEncryptionKey
-	raw := noMethod(*s)
+	type NoMethod CustomerEncryptionKey
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4990,8 +5108,8 @@ type CustomerEncryptionKeyProtectedDisk struct {
 }
 
 func (s *CustomerEncryptionKeyProtectedDisk) MarshalJSON() ([]byte, error) {
-	type noMethod CustomerEncryptionKeyProtectedDisk
-	raw := noMethod(*s)
+	type NoMethod CustomerEncryptionKeyProtectedDisk
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5051,8 +5169,8 @@ type DeprecationStatus struct {
 }
 
 func (s *DeprecationStatus) MarshalJSON() ([]byte, error) {
-	type noMethod DeprecationStatus
-	raw := noMethod(*s)
+	type NoMethod DeprecationStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5113,6 +5231,10 @@ type Disk struct {
 	// text format.
 	LastDetachTimestamp string `json:"lastDetachTimestamp,omitempty"`
 
+	// LicenseCodes: Integer license codes indicating which licenses are
+	// attached to this disk.
+	LicenseCodes googleapi.Int64s `json:"licenseCodes,omitempty"`
+
 	// Licenses: Any applicable publicly visible licenses.
 	Licenses []string `json:"licenses,omitempty"`
 
@@ -5158,17 +5280,17 @@ type Disk struct {
 	//
 	// projects/debian-cloud/global/images/debian-8-jessie-vYYYYMMDD
 	//
-	// To create a disk with a private image that you created, specify the
+	// To create a disk with a custom image that you created, specify the
 	// image name in the following format:
 	//
-	// global/images/my-private-image
+	// global/images/my-custom-image
 	//
-	// You can also specify a private image by its image family, which
+	// You can also specify a custom image by its image family, which
 	// returns the latest version of the image in that family. Replace the
 	// image name with
 	// family/family-name:
 	//
-	// global/images/family/my-private-family
+	// global/images/family/my-image-family
 	SourceImage string `json:"sourceImage,omitempty"`
 
 	// SourceImageEncryptionKey: The customer-supplied encryption key of the
@@ -5256,8 +5378,8 @@ type Disk struct {
 }
 
 func (s *Disk) MarshalJSON() ([]byte, error) {
-	type noMethod Disk
-	raw := noMethod(*s)
+	type NoMethod Disk
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5309,8 +5431,8 @@ type DiskAggregatedList struct {
 }
 
 func (s *DiskAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod DiskAggregatedList
-	raw := noMethod(*s)
+	type NoMethod DiskAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5324,9 +5446,13 @@ type DiskAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -5337,7 +5463,9 @@ type DiskAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -5368,8 +5496,8 @@ type DiskAggregatedListWarning struct {
 }
 
 func (s *DiskAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod DiskAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod DiskAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5405,8 +5533,8 @@ type DiskAggregatedListWarningData struct {
 }
 
 func (s *DiskAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod DiskAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod DiskAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5459,8 +5587,8 @@ type DiskList struct {
 }
 
 func (s *DiskList) MarshalJSON() ([]byte, error) {
-	type noMethod DiskList
-	raw := noMethod(*s)
+	type NoMethod DiskList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5473,9 +5601,13 @@ type DiskListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -5486,7 +5618,9 @@ type DiskListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -5517,8 +5651,8 @@ type DiskListWarning struct {
 }
 
 func (s *DiskListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod DiskListWarning
-	raw := noMethod(*s)
+	type NoMethod DiskListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5554,8 +5688,8 @@ type DiskListWarningData struct {
 }
 
 func (s *DiskListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod DiskListWarningData
-	raw := noMethod(*s)
+	type NoMethod DiskListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5597,8 +5731,8 @@ type DiskMoveRequest struct {
 }
 
 func (s *DiskMoveRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DiskMoveRequest
-	raw := noMethod(*s)
+	type NoMethod DiskMoveRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5663,8 +5797,8 @@ type DiskType struct {
 }
 
 func (s *DiskType) MarshalJSON() ([]byte, error) {
-	type noMethod DiskType
-	raw := noMethod(*s)
+	type NoMethod DiskType
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5716,8 +5850,8 @@ type DiskTypeAggregatedList struct {
 }
 
 func (s *DiskTypeAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod DiskTypeAggregatedList
-	raw := noMethod(*s)
+	type NoMethod DiskTypeAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5731,9 +5865,13 @@ type DiskTypeAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -5744,7 +5882,9 @@ type DiskTypeAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -5775,8 +5915,8 @@ type DiskTypeAggregatedListWarning struct {
 }
 
 func (s *DiskTypeAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod DiskTypeAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod DiskTypeAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5812,8 +5952,8 @@ type DiskTypeAggregatedListWarningData struct {
 }
 
 func (s *DiskTypeAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod DiskTypeAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod DiskTypeAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5866,8 +6006,8 @@ type DiskTypeList struct {
 }
 
 func (s *DiskTypeList) MarshalJSON() ([]byte, error) {
-	type noMethod DiskTypeList
-	raw := noMethod(*s)
+	type NoMethod DiskTypeList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5880,9 +6020,13 @@ type DiskTypeListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -5893,7 +6037,9 @@ type DiskTypeListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -5924,8 +6070,8 @@ type DiskTypeListWarning struct {
 }
 
 func (s *DiskTypeListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod DiskTypeListWarning
-	raw := noMethod(*s)
+	type NoMethod DiskTypeListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5961,8 +6107,8 @@ type DiskTypeListWarningData struct {
 }
 
 func (s *DiskTypeListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod DiskTypeListWarningData
-	raw := noMethod(*s)
+	type NoMethod DiskTypeListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5992,8 +6138,8 @@ type DiskTypesScopedList struct {
 }
 
 func (s *DiskTypesScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod DiskTypesScopedList
-	raw := noMethod(*s)
+	type NoMethod DiskTypesScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6007,9 +6153,13 @@ type DiskTypesScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -6020,7 +6170,9 @@ type DiskTypesScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -6051,8 +6203,8 @@ type DiskTypesScopedListWarning struct {
 }
 
 func (s *DiskTypesScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod DiskTypesScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod DiskTypesScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6088,8 +6240,8 @@ type DiskTypesScopedListWarningData struct {
 }
 
 func (s *DiskTypesScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod DiskTypesScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod DiskTypesScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6116,8 +6268,8 @@ type DisksResizeRequest struct {
 }
 
 func (s *DisksResizeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DisksResizeRequest
-	raw := noMethod(*s)
+	type NoMethod DisksResizeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6147,8 +6299,8 @@ type DisksScopedList struct {
 }
 
 func (s *DisksScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod DisksScopedList
-	raw := noMethod(*s)
+	type NoMethod DisksScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6162,9 +6314,13 @@ type DisksScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -6175,7 +6331,9 @@ type DisksScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -6206,8 +6364,8 @@ type DisksScopedListWarning struct {
 }
 
 func (s *DisksScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod DisksScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod DisksScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6243,8 +6401,8 @@ type DisksScopedListWarningData struct {
 }
 
 func (s *DisksScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod DisksScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod DisksScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6269,8 +6427,8 @@ type DistributionPolicy struct {
 }
 
 func (s *DistributionPolicy) MarshalJSON() ([]byte, error) {
-	type noMethod DistributionPolicy
-	raw := noMethod(*s)
+	type NoMethod DistributionPolicy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6298,8 +6456,8 @@ type DistributionPolicyZoneConfiguration struct {
 }
 
 func (s *DistributionPolicyZoneConfiguration) MarshalJSON() ([]byte, error) {
-	type noMethod DistributionPolicyZoneConfiguration
-	raw := noMethod(*s)
+	type NoMethod DistributionPolicyZoneConfiguration
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6348,8 +6506,8 @@ type Expr struct {
 }
 
 func (s *Expr) MarshalJSON() ([]byte, error) {
-	type noMethod Expr
-	raw := noMethod(*s)
+	type NoMethod Expr
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6476,10 +6634,11 @@ type Firewall struct {
 	// applies to all instances on the specified network.
 	TargetServiceAccounts []string `json:"targetServiceAccounts,omitempty"`
 
-	// TargetTags: A list of instance tags indicating sets of instances
-	// located in the network that may make network connections as specified
-	// in allowed[]. If no targetTags are specified, the firewall rule
-	// applies to all instances on the specified network.
+	// TargetTags: A list of tags that controls which instances the firewall
+	// rule applies to. If targetTags are specified, then the firewall rule
+	// applies only to instances in the VPC network that have one of those
+	// tags. If no targetTags are specified, the firewall rule applies to
+	// all instances on the specified network.
 	TargetTags []string `json:"targetTags,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
@@ -6504,8 +6663,8 @@ type Firewall struct {
 }
 
 func (s *Firewall) MarshalJSON() ([]byte, error) {
-	type noMethod Firewall
-	raw := noMethod(*s)
+	type NoMethod Firewall
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6542,8 +6701,8 @@ type FirewallAllowed struct {
 }
 
 func (s *FirewallAllowed) MarshalJSON() ([]byte, error) {
-	type noMethod FirewallAllowed
-	raw := noMethod(*s)
+	type NoMethod FirewallAllowed
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6580,8 +6739,8 @@ type FirewallDenied struct {
 }
 
 func (s *FirewallDenied) MarshalJSON() ([]byte, error) {
-	type noMethod FirewallDenied
-	raw := noMethod(*s)
+	type NoMethod FirewallDenied
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6634,8 +6793,8 @@ type FirewallList struct {
 }
 
 func (s *FirewallList) MarshalJSON() ([]byte, error) {
-	type noMethod FirewallList
-	raw := noMethod(*s)
+	type NoMethod FirewallList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6648,9 +6807,13 @@ type FirewallListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -6661,7 +6824,9 @@ type FirewallListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -6692,8 +6857,8 @@ type FirewallListWarning struct {
 }
 
 func (s *FirewallListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod FirewallListWarning
-	raw := noMethod(*s)
+	type NoMethod FirewallListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6729,23 +6894,32 @@ type FirewallListWarningData struct {
 }
 
 func (s *FirewallListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod FirewallListWarningData
-	raw := noMethod(*s)
+	type NoMethod FirewallListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // FixedOrPercent: Encapsulates numeric value that can be either
 // absolute or relative.
 type FixedOrPercent struct {
-	// Calculated: [Output Only] Absolute value calculated based on mode:
-	// mode = fixed -> calculated = fixed = percent -> calculated =
-	// ceiling(percent/100 * base_value)
+	// Calculated: [Output Only] Absolute value of VM instances calculated
+	// based on the specific mode.
+	//
+	//
+	// - If the value is fixed, then the caculated value is equal to the
+	// fixed value.
+	// - If the value is a percent, then the calculated value is percent/100
+	// * targetSize. For example, the calculated value of a 80% of a managed
+	// instance group with 150 instances would be (80/100 * 150) = 120 VM
+	// instances. If there is a remainder, the number is rounded up.
 	Calculated int64 `json:"calculated,omitempty"`
 
-	// Fixed: fixed must be non-negative.
+	// Fixed: Specifies a fixed number of VM instances. This must be a
+	// positive integer.
 	Fixed int64 `json:"fixed,omitempty"`
 
-	// Percent: percent must belong to [0, 100].
+	// Percent: Specifies a percentage of instances between 0 to 100%,
+	// inclusive. For example, specify 80 for 80%.
 	Percent int64 `json:"percent,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Calculated") to
@@ -6766,8 +6940,8 @@ type FixedOrPercent struct {
 }
 
 func (s *FixedOrPercent) MarshalJSON() ([]byte, error) {
-	type noMethod FixedOrPercent
-	raw := noMethod(*s)
+	type NoMethod FixedOrPercent
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6778,19 +6952,34 @@ type ForwardingRule struct {
 	// IPAddress: The IP address that this forwarding rule is serving on
 	// behalf of.
 	//
-	// For global forwarding rules, the address must be a global IP. For
-	// regional forwarding rules, the address must live in the same region
-	// as the forwarding rule. By default, this field is empty and an
-	// ephemeral IPv4 address from the same scope (global or regional) will
-	// be assigned. A regional forwarding rule supports IPv4 only. A global
-	// forwarding rule supports either IPv4 or IPv6.
+	// Addresses are restricted based on the forwarding rule's load
+	// balancing scheme (EXTERNAL or INTERNAL) and scope (global or
+	// regional).
+	//
+	// When the load balancing scheme is EXTERNAL, for global forwarding
+	// rules, the address must be a global IP, and for regional forwarding
+	// rules, the address must live in the same region as the forwarding
+	// rule. If this field is empty, an ephemeral IPv4 address from the same
+	// scope (global or regional) will be assigned. A regional forwarding
+	// rule supports IPv4 only. A global forwarding rule supports either
+	// IPv4 or IPv6.
 	//
 	// When the load balancing scheme is INTERNAL, this can only be an RFC
-	// 1918 IP address belonging to the network/subnetwork configured for
-	// the forwarding rule. A reserved address cannot be used. If the field
-	// is empty, the IP address will be automatically allocated from the
-	// internal IP range of the subnetwork or network configured for this
-	// forwarding rule.
+	// 1918 IP address belonging to the network/subnet configured for the
+	// forwarding rule. By default, if this field is empty, an ephemeral
+	// internal IP address will be automatically allocated from the IP range
+	// of the subnet or network configured for this forwarding rule.
+	//
+	// An address can be specified either by a literal IP address or a URL
+	// reference to an existing Address resource. The following examples are
+	// all valid:
+	// - 100.1.2.3
+	// -
+	// https://www.googleapis.com/compute/v1/projects/project/regions/region/addresses/address
+	// - projects/project/regions/region/addresses/address
+	// - regions/region/addresses/address
+	// - global/addresses/address
+	// - address
 	IPAddress string `json:"IPAddress,omitempty"`
 
 	// IPProtocol: The IP protocol to which this rule applies. Valid options
@@ -6988,8 +7177,8 @@ type ForwardingRule struct {
 }
 
 func (s *ForwardingRule) MarshalJSON() ([]byte, error) {
-	type noMethod ForwardingRule
-	raw := noMethod(*s)
+	type NoMethod ForwardingRule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7041,8 +7230,8 @@ type ForwardingRuleAggregatedList struct {
 }
 
 func (s *ForwardingRuleAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod ForwardingRuleAggregatedList
-	raw := noMethod(*s)
+	type NoMethod ForwardingRuleAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7056,9 +7245,13 @@ type ForwardingRuleAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -7069,7 +7262,9 @@ type ForwardingRuleAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -7100,8 +7295,8 @@ type ForwardingRuleAggregatedListWarning struct {
 }
 
 func (s *ForwardingRuleAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod ForwardingRuleAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod ForwardingRuleAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7137,8 +7332,8 @@ type ForwardingRuleAggregatedListWarningData struct {
 }
 
 func (s *ForwardingRuleAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod ForwardingRuleAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod ForwardingRuleAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7190,8 +7385,8 @@ type ForwardingRuleList struct {
 }
 
 func (s *ForwardingRuleList) MarshalJSON() ([]byte, error) {
-	type noMethod ForwardingRuleList
-	raw := noMethod(*s)
+	type NoMethod ForwardingRuleList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7205,9 +7400,13 @@ type ForwardingRuleListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -7218,7 +7417,9 @@ type ForwardingRuleListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -7249,8 +7450,8 @@ type ForwardingRuleListWarning struct {
 }
 
 func (s *ForwardingRuleListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod ForwardingRuleListWarning
-	raw := noMethod(*s)
+	type NoMethod ForwardingRuleListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7286,8 +7487,8 @@ type ForwardingRuleListWarningData struct {
 }
 
 func (s *ForwardingRuleListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod ForwardingRuleListWarningData
-	raw := noMethod(*s)
+	type NoMethod ForwardingRuleListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7318,8 +7519,8 @@ type ForwardingRulesScopedList struct {
 }
 
 func (s *ForwardingRulesScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod ForwardingRulesScopedList
-	raw := noMethod(*s)
+	type NoMethod ForwardingRulesScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7333,9 +7534,13 @@ type ForwardingRulesScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -7346,7 +7551,9 @@ type ForwardingRulesScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -7377,8 +7584,8 @@ type ForwardingRulesScopedListWarning struct {
 }
 
 func (s *ForwardingRulesScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod ForwardingRulesScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod ForwardingRulesScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7414,8 +7621,8 @@ type ForwardingRulesScopedListWarningData struct {
 }
 
 func (s *ForwardingRulesScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod ForwardingRulesScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod ForwardingRulesScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7457,8 +7664,8 @@ type GlobalSetLabelsRequest struct {
 }
 
 func (s *GlobalSetLabelsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod GlobalSetLabelsRequest
-	raw := noMethod(*s)
+	type NoMethod GlobalSetLabelsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7467,12 +7674,13 @@ type GuestOsFeature struct {
 	// Type: The type of supported feature. Currently only
 	// VIRTIO_SCSI_MULTIQUEUE is supported. For newer Windows images, the
 	// server might also populate this property with the value WINDOWS to
-	// indicate that this is a Windows image. This value is purely
-	// informational and does not enable or disable any features.
+	// indicate that this is a Windows image.
 	//
 	// Possible values:
 	//   "FEATURE_TYPE_UNSPECIFIED"
 	//   "MULTI_IP_SUBNET"
+	//   "SECURE_BOOT"
+	//   "UEFI_COMPATIBLE"
 	//   "VIRTIO_SCSI_MULTIQUEUE"
 	//   "WINDOWS"
 	Type string `json:"type,omitempty"`
@@ -7495,8 +7703,8 @@ type GuestOsFeature struct {
 }
 
 func (s *GuestOsFeature) MarshalJSON() ([]byte, error) {
-	type noMethod GuestOsFeature
-	raw := noMethod(*s)
+	type NoMethod GuestOsFeature
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7527,6 +7735,11 @@ type HTTPHealthCheck struct {
 	// default value is /.
 	RequestPath string `json:"requestPath,omitempty"`
 
+	// Response: The string to match anywhere in the first 1024 bytes of the
+	// response body. If left empty (the default value), the status code
+	// determines health. The response data can only be ASCII.
+	Response string `json:"response,omitempty"`
+
 	// ForceSendFields is a list of field names (e.g. "Host") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -7545,8 +7758,8 @@ type HTTPHealthCheck struct {
 }
 
 func (s *HTTPHealthCheck) MarshalJSON() ([]byte, error) {
-	type noMethod HTTPHealthCheck
-	raw := noMethod(*s)
+	type NoMethod HTTPHealthCheck
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7577,6 +7790,11 @@ type HTTPSHealthCheck struct {
 	// default value is /.
 	RequestPath string `json:"requestPath,omitempty"`
 
+	// Response: The string to match anywhere in the first 1024 bytes of the
+	// response body. If left empty (the default value), the status code
+	// determines health. The response data can only be ASCII.
+	Response string `json:"response,omitempty"`
+
 	// ForceSendFields is a list of field names (e.g. "Host") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -7595,8 +7813,8 @@ type HTTPSHealthCheck struct {
 }
 
 func (s *HTTPSHealthCheck) MarshalJSON() ([]byte, error) {
-	type noMethod HTTPSHealthCheck
-	raw := noMethod(*s)
+	type NoMethod HTTPSHealthCheck
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7696,8 +7914,8 @@ type HealthCheck struct {
 }
 
 func (s *HealthCheck) MarshalJSON() ([]byte, error) {
-	type noMethod HealthCheck
-	raw := noMethod(*s)
+	type NoMethod HealthCheck
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7749,8 +7967,8 @@ type HealthCheckList struct {
 }
 
 func (s *HealthCheckList) MarshalJSON() ([]byte, error) {
-	type noMethod HealthCheckList
-	raw := noMethod(*s)
+	type NoMethod HealthCheckList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7763,9 +7981,13 @@ type HealthCheckListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -7776,7 +7998,9 @@ type HealthCheckListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -7807,8 +8031,8 @@ type HealthCheckListWarning struct {
 }
 
 func (s *HealthCheckListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod HealthCheckListWarning
-	raw := noMethod(*s)
+	type NoMethod HealthCheckListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7844,8 +8068,8 @@ type HealthCheckListWarningData struct {
 }
 
 func (s *HealthCheckListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod HealthCheckListWarningData
-	raw := noMethod(*s)
+	type NoMethod HealthCheckListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7876,8 +8100,8 @@ type HealthCheckReference struct {
 }
 
 func (s *HealthCheckReference) MarshalJSON() ([]byte, error) {
-	type noMethod HealthCheckReference
-	raw := noMethod(*s)
+	type NoMethod HealthCheckReference
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7916,8 +8140,8 @@ type HealthStatus struct {
 }
 
 func (s *HealthStatus) MarshalJSON() ([]byte, error) {
-	type noMethod HealthStatus
-	raw := noMethod(*s)
+	type NoMethod HealthStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7956,8 +8180,8 @@ type HostRule struct {
 }
 
 func (s *HostRule) MarshalJSON() ([]byte, error) {
-	type noMethod HostRule
-	raw := noMethod(*s)
+	type NoMethod HostRule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8047,8 +8271,8 @@ type HttpHealthCheck struct {
 }
 
 func (s *HttpHealthCheck) MarshalJSON() ([]byte, error) {
-	type noMethod HttpHealthCheck
-	raw := noMethod(*s)
+	type NoMethod HttpHealthCheck
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8100,8 +8324,8 @@ type HttpHealthCheckList struct {
 }
 
 func (s *HttpHealthCheckList) MarshalJSON() ([]byte, error) {
-	type noMethod HttpHealthCheckList
-	raw := noMethod(*s)
+	type NoMethod HttpHealthCheckList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8115,9 +8339,13 @@ type HttpHealthCheckListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -8128,7 +8356,9 @@ type HttpHealthCheckListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -8159,8 +8389,8 @@ type HttpHealthCheckListWarning struct {
 }
 
 func (s *HttpHealthCheckListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod HttpHealthCheckListWarning
-	raw := noMethod(*s)
+	type NoMethod HttpHealthCheckListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8196,8 +8426,8 @@ type HttpHealthCheckListWarningData struct {
 }
 
 func (s *HttpHealthCheckListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod HttpHealthCheckListWarningData
-	raw := noMethod(*s)
+	type NoMethod HttpHealthCheckListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8286,8 +8516,8 @@ type HttpsHealthCheck struct {
 }
 
 func (s *HttpsHealthCheck) MarshalJSON() ([]byte, error) {
-	type noMethod HttpsHealthCheck
-	raw := noMethod(*s)
+	type NoMethod HttpsHealthCheck
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8339,8 +8569,8 @@ type HttpsHealthCheckList struct {
 }
 
 func (s *HttpsHealthCheckList) MarshalJSON() ([]byte, error) {
-	type noMethod HttpsHealthCheckList
-	raw := noMethod(*s)
+	type NoMethod HttpsHealthCheckList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8354,9 +8584,13 @@ type HttpsHealthCheckListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -8367,7 +8601,9 @@ type HttpsHealthCheckListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -8398,8 +8634,8 @@ type HttpsHealthCheckListWarning struct {
 }
 
 func (s *HttpsHealthCheckListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod HttpsHealthCheckListWarning
-	raw := noMethod(*s)
+	type NoMethod HttpsHealthCheckListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8435,8 +8671,8 @@ type HttpsHealthCheckListWarningData struct {
 }
 
 func (s *HttpsHealthCheckListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod HttpsHealthCheckListWarningData
-	raw := noMethod(*s)
+	type NoMethod HttpsHealthCheckListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8476,10 +8712,9 @@ type Image struct {
 	// higher. Linux images with kernel versions 3.17 and higher will
 	// support VIRTIO_SCSI_MULTIQUEUE.
 	//
-	// For new Windows images, the server might also populate this field
-	// with the value WINDOWS, to indicate that this is a Windows image.
-	// This value is purely informational and does not enable or disable any
-	// features.
+	// For newer Windows images, the server might also populate this
+	// property with the value WINDOWS to indicate that this is a Windows
+	// image.
 	GuestOsFeatures []*GuestOsFeature `json:"guestOsFeatures,omitempty"`
 
 	// Id: [Output Only] The unique identifier for the resource. This
@@ -8519,6 +8754,10 @@ type Image struct {
 	// Labels: Labels to apply to this image. These can be later modified by
 	// the setLabels method.
 	Labels map[string]string `json:"labels,omitempty"`
+
+	// LicenseCodes: Integer license codes indicating which licenses are
+	// attached to this image.
+	LicenseCodes googleapi.Int64s `json:"licenseCodes,omitempty"`
 
 	// Licenses: Any applicable license URI.
 	Licenses []string `json:"licenses,omitempty"`
@@ -8617,8 +8856,8 @@ type Image struct {
 }
 
 func (s *Image) MarshalJSON() ([]byte, error) {
-	type noMethod Image
-	raw := noMethod(*s)
+	type NoMethod Image
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8660,8 +8899,8 @@ type ImageRawDisk struct {
 }
 
 func (s *ImageRawDisk) MarshalJSON() ([]byte, error) {
-	type noMethod ImageRawDisk
-	raw := noMethod(*s)
+	type NoMethod ImageRawDisk
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8713,8 +8952,8 @@ type ImageList struct {
 }
 
 func (s *ImageList) MarshalJSON() ([]byte, error) {
-	type noMethod ImageList
-	raw := noMethod(*s)
+	type NoMethod ImageList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8727,9 +8966,13 @@ type ImageListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -8740,7 +8983,9 @@ type ImageListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -8771,8 +9016,8 @@ type ImageListWarning struct {
 }
 
 func (s *ImageListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod ImageListWarning
-	raw := noMethod(*s)
+	type NoMethod ImageListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8808,8 +9053,8 @@ type ImageListWarningData struct {
 }
 
 func (s *ImageListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod ImageListWarningData
-	raw := noMethod(*s)
+	type NoMethod ImageListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8827,6 +9072,10 @@ type Instance struct {
 	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
 	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// DeletionProtection: Whether the resource should be protected against
+	// deletion.
+	DeletionProtection bool `json:"deletionProtection,omitempty"`
 
 	// Description: An optional description of this resource. Provide this
 	// property when you create the resource.
@@ -8982,8 +9231,8 @@ type Instance struct {
 }
 
 func (s *Instance) MarshalJSON() ([]byte, error) {
-	type noMethod Instance
-	raw := noMethod(*s)
+	type NoMethod Instance
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9036,8 +9285,8 @@ type InstanceAggregatedList struct {
 }
 
 func (s *InstanceAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceAggregatedList
-	raw := noMethod(*s)
+	type NoMethod InstanceAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9051,9 +9300,13 @@ type InstanceAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -9064,7 +9317,9 @@ type InstanceAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -9095,8 +9350,8 @@ type InstanceAggregatedListWarning struct {
 }
 
 func (s *InstanceAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod InstanceAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9132,8 +9387,8 @@ type InstanceAggregatedListWarningData struct {
 }
 
 func (s *InstanceAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod InstanceAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9221,8 +9476,8 @@ type InstanceGroup struct {
 }
 
 func (s *InstanceGroup) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroup
-	raw := noMethod(*s)
+	type NoMethod InstanceGroup
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9275,8 +9530,8 @@ type InstanceGroupAggregatedList struct {
 }
 
 func (s *InstanceGroupAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupAggregatedList
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9290,9 +9545,13 @@ type InstanceGroupAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -9303,7 +9562,9 @@ type InstanceGroupAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -9334,8 +9595,8 @@ type InstanceGroupAggregatedListWarning struct {
 }
 
 func (s *InstanceGroupAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9371,8 +9632,8 @@ type InstanceGroupAggregatedListWarningData struct {
 }
 
 func (s *InstanceGroupAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9425,8 +9686,8 @@ type InstanceGroupList struct {
 }
 
 func (s *InstanceGroupList) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupList
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9440,9 +9701,13 @@ type InstanceGroupListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -9453,7 +9718,9 @@ type InstanceGroupListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -9484,8 +9751,8 @@ type InstanceGroupListWarning struct {
 }
 
 func (s *InstanceGroupListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupListWarning
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9521,8 +9788,8 @@ type InstanceGroupListWarningData struct {
 }
 
 func (s *InstanceGroupListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupListWarningData
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9625,15 +9892,15 @@ type InstanceGroupManager struct {
 	// UpdatePolicy: The update policy for this managed instance group.
 	UpdatePolicy *InstanceGroupManagerUpdatePolicy `json:"updatePolicy,omitempty"`
 
-	// Versions: Versions supported by this IGM. User should set this field
-	// if they need fine-grained control over how many instances in each
-	// version are run by this IGM. Versions are keyed by instanceTemplate.
-	// Every instanceTemplate can appear at most once. This field overrides
-	// instanceTemplate field. If both instanceTemplate and versions are
-	// set, the user receives a warning. "instanceTemplate: X" is
-	// semantically equivalent to "versions [ { instanceTemplate: X } ]".
-	// Exactly one version must have targetSize field left unset. Size of
-	// such a version will be calculated automatically.
+	// Versions: Specifies the instance templates used by this managed
+	// instance group to create instances.
+	//
+	// Each version is defined by an instanceTemplate. Every template can
+	// appear at most once per instance group. This field overrides the
+	// top-level instanceTemplate field. Read more about the relationships
+	// between these fields. Exactly one version must leave the targetSize
+	// field unset. That version will be applied to all remaining instances.
+	// For more information, read about canary updates.
 	Versions []*InstanceGroupManagerVersion `json:"versions,omitempty"`
 
 	// Zone: [Output Only] The URL of the zone where the managed instance
@@ -9663,8 +9930,8 @@ type InstanceGroupManager struct {
 }
 
 func (s *InstanceGroupManager) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManager
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManager
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9743,8 +10010,8 @@ type InstanceGroupManagerActionsSummary struct {
 }
 
 func (s *InstanceGroupManagerActionsSummary) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagerActionsSummary
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagerActionsSummary
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9797,8 +10064,8 @@ type InstanceGroupManagerAggregatedList struct {
 }
 
 func (s *InstanceGroupManagerAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagerAggregatedList
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagerAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9812,9 +10079,13 @@ type InstanceGroupManagerAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -9825,7 +10096,9 @@ type InstanceGroupManagerAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -9856,8 +10129,8 @@ type InstanceGroupManagerAggregatedListWarning struct {
 }
 
 func (s *InstanceGroupManagerAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagerAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagerAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9893,8 +10166,8 @@ type InstanceGroupManagerAggregatedListWarningData struct {
 }
 
 func (s *InstanceGroupManagerAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagerAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagerAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9929,8 +10202,8 @@ type InstanceGroupManagerAutoHealingPolicy struct {
 }
 
 func (s *InstanceGroupManagerAutoHealingPolicy) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagerAutoHealingPolicy
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagerAutoHealingPolicy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -9985,8 +10258,8 @@ type InstanceGroupManagerList struct {
 }
 
 func (s *InstanceGroupManagerList) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagerList
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagerList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10000,9 +10273,13 @@ type InstanceGroupManagerListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -10013,7 +10290,9 @@ type InstanceGroupManagerListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -10044,8 +10323,8 @@ type InstanceGroupManagerListWarning struct {
 }
 
 func (s *InstanceGroupManagerListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagerListWarning
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagerListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10081,8 +10360,8 @@ type InstanceGroupManagerListWarningData struct {
 }
 
 func (s *InstanceGroupManagerListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagerListWarningData
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagerListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10121,25 +10400,40 @@ type InstanceGroupManagerPendingActionsSummary struct {
 }
 
 func (s *InstanceGroupManagerPendingActionsSummary) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagerPendingActionsSummary
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagerPendingActionsSummary
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 type InstanceGroupManagerUpdatePolicy struct {
-	// MaxSurge: Maximum number of instances that can be created above the
-	// InstanceGroupManager.targetSize during the update process. By
-	// default, a fixed value of 1 is used. Using maxSurge > 0 will cause
-	// instance names to change during the update process. At least one of {
-	// maxSurge, maxUnavailable } must be greater than 0.
+	// MaxSurge: The maximum number of instances that can be created above
+	// the specified targetSize during the update process. By default, a
+	// fixed value of 1 is used. This value can be either a fixed number or
+	// a percentage if the instance group has 10 or more instances. If you
+	// set a percentage, the number of instances will be rounded up if
+	// necessary.
+	//
+	// At least one of either maxSurge or maxUnavailable must be greater
+	// than 0. Learn more about maxSurge.
 	MaxSurge *FixedOrPercent `json:"maxSurge,omitempty"`
 
-	// MaxUnavailable: Maximum number of instances that can be unavailable
-	// during the update process. The instance is considered available if
-	// all of the following conditions are satisfied: 1. Instance's status
-	// is RUNNING. 2. Instance's liveness health check result was observed
-	// to be HEALTHY at least once. By default, a fixed value of 1 is used.
-	// At least one of { maxSurge, maxUnavailable } must be greater than 0.
+	// MaxUnavailable: The maximum number of instances that can be
+	// unavailable during the update process. An instance is considered
+	// available if all of the following conditions are satisfied:
+	//
+	//
+	// - The instance's status is RUNNING.
+	// - If there is a health check on the instance grourp, the instance's
+	// liveness health check result must be HEALTHY at least once. If there
+	// is no health check on the group, then the instance only needs to have
+	// a status of RUNNING to be considered available.  By default, a fixed
+	// value of 1 is used. This value can be either a fixed number or a
+	// percentage if the instance group has 10 or more instances. If you set
+	// a percentage, the number of instances will be rounded up if
+	// necessary.
+	//
+	// At least one of either maxSurge or maxUnavailable must be greater
+	// than 0. Learn more about maxUnavailable.
 	MaxUnavailable *FixedOrPercent `json:"maxUnavailable,omitempty"`
 
 	// MinReadySec: Minimum number of seconds to wait for after a newly
@@ -10147,8 +10441,13 @@ type InstanceGroupManagerUpdatePolicy struct {
 	// 3600].
 	MinReadySec int64 `json:"minReadySec,omitempty"`
 
-	// MinimalAction: Minimal action to be taken on an instance. The order
-	// of action types is: RESTART < REPLACE.
+	// MinimalAction: Minimal action to be taken on an instance. You can
+	// specify either RESTART to restart existing instances or REPLACE to
+	// delete and create new instances from the target template. If you
+	// specify a code>RESTART, the Updater will attempt to perform that
+	// action only. However, if the Updater determines that the minimal
+	// action you specify is not enough to perform the update, it might
+	// perform a more disruptive action.
 	//
 	// Possible values:
 	//   "REPLACE"
@@ -10178,8 +10477,8 @@ type InstanceGroupManagerUpdatePolicy struct {
 }
 
 func (s *InstanceGroupManagerUpdatePolicy) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagerUpdatePolicy
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagerUpdatePolicy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10190,13 +10489,16 @@ type InstanceGroupManagerVersion struct {
 	// this managed instance group.
 	Name string `json:"name,omitempty"`
 
-	// TargetSize: Intended number of instances that are created from
-	// instanceTemplate. The final number of instances created from
-	// instanceTemplate will be equal to: * if expressed as fixed number:
-	// min(targetSize.fixed, instanceGroupManager.targetSize), * if
-	// expressed as percent: ceiling(targetSize.percent *
-	// InstanceGroupManager.targetSize). If unset, this version will handle
-	// all the remaining instances.
+	// TargetSize: Specifies the intended number of instances to be created
+	// from the instanceTemplate. The final number of instances created from
+	// the template will be equal to:
+	// - If expressed as a fixed number, the minimum of either
+	// targetSize.fixed or instanceGroupManager.targetSize is used.
+	// - if expressed as a percent, the targetSize would be
+	// (targetSize.percent/100 * InstanceGroupManager.targetSize) If there
+	// is a remainder, the number is rounded up.  If unset, this version
+	// will update any remaining instances not updated by another version.
+	// Read Starting a canary update for more information.
 	TargetSize *FixedOrPercent `json:"targetSize,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "InstanceTemplate") to
@@ -10218,8 +10520,8 @@ type InstanceGroupManagerVersion struct {
 }
 
 func (s *InstanceGroupManagerVersion) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagerVersion
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagerVersion
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10247,8 +10549,8 @@ type InstanceGroupManagersAbandonInstancesRequest struct {
 }
 
 func (s *InstanceGroupManagersAbandonInstancesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagersAbandonInstancesRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagersAbandonInstancesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10276,8 +10578,8 @@ type InstanceGroupManagersDeleteInstancesRequest struct {
 }
 
 func (s *InstanceGroupManagersDeleteInstancesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagersDeleteInstancesRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagersDeleteInstancesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10317,8 +10619,8 @@ type InstanceGroupManagersListManagedInstancesResponse struct {
 }
 
 func (s *InstanceGroupManagersListManagedInstancesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagersListManagedInstancesResponse
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagersListManagedInstancesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10346,8 +10648,8 @@ type InstanceGroupManagersRecreateInstancesRequest struct {
 }
 
 func (s *InstanceGroupManagersRecreateInstancesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagersRecreateInstancesRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagersRecreateInstancesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10400,8 +10702,8 @@ type InstanceGroupManagersResizeAdvancedRequest struct {
 }
 
 func (s *InstanceGroupManagersResizeAdvancedRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagersResizeAdvancedRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagersResizeAdvancedRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10434,8 +10736,8 @@ type InstanceGroupManagersScopedList struct {
 }
 
 func (s *InstanceGroupManagersScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagersScopedList
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagersScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10450,9 +10752,13 @@ type InstanceGroupManagersScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -10463,7 +10769,9 @@ type InstanceGroupManagersScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -10494,8 +10802,8 @@ type InstanceGroupManagersScopedListWarning struct {
 }
 
 func (s *InstanceGroupManagersScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagersScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagersScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10531,8 +10839,8 @@ type InstanceGroupManagersScopedListWarningData struct {
 }
 
 func (s *InstanceGroupManagersScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagersScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagersScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10558,8 +10866,8 @@ type InstanceGroupManagersSetAutoHealingRequest struct {
 }
 
 func (s *InstanceGroupManagersSetAutoHealingRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagersSetAutoHealingRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagersSetAutoHealingRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10588,8 +10896,8 @@ type InstanceGroupManagersSetInstanceTemplateRequest struct {
 }
 
 func (s *InstanceGroupManagersSetInstanceTemplateRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagersSetInstanceTemplateRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagersSetInstanceTemplateRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10627,8 +10935,8 @@ type InstanceGroupManagersSetTargetPoolsRequest struct {
 }
 
 func (s *InstanceGroupManagersSetTargetPoolsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupManagersSetTargetPoolsRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupManagersSetTargetPoolsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10654,8 +10962,8 @@ type InstanceGroupsAddInstancesRequest struct {
 }
 
 func (s *InstanceGroupsAddInstancesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupsAddInstancesRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupsAddInstancesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10708,8 +11016,8 @@ type InstanceGroupsListInstances struct {
 }
 
 func (s *InstanceGroupsListInstances) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupsListInstances
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupsListInstances
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10723,9 +11031,13 @@ type InstanceGroupsListInstancesWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -10736,7 +11048,9 @@ type InstanceGroupsListInstancesWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -10767,8 +11081,8 @@ type InstanceGroupsListInstancesWarning struct {
 }
 
 func (s *InstanceGroupsListInstancesWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupsListInstancesWarning
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupsListInstancesWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10804,8 +11118,8 @@ type InstanceGroupsListInstancesWarningData struct {
 }
 
 func (s *InstanceGroupsListInstancesWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupsListInstancesWarningData
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupsListInstancesWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10838,8 +11152,8 @@ type InstanceGroupsListInstancesRequest struct {
 }
 
 func (s *InstanceGroupsListInstancesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupsListInstancesRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupsListInstancesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10865,8 +11179,8 @@ type InstanceGroupsRemoveInstancesRequest struct {
 }
 
 func (s *InstanceGroupsRemoveInstancesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupsRemoveInstancesRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupsRemoveInstancesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10898,8 +11212,8 @@ type InstanceGroupsScopedList struct {
 }
 
 func (s *InstanceGroupsScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupsScopedList
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupsScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10914,9 +11228,13 @@ type InstanceGroupsScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -10927,7 +11245,9 @@ type InstanceGroupsScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -10958,8 +11278,8 @@ type InstanceGroupsScopedListWarning struct {
 }
 
 func (s *InstanceGroupsScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupsScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupsScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -10995,8 +11315,8 @@ type InstanceGroupsScopedListWarningData struct {
 }
 
 func (s *InstanceGroupsScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupsScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupsScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11030,8 +11350,8 @@ type InstanceGroupsSetNamedPortsRequest struct {
 }
 
 func (s *InstanceGroupsSetNamedPortsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceGroupsSetNamedPortsRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceGroupsSetNamedPortsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11084,8 +11404,8 @@ type InstanceList struct {
 }
 
 func (s *InstanceList) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceList
-	raw := noMethod(*s)
+	type NoMethod InstanceList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11098,9 +11418,13 @@ type InstanceListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -11111,7 +11435,9 @@ type InstanceListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -11142,8 +11468,8 @@ type InstanceListWarning struct {
 }
 
 func (s *InstanceListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceListWarning
-	raw := noMethod(*s)
+	type NoMethod InstanceListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11179,8 +11505,8 @@ type InstanceListWarningData struct {
 }
 
 func (s *InstanceListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceListWarningData
-	raw := noMethod(*s)
+	type NoMethod InstanceListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11233,8 +11559,8 @@ type InstanceListReferrers struct {
 }
 
 func (s *InstanceListReferrers) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceListReferrers
-	raw := noMethod(*s)
+	type NoMethod InstanceListReferrers
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11248,9 +11574,13 @@ type InstanceListReferrersWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -11261,7 +11591,9 @@ type InstanceListReferrersWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -11292,8 +11624,8 @@ type InstanceListReferrersWarning struct {
 }
 
 func (s *InstanceListReferrersWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceListReferrersWarning
-	raw := noMethod(*s)
+	type NoMethod InstanceListReferrersWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11329,8 +11661,8 @@ type InstanceListReferrersWarningData struct {
 }
 
 func (s *InstanceListReferrersWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceListReferrersWarningData
-	raw := noMethod(*s)
+	type NoMethod InstanceListReferrersWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11372,8 +11704,8 @@ type InstanceMoveRequest struct {
 }
 
 func (s *InstanceMoveRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceMoveRequest
-	raw := noMethod(*s)
+	type NoMethod InstanceMoveRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11459,8 +11791,8 @@ type InstanceProperties struct {
 }
 
 func (s *InstanceProperties) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceProperties
-	raw := noMethod(*s)
+	type NoMethod InstanceProperties
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11486,8 +11818,8 @@ type InstanceReference struct {
 }
 
 func (s *InstanceReference) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceReference
-	raw := noMethod(*s)
+	type NoMethod InstanceReference
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11548,8 +11880,8 @@ type InstanceTemplate struct {
 }
 
 func (s *InstanceTemplate) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceTemplate
-	raw := noMethod(*s)
+	type NoMethod InstanceTemplate
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11602,8 +11934,8 @@ type InstanceTemplateList struct {
 }
 
 func (s *InstanceTemplateList) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceTemplateList
-	raw := noMethod(*s)
+	type NoMethod InstanceTemplateList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11617,9 +11949,13 @@ type InstanceTemplateListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -11630,7 +11966,9 @@ type InstanceTemplateListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -11661,8 +11999,8 @@ type InstanceTemplateListWarning struct {
 }
 
 func (s *InstanceTemplateListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceTemplateListWarning
-	raw := noMethod(*s)
+	type NoMethod InstanceTemplateListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11698,8 +12036,8 @@ type InstanceTemplateListWarningData struct {
 }
 
 func (s *InstanceTemplateListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceTemplateListWarningData
-	raw := noMethod(*s)
+	type NoMethod InstanceTemplateListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11742,8 +12080,8 @@ type InstanceWithNamedPorts struct {
 }
 
 func (s *InstanceWithNamedPorts) MarshalJSON() ([]byte, error) {
-	type noMethod InstanceWithNamedPorts
-	raw := noMethod(*s)
+	type NoMethod InstanceWithNamedPorts
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11773,8 +12111,8 @@ type InstancesScopedList struct {
 }
 
 func (s *InstancesScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod InstancesScopedList
-	raw := noMethod(*s)
+	type NoMethod InstancesScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11788,9 +12126,13 @@ type InstancesScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -11801,7 +12143,9 @@ type InstancesScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -11832,8 +12176,8 @@ type InstancesScopedListWarning struct {
 }
 
 func (s *InstancesScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InstancesScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod InstancesScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11869,8 +12213,8 @@ type InstancesScopedListWarningData struct {
 }
 
 func (s *InstancesScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InstancesScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod InstancesScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11901,8 +12245,8 @@ type InstancesSetLabelsRequest struct {
 }
 
 func (s *InstancesSetLabelsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstancesSetLabelsRequest
-	raw := noMethod(*s)
+	type NoMethod InstancesSetLabelsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11930,8 +12274,8 @@ type InstancesSetMachineResourcesRequest struct {
 }
 
 func (s *InstancesSetMachineResourcesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstancesSetMachineResourcesRequest
-	raw := noMethod(*s)
+	type NoMethod InstancesSetMachineResourcesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11959,8 +12303,8 @@ type InstancesSetMachineTypeRequest struct {
 }
 
 func (s *InstancesSetMachineTypeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstancesSetMachineTypeRequest
-	raw := noMethod(*s)
+	type NoMethod InstancesSetMachineTypeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -11988,8 +12332,8 @@ type InstancesSetMinCpuPlatformRequest struct {
 }
 
 func (s *InstancesSetMinCpuPlatformRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstancesSetMinCpuPlatformRequest
-	raw := noMethod(*s)
+	type NoMethod InstancesSetMinCpuPlatformRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12019,8 +12363,8 @@ type InstancesSetServiceAccountRequest struct {
 }
 
 func (s *InstancesSetServiceAccountRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstancesSetServiceAccountRequest
-	raw := noMethod(*s)
+	type NoMethod InstancesSetServiceAccountRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12053,31 +12397,26 @@ type InstancesStartWithEncryptionKeyRequest struct {
 }
 
 func (s *InstancesStartWithEncryptionKeyRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InstancesStartWithEncryptionKeyRequest
-	raw := noMethod(*s)
+	type NoMethod InstancesStartWithEncryptionKeyRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// Interconnect: Protocol definitions for Mixer API to support
-// Interconnect. Next available tag: 23
+// Interconnect: Represents an Interconnects resource. The Interconnects
+// resource is a dedicated connection between Google's network and your
+// on-premises network. For more information, see the  Dedicated
+// overview page.
 type Interconnect struct {
 	// AdminEnabled: Administrative status of the interconnect. When this is
-	// set to ?true?, the Interconnect is functional and may carry traffic
-	// (assuming there are functional InterconnectAttachments and other
-	// requirements are satisfied). When set to ?false?, no packets will be
-	// carried over this Interconnect and no BGP routes will be exchanged
-	// over it. By default, it is set to ?true?.
+	// set to true, the Interconnect is functional and can carry traffic.
+	// When set to false, no packets can be carried over the interconnect
+	// and no BGP routes are exchanged over it. By default, the status is
+	// set to true.
 	AdminEnabled bool `json:"adminEnabled,omitempty"`
 
 	// CircuitInfos: [Output Only] List of CircuitInfo objects, that
 	// describe the individual circuits in this LAG.
 	CircuitInfos []*InterconnectCircuitInfo `json:"circuitInfos,omitempty"`
-
-	// ConnectionAuthorization: [Output Only] URL to retrieve the Letter Of
-	// Authority and Customer Facility Assignment (LOA-CFA) documentation
-	// relating to this Interconnect. This documentation authorizes the
-	// facility provider to connect to the specified crossconnect ports.
-	ConnectionAuthorization string `json:"connectionAuthorization,omitempty"`
 
 	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
 	// format.
@@ -12112,7 +12451,11 @@ type Interconnect struct {
 	// InterconnectAttachments configured to use this Interconnect.
 	InterconnectAttachments []string `json:"interconnectAttachments,omitempty"`
 
+	// InterconnectType: Type of interconnect. Note that "IT_PRIVATE" has
+	// been deprecated in favor of "DEDICATED"
+	//
 	// Possible values:
+	//   "DEDICATED"
 	//   "IT_PRIVATE"
 	InterconnectType string `json:"interconnectType,omitempty"`
 
@@ -12120,6 +12463,10 @@ type Interconnect struct {
 	// for interconnects.
 	Kind string `json:"kind,omitempty"`
 
+	// LinkType: Type of link requested. This field indicates speed of each
+	// of the links in the bundle, not the entire bundle. Only 10G per link
+	// is allowed for a dedicated interconnect. Options: Ethernet_10G_LR
+	//
 	// Possible values:
 	//   "LINK_TYPE_ETHERNET_10G_LR"
 	LinkType string `json:"linkType,omitempty"`
@@ -12191,13 +12538,14 @@ type Interconnect struct {
 }
 
 func (s *Interconnect) MarshalJSON() ([]byte, error) {
-	type noMethod Interconnect
-	raw := noMethod(*s)
+	type NoMethod Interconnect
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// InterconnectAttachment: Protocol definitions for Mixer API to support
-// InterconnectAttachment. Next available tag: 18
+// InterconnectAttachment: Represents an InterconnectAttachment (VLAN
+// attachment) resource. For more information, see  Creating VLAN
+// Attachments.
 type InterconnectAttachment struct {
 	// CloudRouterIpAddress: [Output Only] IPv4 address + prefix length to
 	// be configured on Cloud Router Interface for this interconnect
@@ -12213,8 +12561,7 @@ type InterconnectAttachment struct {
 	// interconnect attachment.
 	CustomerRouterIpAddress string `json:"customerRouterIpAddress,omitempty"`
 
-	// Description: An optional description of this resource. Provide this
-	// property when you create the resource.
+	// Description: An optional description of this resource.
 	Description string `json:"description,omitempty"`
 
 	// GoogleReferenceId: [Output Only] Google reference ID, to be used when
@@ -12251,9 +12598,9 @@ type InterconnectAttachment struct {
 	//   "OS_UNPROVISIONED"
 	OperationalStatus string `json:"operationalStatus,omitempty"`
 
-	// PrivateInterconnectInfo: [Output Only] Information specific to a
-	// Private InterconnectAttachment. Only populated if the interconnect
-	// that this is attached is of type IT_PRIVATE.
+	// PrivateInterconnectInfo: [Output Only] Information specific to an
+	// InterconnectAttachment. This property is populated if the
+	// interconnect that this is attached to is of type DEDICATED.
 	PrivateInterconnectInfo *InterconnectAttachmentPrivateInfo `json:"privateInterconnectInfo,omitempty"`
 
 	// Region: [Output Only] URL of the region where the regional
@@ -12293,8 +12640,8 @@ type InterconnectAttachment struct {
 }
 
 func (s *InterconnectAttachment) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectAttachment
-	raw := noMethod(*s)
+	type NoMethod InterconnectAttachment
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12347,8 +12694,8 @@ type InterconnectAttachmentAggregatedList struct {
 }
 
 func (s *InterconnectAttachmentAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectAttachmentAggregatedList
-	raw := noMethod(*s)
+	type NoMethod InterconnectAttachmentAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12362,9 +12709,13 @@ type InterconnectAttachmentAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -12375,7 +12726,9 @@ type InterconnectAttachmentAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -12406,8 +12759,8 @@ type InterconnectAttachmentAggregatedListWarning struct {
 }
 
 func (s *InterconnectAttachmentAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectAttachmentAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod InterconnectAttachmentAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12443,8 +12796,8 @@ type InterconnectAttachmentAggregatedListWarningData struct {
 }
 
 func (s *InterconnectAttachmentAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectAttachmentAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod InterconnectAttachmentAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12499,8 +12852,8 @@ type InterconnectAttachmentList struct {
 }
 
 func (s *InterconnectAttachmentList) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectAttachmentList
-	raw := noMethod(*s)
+	type NoMethod InterconnectAttachmentList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12514,9 +12867,13 @@ type InterconnectAttachmentListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -12527,7 +12884,9 @@ type InterconnectAttachmentListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -12558,8 +12917,8 @@ type InterconnectAttachmentListWarning struct {
 }
 
 func (s *InterconnectAttachmentListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectAttachmentListWarning
-	raw := noMethod(*s)
+	type NoMethod InterconnectAttachmentListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12595,14 +12954,13 @@ type InterconnectAttachmentListWarningData struct {
 }
 
 func (s *InterconnectAttachmentListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectAttachmentListWarningData
-	raw := noMethod(*s)
+	type NoMethod InterconnectAttachmentListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// InterconnectAttachmentPrivateInfo: Private information for an
-// interconnect attachment when this belongs to an interconnect of type
-// IT_PRIVATE.
+// InterconnectAttachmentPrivateInfo: Information for an interconnect
+// attachment when this belongs to an interconnect of type DEDICATED.
 type InterconnectAttachmentPrivateInfo struct {
 	// Tag8021q: [Output Only] 802.1q encapsulation tag to be used for
 	// traffic between Google and the customer, going to and from this
@@ -12627,8 +12985,8 @@ type InterconnectAttachmentPrivateInfo struct {
 }
 
 func (s *InterconnectAttachmentPrivateInfo) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectAttachmentPrivateInfo
-	raw := noMethod(*s)
+	type NoMethod InterconnectAttachmentPrivateInfo
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12661,8 +13019,8 @@ type InterconnectAttachmentsScopedList struct {
 }
 
 func (s *InterconnectAttachmentsScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectAttachmentsScopedList
-	raw := noMethod(*s)
+	type NoMethod InterconnectAttachmentsScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12676,9 +13034,13 @@ type InterconnectAttachmentsScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -12689,7 +13051,9 @@ type InterconnectAttachmentsScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -12720,8 +13084,8 @@ type InterconnectAttachmentsScopedListWarning struct {
 }
 
 func (s *InterconnectAttachmentsScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectAttachmentsScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod InterconnectAttachmentsScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12757,8 +13121,8 @@ type InterconnectAttachmentsScopedListWarningData struct {
 }
 
 func (s *InterconnectAttachmentsScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectAttachmentsScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod InterconnectAttachmentsScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12766,9 +13130,7 @@ func (s *InterconnectAttachmentsScopedListWarningData) MarshalJSON() ([]byte, er
 // the Customer and Google. CircuitInfo objects are created by Google,
 // so all fields are output only. Next id: 4
 type InterconnectCircuitInfo struct {
-	// CustomerDemarcId: Customer-side demarc ID for this circuit. This will
-	// only be set if it was provided by the Customer to Google during
-	// circuit turn-up.
+	// CustomerDemarcId: Customer-side demarc ID for this circuit.
 	CustomerDemarcId string `json:"customerDemarcId,omitempty"`
 
 	// GoogleCircuitId: Google-assigned unique ID for this circuit. Assigned
@@ -12798,8 +13160,8 @@ type InterconnectCircuitInfo struct {
 }
 
 func (s *InterconnectCircuitInfo) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectCircuitInfo
-	raw := noMethod(*s)
+	type NoMethod InterconnectCircuitInfo
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12853,8 +13215,8 @@ type InterconnectList struct {
 }
 
 func (s *InterconnectList) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectList
-	raw := noMethod(*s)
+	type NoMethod InterconnectList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12867,9 +13229,13 @@ type InterconnectListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -12880,7 +13246,9 @@ type InterconnectListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -12911,8 +13279,8 @@ type InterconnectListWarning struct {
 }
 
 func (s *InterconnectListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectListWarning
-	raw := noMethod(*s)
+	type NoMethod InterconnectListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -12948,37 +13316,44 @@ type InterconnectListWarningData struct {
 }
 
 func (s *InterconnectListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectListWarningData
-	raw := noMethod(*s)
+	type NoMethod InterconnectListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// InterconnectLocation: Protocol definitions for Mixer API to support
-// InterconnectLocation.
+// InterconnectLocation: Represents an InterconnectLocations resource.
+// The InterconnectLocations resource describes the locations where you
+// can connect to Google's networks. For more information, see
+// Colocation Facilities.
 type InterconnectLocation struct {
 	// Address: [Output Only] The postal address of the Point of Presence,
 	// each line in the address is separated by a newline character.
 	Address string `json:"address,omitempty"`
 
-	// AvailabilityZone: Availability zone for this location. Within a city,
-	// maintenance will not be simultaneously scheduled in more than one
-	// availability zone. Example: "zone1" or "zone2".
+	// AvailabilityZone: [Output Only] Availability zone for this location.
+	// Within a metropolitan area (metro), maintenance will not be
+	// simultaneously scheduled in more than one availability zone. Example:
+	// "zone1" or "zone2".
 	AvailabilityZone string `json:"availabilityZone,omitempty"`
 
-	// City: City designator used by the Interconnect UI to locate this
-	// InterconnectLocation within the Continent. For example: "Chicago,
-	// IL", "Amsterdam, Netherlands".
+	// City: [Output Only] Metropolitan area designator that indicates which
+	// city an interconnect is located. For example: "Chicago, IL",
+	// "Amsterdam, Netherlands".
 	City string `json:"city,omitempty"`
 
-	// Continent: Continent for this location. Used by the location picker
-	// in the Interconnect UI.
+	// Continent: [Output Only] Continent for this location.
 	//
 	// Possible values:
+	//   "AFRICA"
+	//   "ASIA_PAC"
 	//   "C_AFRICA"
 	//   "C_ASIA_PAC"
 	//   "C_EUROPE"
 	//   "C_NORTH_AMERICA"
 	//   "C_SOUTH_AMERICA"
+	//   "EUROPE"
+	//   "NORTH_AMERICA"
+	//   "SOUTH_AMERICA"
 	Continent string `json:"continent,omitempty"`
 
 	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
@@ -13041,8 +13416,8 @@ type InterconnectLocation struct {
 }
 
 func (s *InterconnectLocation) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectLocation
-	raw := noMethod(*s)
+	type NoMethod InterconnectLocation
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13096,8 +13471,8 @@ type InterconnectLocationList struct {
 }
 
 func (s *InterconnectLocationList) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectLocationList
-	raw := noMethod(*s)
+	type NoMethod InterconnectLocationList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13111,9 +13486,13 @@ type InterconnectLocationListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -13124,7 +13503,9 @@ type InterconnectLocationListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -13155,8 +13536,8 @@ type InterconnectLocationListWarning struct {
 }
 
 func (s *InterconnectLocationListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectLocationListWarning
-	raw := noMethod(*s)
+	type NoMethod InterconnectLocationListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13192,8 +13573,8 @@ type InterconnectLocationListWarningData struct {
 }
 
 func (s *InterconnectLocationListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectLocationListWarningData
-	raw := noMethod(*s)
+	type NoMethod InterconnectLocationListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13208,15 +13589,14 @@ type InterconnectLocationRegionInfo struct {
 	// LocationPresence: Identifies the network presence of this location.
 	//
 	// Possible values:
+	//   "GLOBAL"
+	//   "LOCAL_REGION"
 	//   "LP_GLOBAL"
 	//   "LP_LOCAL_REGION"
 	LocationPresence string `json:"locationPresence,omitempty"`
 
 	// Region: URL for the region of this location.
 	Region string `json:"region,omitempty"`
-
-	// RegionKey: Scope key for the region of this location.
-	RegionKey string `json:"regionKey,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ExpectedRttMs") to
 	// unconditionally include in API requests. By default, fields with
@@ -13236,8 +13616,8 @@ type InterconnectLocationRegionInfo struct {
 }
 
 func (s *InterconnectLocationRegionInfo) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectLocationRegionInfo
-	raw := noMethod(*s)
+	type NoMethod InterconnectLocationRegionInfo
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13248,29 +13628,45 @@ type InterconnectOutageNotification struct {
 	// Google-side circuit IDs that will be affected.
 	AffectedCircuits []string `json:"affectedCircuits,omitempty"`
 
-	// Description: Short user-visible description of the purpose of the
-	// outage.
+	// Description: A description about the purpose of the outage.
 	Description string `json:"description,omitempty"`
 
+	// EndTime: Scheduled end time for the outage (milliseconds since Unix
+	// epoch).
 	EndTime int64 `json:"endTime,omitempty,string"`
 
+	// IssueType: Form this outage is expected to take. Note that the "IT_"
+	// versions of this enum have been deprecated in favor of the unprefixed
+	// values.
+	//
 	// Possible values:
 	//   "IT_OUTAGE"
 	//   "IT_PARTIAL_OUTAGE"
+	//   "OUTAGE"
+	//   "PARTIAL_OUTAGE"
 	IssueType string `json:"issueType,omitempty"`
 
 	// Name: Unique identifier for this outage notification.
 	Name string `json:"name,omitempty"`
 
+	// Source: The party that generated this notification. Note that
+	// "NSRC_GOOGLE" has been deprecated in favor of "GOOGLE"
+	//
 	// Possible values:
+	//   "GOOGLE"
 	//   "NSRC_GOOGLE"
 	Source string `json:"source,omitempty"`
 
-	// StartTime: Scheduled start and end times for the outage (milliseconds
-	// since Unix epoch).
+	// StartTime: Scheduled start time for the outage (milliseconds since
+	// Unix epoch).
 	StartTime int64 `json:"startTime,omitempty,string"`
 
+	// State: State of this notification. Note that the "NS_" versions of
+	// this enum have been deprecated in favor of the unprefixed values.
+	//
 	// Possible values:
+	//   "ACTIVE"
+	//   "CANCELLED"
 	//   "NS_ACTIVE"
 	//   "NS_CANCELED"
 	State string `json:"state,omitempty"`
@@ -13294,8 +13690,8 @@ type InterconnectOutageNotification struct {
 }
 
 func (s *InterconnectOutageNotification) MarshalJSON() ([]byte, error) {
-	type noMethod InterconnectOutageNotification
-	raw := noMethod(*s)
+	type NoMethod InterconnectOutageNotification
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13305,16 +13701,39 @@ type License struct {
 	// reflects whether a license charges a usage fee.
 	ChargesUseFee bool `json:"chargesUseFee,omitempty"`
 
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
+	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// Description: An optional textual description of the resource;
+	// provided by the client when the resource is created.
+	Description string `json:"description,omitempty"`
+
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
+	Id uint64 `json:"id,omitempty,string"`
+
 	// Kind: [Output Only] Type of resource. Always compute#license for
 	// licenses.
 	Kind string `json:"kind,omitempty"`
+
+	// LicenseCode: [Output Only] The unique code used to attach this
+	// license to images, snapshots, and disks.
+	LicenseCode uint64 `json:"licenseCode,omitempty,string"`
 
 	// Name: [Output Only] Name of the resource. The name is 1-63 characters
 	// long and complies with RFC1035.
 	Name string `json:"name,omitempty"`
 
+	ResourceRequirements *LicenseResourceRequirements `json:"resourceRequirements,omitempty"`
+
 	// SelfLink: [Output Only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
+
+	// Transferable: If false, licenses will not be copied from the source
+	// resource when creating an image from a disk, disk from snapshot, or
+	// snapshot from disk.
+	Transferable bool `json:"transferable,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -13338,8 +13757,293 @@ type License struct {
 }
 
 func (s *License) MarshalJSON() ([]byte, error) {
-	type noMethod License
-	raw := noMethod(*s)
+	type NoMethod License
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type LicenseCode struct {
+	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
+	// format.
+	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+
+	// Description: [Output Only] Description of this License Code.
+	Description string `json:"description,omitempty"`
+
+	// Id: [Output Only] The unique identifier for the resource. This
+	// identifier is defined by the server.
+	Id uint64 `json:"id,omitempty,string"`
+
+	// Kind: [Output Only] Type of resource. Always compute#licenseCode for
+	// licenses.
+	Kind string `json:"kind,omitempty"`
+
+	// LicenseAlias: [Output Only] URL and description aliases of Licenses
+	// with the same License Code.
+	LicenseAlias []*LicenseCodeLicenseAlias `json:"licenseAlias,omitempty"`
+
+	// Name: [Output Only] Name of the resource. The name is 1-20 characters
+	// long and must be a valid 64 bit integer.
+	Name string `json:"name,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for the resource.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// State: [Output Only] Current state of this License Code.
+	//
+	// Possible values:
+	//   "DISABLED"
+	//   "ENABLED"
+	//   "RESTRICTED"
+	//   "STATE_UNSPECIFIED"
+	//   "TERMINATED"
+	State string `json:"state,omitempty"`
+
+	// Transferable: [Output Only] If true, the license will remain attached
+	// when creating images or snapshots from disks. Otherwise, the license
+	// is not transferred.
+	Transferable bool `json:"transferable,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "CreationTimestamp")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "CreationTimestamp") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *LicenseCode) MarshalJSON() ([]byte, error) {
+	type NoMethod LicenseCode
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type LicenseCodeLicenseAlias struct {
+	// Description: [Output Only] Description of this License Code.
+	Description string `json:"description,omitempty"`
+
+	// SelfLink: [Output Only] URL of license corresponding to this License
+	// Code.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Description") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Description") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *LicenseCodeLicenseAlias) MarshalJSON() ([]byte, error) {
+	type NoMethod LicenseCodeLicenseAlias
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type LicenseResourceRequirements struct {
+	// MinGuestCpuCount: Minimum number of guest cpus required to use the
+	// Instance. Enforced at Instance creation and Instance start.
+	MinGuestCpuCount int64 `json:"minGuestCpuCount,omitempty"`
+
+	// MinMemoryMb: Minimum memory required to use the Instance. Enforced at
+	// Instance creation and Instance start.
+	MinMemoryMb int64 `json:"minMemoryMb,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "MinGuestCpuCount") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "MinGuestCpuCount") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *LicenseResourceRequirements) MarshalJSON() ([]byte, error) {
+	type NoMethod LicenseResourceRequirements
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type LicensesListResponse struct {
+	// Id: [Output Only] Unique identifier for the resource; defined by the
+	// server.
+	Id string `json:"id,omitempty"`
+
+	// Items: A list of License resources.
+	Items []*License `json:"items,omitempty"`
+
+	// NextPageToken: [Output Only] This token allows you to get the next
+	// page of results for list requests. If the number of results is larger
+	// than maxResults, use the nextPageToken as a value for the query
+	// parameter pageToken in the next list request. Subsequent list
+	// requests will have their own nextPageToken to continue paging through
+	// the results.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// SelfLink: [Output Only] Server-defined URL for this resource.
+	SelfLink string `json:"selfLink,omitempty"`
+
+	// Warning: [Output Only] Informational warning message.
+	Warning *LicensesListResponseWarning `json:"warning,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Id") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Id") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *LicensesListResponse) MarshalJSON() ([]byte, error) {
+	type NoMethod LicensesListResponse
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// LicensesListResponseWarning: [Output Only] Informational warning
+// message.
+type LicensesListResponseWarning struct {
+	// Code: [Output Only] A warning code, if applicable. For example,
+	// Compute Engine returns NO_RESULTS_ON_PAGE if there are no results in
+	// the response.
+	//
+	// Possible values:
+	//   "CLEANUP_FAILED"
+	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
+	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
+	//   "FIELD_VALUE_OVERRIDEN"
+	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
+	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
+	//   "NEXT_HOP_CANNOT_IP_FORWARD"
+	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
+	//   "NEXT_HOP_INSTANCE_NOT_ON_NETWORK"
+	//   "NEXT_HOP_NOT_RUNNING"
+	//   "NOT_CRITICAL_ERROR"
+	//   "NO_RESULTS_ON_PAGE"
+	//   "REQUIRED_TOS_AGREEMENT"
+	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
+	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
+	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
+	//   "UNREACHABLE"
+	Code string `json:"code,omitempty"`
+
+	// Data: [Output Only] Metadata about this warning in key: value format.
+	// For example:
+	// "data": [ { "key": "scope", "value": "zones/us-east1-d" }
+	Data []*LicensesListResponseWarningData `json:"data,omitempty"`
+
+	// Message: [Output Only] A human-readable description of the warning
+	// code.
+	Message string `json:"message,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Code") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Code") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *LicensesListResponseWarning) MarshalJSON() ([]byte, error) {
+	type NoMethod LicensesListResponseWarning
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type LicensesListResponseWarningData struct {
+	// Key: [Output Only] A key that provides more detail on the warning
+	// being returned. For example, for warnings where there are no results
+	// in a list request for a particular zone, this key might be scope and
+	// the key value might be the zone name. Other examples might be a key
+	// indicating a deprecated resource and a suggested replacement, or a
+	// warning about invalid network settings (for example, if an instance
+	// attempts to perform IP forwarding but is not enabled for IP
+	// forwarding).
+	Key string `json:"key,omitempty"`
+
+	// Value: [Output Only] A warning data value corresponding to the key.
+	Value string `json:"value,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Key") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Key") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *LicensesListResponseWarningData) MarshalJSON() ([]byte, error) {
+	type NoMethod LicensesListResponseWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13372,8 +14076,8 @@ type LogConfig struct {
 }
 
 func (s *LogConfig) MarshalJSON() ([]byte, error) {
-	type noMethod LogConfig
-	raw := noMethod(*s)
+	type NoMethod LogConfig
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13411,8 +14115,8 @@ type LogConfigCloudAuditOptions struct {
 }
 
 func (s *LogConfigCloudAuditOptions) MarshalJSON() ([]byte, error) {
-	type noMethod LogConfigCloudAuditOptions
-	raw := noMethod(*s)
+	type NoMethod LogConfigCloudAuditOptions
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13464,8 +14168,8 @@ type LogConfigCounterOptions struct {
 }
 
 func (s *LogConfigCounterOptions) MarshalJSON() ([]byte, error) {
-	type noMethod LogConfigCounterOptions
-	raw := noMethod(*s)
+	type NoMethod LogConfigCounterOptions
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13498,8 +14202,8 @@ type LogConfigDataAccessOptions struct {
 }
 
 func (s *LogConfigDataAccessOptions) MarshalJSON() ([]byte, error) {
-	type noMethod LogConfigDataAccessOptions
-	raw := noMethod(*s)
+	type NoMethod LogConfigDataAccessOptions
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13578,8 +14282,8 @@ type MachineType struct {
 }
 
 func (s *MachineType) MarshalJSON() ([]byte, error) {
-	type noMethod MachineType
-	raw := noMethod(*s)
+	type NoMethod MachineType
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13632,8 +14336,8 @@ type MachineTypeAggregatedList struct {
 }
 
 func (s *MachineTypeAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod MachineTypeAggregatedList
-	raw := noMethod(*s)
+	type NoMethod MachineTypeAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13647,9 +14351,13 @@ type MachineTypeAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -13660,7 +14368,9 @@ type MachineTypeAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -13691,8 +14401,8 @@ type MachineTypeAggregatedListWarning struct {
 }
 
 func (s *MachineTypeAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod MachineTypeAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod MachineTypeAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13728,8 +14438,8 @@ type MachineTypeAggregatedListWarningData struct {
 }
 
 func (s *MachineTypeAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod MachineTypeAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod MachineTypeAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13782,8 +14492,8 @@ type MachineTypeList struct {
 }
 
 func (s *MachineTypeList) MarshalJSON() ([]byte, error) {
-	type noMethod MachineTypeList
-	raw := noMethod(*s)
+	type NoMethod MachineTypeList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13796,9 +14506,13 @@ type MachineTypeListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -13809,7 +14523,9 @@ type MachineTypeListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -13840,8 +14556,8 @@ type MachineTypeListWarning struct {
 }
 
 func (s *MachineTypeListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod MachineTypeListWarning
-	raw := noMethod(*s)
+	type NoMethod MachineTypeListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13877,8 +14593,8 @@ type MachineTypeListWarningData struct {
 }
 
 func (s *MachineTypeListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod MachineTypeListWarningData
-	raw := noMethod(*s)
+	type NoMethod MachineTypeListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13909,8 +14625,8 @@ type MachineTypesScopedList struct {
 }
 
 func (s *MachineTypesScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod MachineTypesScopedList
-	raw := noMethod(*s)
+	type NoMethod MachineTypesScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -13924,9 +14640,13 @@ type MachineTypesScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -13937,7 +14657,9 @@ type MachineTypesScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -13968,8 +14690,8 @@ type MachineTypesScopedListWarning struct {
 }
 
 func (s *MachineTypesScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod MachineTypesScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod MachineTypesScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14005,8 +14727,8 @@ type MachineTypesScopedListWarningData struct {
 }
 
 func (s *MachineTypesScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod MachineTypesScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod MachineTypesScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14095,8 +14817,8 @@ type ManagedInstance struct {
 }
 
 func (s *ManagedInstance) MarshalJSON() ([]byte, error) {
-	type noMethod ManagedInstance
-	raw := noMethod(*s)
+	type NoMethod ManagedInstance
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14123,8 +14845,8 @@ type ManagedInstanceLastAttempt struct {
 }
 
 func (s *ManagedInstanceLastAttempt) MarshalJSON() ([]byte, error) {
-	type noMethod ManagedInstanceLastAttempt
-	raw := noMethod(*s)
+	type NoMethod ManagedInstanceLastAttempt
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14153,8 +14875,8 @@ type ManagedInstanceLastAttemptErrors struct {
 }
 
 func (s *ManagedInstanceLastAttemptErrors) MarshalJSON() ([]byte, error) {
-	type noMethod ManagedInstanceLastAttemptErrors
-	raw := noMethod(*s)
+	type NoMethod ManagedInstanceLastAttemptErrors
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14187,8 +14909,8 @@ type ManagedInstanceLastAttemptErrorsErrors struct {
 }
 
 func (s *ManagedInstanceLastAttemptErrorsErrors) MarshalJSON() ([]byte, error) {
-	type noMethod ManagedInstanceLastAttemptErrorsErrors
-	raw := noMethod(*s)
+	type NoMethod ManagedInstanceLastAttemptErrorsErrors
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14220,8 +14942,8 @@ type ManagedInstanceVersion struct {
 }
 
 func (s *ManagedInstanceVersion) MarshalJSON() ([]byte, error) {
-	type noMethod ManagedInstanceVersion
-	raw := noMethod(*s)
+	type NoMethod ManagedInstanceVersion
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14261,8 +14983,8 @@ type Metadata struct {
 }
 
 func (s *Metadata) MarshalJSON() ([]byte, error) {
-	type noMethod Metadata
-	raw := noMethod(*s)
+	type NoMethod Metadata
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14298,8 +15020,8 @@ type MetadataItems struct {
 }
 
 func (s *MetadataItems) MarshalJSON() ([]byte, error) {
-	type noMethod MetadataItems
-	raw := noMethod(*s)
+	type NoMethod MetadataItems
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14330,8 +15052,8 @@ type NamedPort struct {
 }
 
 func (s *NamedPort) MarshalJSON() ([]byte, error) {
-	type noMethod NamedPort
-	raw := noMethod(*s)
+	type NoMethod NamedPort
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14419,8 +15141,8 @@ type Network struct {
 }
 
 func (s *Network) MarshalJSON() ([]byte, error) {
-	type noMethod Network
-	raw := noMethod(*s)
+	type NoMethod Network
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14437,6 +15159,12 @@ type NetworkInterface struct {
 	// interface. Can only be specified for network interfaces on
 	// subnet-mode networks.
 	AliasIpRanges []*AliasIpRange `json:"aliasIpRanges,omitempty"`
+
+	// Fingerprint: Fingerprint hash of contents stored in this network
+	// interface. This field will be ignored when inserting an Instance or
+	// adding a NetworkInterface. An up-to-date fingerprint must be provided
+	// in order to update the NetworkInterface.
+	Fingerprint string `json:"fingerprint,omitempty"`
 
 	// Kind: [Output Only] Type of the resource. Always
 	// compute#networkInterface for network interfaces.
@@ -14499,8 +15227,8 @@ type NetworkInterface struct {
 }
 
 func (s *NetworkInterface) MarshalJSON() ([]byte, error) {
-	type noMethod NetworkInterface
-	raw := noMethod(*s)
+	type NoMethod NetworkInterface
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14553,8 +15281,8 @@ type NetworkList struct {
 }
 
 func (s *NetworkList) MarshalJSON() ([]byte, error) {
-	type noMethod NetworkList
-	raw := noMethod(*s)
+	type NoMethod NetworkList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14567,9 +15295,13 @@ type NetworkListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -14580,7 +15312,9 @@ type NetworkListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -14611,8 +15345,8 @@ type NetworkListWarning struct {
 }
 
 func (s *NetworkListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod NetworkListWarning
-	raw := noMethod(*s)
+	type NoMethod NetworkListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14648,8 +15382,8 @@ type NetworkListWarningData struct {
 }
 
 func (s *NetworkListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod NetworkListWarningData
-	raw := noMethod(*s)
+	type NoMethod NetworkListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14710,8 +15444,8 @@ type NetworkPeering struct {
 }
 
 func (s *NetworkPeering) MarshalJSON() ([]byte, error) {
-	type noMethod NetworkPeering
-	raw := noMethod(*s)
+	type NoMethod NetworkPeering
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14749,8 +15483,8 @@ type NetworkRoutingConfig struct {
 }
 
 func (s *NetworkRoutingConfig) MarshalJSON() ([]byte, error) {
-	type noMethod NetworkRoutingConfig
-	raw := noMethod(*s)
+	type NoMethod NetworkRoutingConfig
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14787,8 +15521,8 @@ type NetworksAddPeeringRequest struct {
 }
 
 func (s *NetworksAddPeeringRequest) MarshalJSON() ([]byte, error) {
-	type noMethod NetworksAddPeeringRequest
-	raw := noMethod(*s)
+	type NoMethod NetworksAddPeeringRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14814,8 +15548,8 @@ type NetworksRemovePeeringRequest struct {
 }
 
 func (s *NetworksRemovePeeringRequest) MarshalJSON() ([]byte, error) {
-	type noMethod NetworksRemovePeeringRequest
-	raw := noMethod(*s)
+	type NoMethod NetworksRemovePeeringRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14943,8 +15677,8 @@ type Operation struct {
 }
 
 func (s *Operation) MarshalJSON() ([]byte, error) {
-	type noMethod Operation
-	raw := noMethod(*s)
+	type NoMethod Operation
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -14973,8 +15707,8 @@ type OperationError struct {
 }
 
 func (s *OperationError) MarshalJSON() ([]byte, error) {
-	type noMethod OperationError
-	raw := noMethod(*s)
+	type NoMethod OperationError
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15007,8 +15741,8 @@ type OperationErrorErrors struct {
 }
 
 func (s *OperationErrorErrors) MarshalJSON() ([]byte, error) {
-	type noMethod OperationErrorErrors
-	raw := noMethod(*s)
+	type NoMethod OperationErrorErrors
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15020,9 +15754,13 @@ type OperationWarnings struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -15033,7 +15771,9 @@ type OperationWarnings struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -15064,8 +15804,8 @@ type OperationWarnings struct {
 }
 
 func (s *OperationWarnings) MarshalJSON() ([]byte, error) {
-	type noMethod OperationWarnings
-	raw := noMethod(*s)
+	type NoMethod OperationWarnings
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15101,8 +15841,8 @@ type OperationWarningsData struct {
 }
 
 func (s *OperationWarningsData) MarshalJSON() ([]byte, error) {
-	type noMethod OperationWarningsData
-	raw := noMethod(*s)
+	type NoMethod OperationWarningsData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15154,8 +15894,8 @@ type OperationAggregatedList struct {
 }
 
 func (s *OperationAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod OperationAggregatedList
-	raw := noMethod(*s)
+	type NoMethod OperationAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15169,9 +15909,13 @@ type OperationAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -15182,7 +15926,9 @@ type OperationAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -15213,8 +15959,8 @@ type OperationAggregatedListWarning struct {
 }
 
 func (s *OperationAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod OperationAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod OperationAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15250,8 +15996,8 @@ type OperationAggregatedListWarningData struct {
 }
 
 func (s *OperationAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod OperationAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod OperationAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15304,8 +16050,8 @@ type OperationList struct {
 }
 
 func (s *OperationList) MarshalJSON() ([]byte, error) {
-	type noMethod OperationList
-	raw := noMethod(*s)
+	type NoMethod OperationList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15318,9 +16064,13 @@ type OperationListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -15331,7 +16081,9 @@ type OperationListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -15362,8 +16114,8 @@ type OperationListWarning struct {
 }
 
 func (s *OperationListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod OperationListWarning
-	raw := noMethod(*s)
+	type NoMethod OperationListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15399,8 +16151,8 @@ type OperationListWarningData struct {
 }
 
 func (s *OperationListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod OperationListWarningData
-	raw := noMethod(*s)
+	type NoMethod OperationListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15430,8 +16182,8 @@ type OperationsScopedList struct {
 }
 
 func (s *OperationsScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod OperationsScopedList
-	raw := noMethod(*s)
+	type NoMethod OperationsScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15445,9 +16197,13 @@ type OperationsScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -15458,7 +16214,9 @@ type OperationsScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -15489,8 +16247,8 @@ type OperationsScopedListWarning struct {
 }
 
 func (s *OperationsScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod OperationsScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod OperationsScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15526,8 +16284,8 @@ type OperationsScopedListWarningData struct {
 }
 
 func (s *OperationsScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod OperationsScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod OperationsScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15575,8 +16333,8 @@ type PathMatcher struct {
 }
 
 func (s *PathMatcher) MarshalJSON() ([]byte, error) {
-	type noMethod PathMatcher
-	raw := noMethod(*s)
+	type NoMethod PathMatcher
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15611,8 +16369,8 @@ type PathRule struct {
 }
 
 func (s *PathRule) MarshalJSON() ([]byte, error) {
-	type noMethod PathRule
-	raw := noMethod(*s)
+	type NoMethod PathRule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15697,8 +16455,8 @@ type Policy struct {
 }
 
 func (s *Policy) MarshalJSON() ([]byte, error) {
-	type noMethod Policy
-	raw := noMethod(*s)
+	type NoMethod Policy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15780,8 +16538,8 @@ type Project struct {
 }
 
 func (s *Project) MarshalJSON() ([]byte, error) {
-	type noMethod Project
-	raw := noMethod(*s)
+	type NoMethod Project
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15807,8 +16565,8 @@ type ProjectsDisableXpnResourceRequest struct {
 }
 
 func (s *ProjectsDisableXpnResourceRequest) MarshalJSON() ([]byte, error) {
-	type noMethod ProjectsDisableXpnResourceRequest
-	raw := noMethod(*s)
+	type NoMethod ProjectsDisableXpnResourceRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15834,8 +16592,8 @@ type ProjectsEnableXpnResourceRequest struct {
 }
 
 func (s *ProjectsEnableXpnResourceRequest) MarshalJSON() ([]byte, error) {
-	type noMethod ProjectsEnableXpnResourceRequest
-	raw := noMethod(*s)
+	type NoMethod ProjectsEnableXpnResourceRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15879,8 +16637,8 @@ type ProjectsGetXpnResources struct {
 }
 
 func (s *ProjectsGetXpnResources) MarshalJSON() ([]byte, error) {
-	type noMethod ProjectsGetXpnResources
-	raw := noMethod(*s)
+	type NoMethod ProjectsGetXpnResources
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15908,8 +16666,8 @@ type ProjectsListXpnHostsRequest struct {
 }
 
 func (s *ProjectsListXpnHostsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod ProjectsListXpnHostsRequest
-	raw := noMethod(*s)
+	type NoMethod ProjectsListXpnHostsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -15937,6 +16695,7 @@ type Quota struct {
 	//   "INSTANCE_GROUP_MANAGERS"
 	//   "INSTANCE_TEMPLATES"
 	//   "INTERCONNECTS"
+	//   "INTERNAL_ADDRESSES"
 	//   "IN_USE_ADDRESSES"
 	//   "LOCAL_SSD_TOTAL_GB"
 	//   "NETWORKS"
@@ -15944,6 +16703,8 @@ type Quota struct {
 	//   "NVIDIA_P100_GPUS"
 	//   "PREEMPTIBLE_CPUS"
 	//   "PREEMPTIBLE_LOCAL_SSD_GB"
+	//   "PREEMPTIBLE_NVIDIA_K80_GPUS"
+	//   "PREEMPTIBLE_NVIDIA_P100_GPUS"
 	//   "REGIONAL_AUTOSCALERS"
 	//   "REGIONAL_INSTANCE_GROUP_MANAGERS"
 	//   "ROUTERS"
@@ -15987,19 +16748,19 @@ type Quota struct {
 }
 
 func (s *Quota) MarshalJSON() ([]byte, error) {
-	type noMethod Quota
-	raw := noMethod(*s)
+	type NoMethod Quota
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *Quota) UnmarshalJSON(data []byte) error {
-	type noMethod Quota
+	type NoMethod Quota
 	var s1 struct {
 		Limit gensupport.JSONFloat64 `json:"limit"`
 		Usage gensupport.JSONFloat64 `json:"usage"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -16043,8 +16804,8 @@ type Reference struct {
 }
 
 func (s *Reference) MarshalJSON() ([]byte, error) {
-	type noMethod Reference
-	raw := noMethod(*s)
+	type NoMethod Reference
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16112,8 +16873,8 @@ type Region struct {
 }
 
 func (s *Region) MarshalJSON() ([]byte, error) {
-	type noMethod Region
-	raw := noMethod(*s)
+	type NoMethod Region
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16165,8 +16926,8 @@ type RegionAutoscalerList struct {
 }
 
 func (s *RegionAutoscalerList) MarshalJSON() ([]byte, error) {
-	type noMethod RegionAutoscalerList
-	raw := noMethod(*s)
+	type NoMethod RegionAutoscalerList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16180,9 +16941,13 @@ type RegionAutoscalerListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -16193,7 +16958,9 @@ type RegionAutoscalerListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -16224,8 +16991,8 @@ type RegionAutoscalerListWarning struct {
 }
 
 func (s *RegionAutoscalerListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod RegionAutoscalerListWarning
-	raw := noMethod(*s)
+	type NoMethod RegionAutoscalerListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16261,8 +17028,8 @@ type RegionAutoscalerListWarningData struct {
 }
 
 func (s *RegionAutoscalerListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod RegionAutoscalerListWarningData
-	raw := noMethod(*s)
+	type NoMethod RegionAutoscalerListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16314,8 +17081,8 @@ type RegionInstanceGroupList struct {
 }
 
 func (s *RegionInstanceGroupList) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupList
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16329,9 +17096,13 @@ type RegionInstanceGroupListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -16342,7 +17113,9 @@ type RegionInstanceGroupListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -16373,8 +17146,8 @@ type RegionInstanceGroupListWarning struct {
 }
 
 func (s *RegionInstanceGroupListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupListWarning
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16410,8 +17183,8 @@ type RegionInstanceGroupListWarningData struct {
 }
 
 func (s *RegionInstanceGroupListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupListWarningData
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16466,8 +17239,8 @@ type RegionInstanceGroupManagerList struct {
 }
 
 func (s *RegionInstanceGroupManagerList) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupManagerList
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupManagerList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16481,9 +17254,13 @@ type RegionInstanceGroupManagerListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -16494,7 +17271,9 @@ type RegionInstanceGroupManagerListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -16525,8 +17304,8 @@ type RegionInstanceGroupManagerListWarning struct {
 }
 
 func (s *RegionInstanceGroupManagerListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupManagerListWarning
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupManagerListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16562,8 +17341,8 @@ type RegionInstanceGroupManagerListWarningData struct {
 }
 
 func (s *RegionInstanceGroupManagerListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupManagerListWarningData
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupManagerListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16591,8 +17370,8 @@ type RegionInstanceGroupManagersAbandonInstancesRequest struct {
 }
 
 func (s *RegionInstanceGroupManagersAbandonInstancesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupManagersAbandonInstancesRequest
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupManagersAbandonInstancesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16620,8 +17399,8 @@ type RegionInstanceGroupManagersDeleteInstancesRequest struct {
 }
 
 func (s *RegionInstanceGroupManagersDeleteInstancesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupManagersDeleteInstancesRequest
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupManagersDeleteInstancesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16660,8 +17439,8 @@ type RegionInstanceGroupManagersListInstancesResponse struct {
 }
 
 func (s *RegionInstanceGroupManagersListInstancesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupManagersListInstancesResponse
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupManagersListInstancesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16689,8 +17468,8 @@ type RegionInstanceGroupManagersRecreateRequest struct {
 }
 
 func (s *RegionInstanceGroupManagersRecreateRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupManagersRecreateRequest
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupManagersRecreateRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16716,8 +17495,8 @@ type RegionInstanceGroupManagersSetAutoHealingRequest struct {
 }
 
 func (s *RegionInstanceGroupManagersSetAutoHealingRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupManagersSetAutoHealingRequest
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupManagersSetAutoHealingRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16750,8 +17529,8 @@ type RegionInstanceGroupManagersSetTargetPoolsRequest struct {
 }
 
 func (s *RegionInstanceGroupManagersSetTargetPoolsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupManagersSetTargetPoolsRequest
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupManagersSetTargetPoolsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16779,8 +17558,8 @@ type RegionInstanceGroupManagersSetTemplateRequest struct {
 }
 
 func (s *RegionInstanceGroupManagersSetTemplateRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupManagersSetTemplateRequest
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupManagersSetTemplateRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16831,8 +17610,8 @@ type RegionInstanceGroupsListInstances struct {
 }
 
 func (s *RegionInstanceGroupsListInstances) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupsListInstances
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupsListInstances
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16846,9 +17625,13 @@ type RegionInstanceGroupsListInstancesWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -16859,7 +17642,9 @@ type RegionInstanceGroupsListInstancesWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -16890,8 +17675,8 @@ type RegionInstanceGroupsListInstancesWarning struct {
 }
 
 func (s *RegionInstanceGroupsListInstancesWarning) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupsListInstancesWarning
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupsListInstancesWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16927,8 +17712,8 @@ type RegionInstanceGroupsListInstancesWarningData struct {
 }
 
 func (s *RegionInstanceGroupsListInstancesWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupsListInstancesWarningData
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupsListInstancesWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -16965,8 +17750,8 @@ type RegionInstanceGroupsListInstancesRequest struct {
 }
 
 func (s *RegionInstanceGroupsListInstancesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupsListInstancesRequest
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupsListInstancesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17000,8 +17785,8 @@ type RegionInstanceGroupsSetNamedPortsRequest struct {
 }
 
 func (s *RegionInstanceGroupsSetNamedPortsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RegionInstanceGroupsSetNamedPortsRequest
-	raw := noMethod(*s)
+	type NoMethod RegionInstanceGroupsSetNamedPortsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17054,8 +17839,8 @@ type RegionList struct {
 }
 
 func (s *RegionList) MarshalJSON() ([]byte, error) {
-	type noMethod RegionList
-	raw := noMethod(*s)
+	type NoMethod RegionList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17068,9 +17853,13 @@ type RegionListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -17081,7 +17870,9 @@ type RegionListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -17112,8 +17903,8 @@ type RegionListWarning struct {
 }
 
 func (s *RegionListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod RegionListWarning
-	raw := noMethod(*s)
+	type NoMethod RegionListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17149,8 +17940,8 @@ type RegionListWarningData struct {
 }
 
 func (s *RegionListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod RegionListWarningData
-	raw := noMethod(*s)
+	type NoMethod RegionListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17185,8 +17976,8 @@ type RegionSetLabelsRequest struct {
 }
 
 func (s *RegionSetLabelsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RegionSetLabelsRequest
-	raw := noMethod(*s)
+	type NoMethod RegionSetLabelsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17226,8 +18017,8 @@ type ResourceCommitment struct {
 }
 
 func (s *ResourceCommitment) MarshalJSON() ([]byte, error) {
-	type noMethod ResourceCommitment
-	raw := noMethod(*s)
+	type NoMethod ResourceCommitment
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17254,8 +18045,8 @@ type ResourceGroupReference struct {
 }
 
 func (s *ResourceGroupReference) MarshalJSON() ([]byte, error) {
-	type noMethod ResourceGroupReference
-	raw := noMethod(*s)
+	type NoMethod ResourceGroupReference
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17381,8 +18172,8 @@ type Route struct {
 }
 
 func (s *Route) MarshalJSON() ([]byte, error) {
-	type noMethod Route
-	raw := noMethod(*s)
+	type NoMethod Route
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17394,9 +18185,13 @@ type RouteWarnings struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -17407,7 +18202,9 @@ type RouteWarnings struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -17438,8 +18235,8 @@ type RouteWarnings struct {
 }
 
 func (s *RouteWarnings) MarshalJSON() ([]byte, error) {
-	type noMethod RouteWarnings
-	raw := noMethod(*s)
+	type NoMethod RouteWarnings
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17475,8 +18272,8 @@ type RouteWarningsData struct {
 }
 
 func (s *RouteWarningsData) MarshalJSON() ([]byte, error) {
-	type noMethod RouteWarningsData
-	raw := noMethod(*s)
+	type NoMethod RouteWarningsData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17528,8 +18325,8 @@ type RouteList struct {
 }
 
 func (s *RouteList) MarshalJSON() ([]byte, error) {
-	type noMethod RouteList
-	raw := noMethod(*s)
+	type NoMethod RouteList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17542,9 +18339,13 @@ type RouteListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -17555,7 +18356,9 @@ type RouteListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -17586,8 +18389,8 @@ type RouteListWarning struct {
 }
 
 func (s *RouteListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod RouteListWarning
-	raw := noMethod(*s)
+	type NoMethod RouteListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17623,8 +18426,8 @@ type RouteListWarningData struct {
 }
 
 func (s *RouteListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod RouteListWarningData
-	raw := noMethod(*s)
+	type NoMethod RouteListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17699,8 +18502,8 @@ type Router struct {
 }
 
 func (s *Router) MarshalJSON() ([]byte, error) {
-	type noMethod Router
-	raw := noMethod(*s)
+	type NoMethod Router
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17752,8 +18555,8 @@ type RouterAggregatedList struct {
 }
 
 func (s *RouterAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod RouterAggregatedList
-	raw := noMethod(*s)
+	type NoMethod RouterAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17767,9 +18570,13 @@ type RouterAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -17780,7 +18587,9 @@ type RouterAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -17811,8 +18620,8 @@ type RouterAggregatedListWarning struct {
 }
 
 func (s *RouterAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod RouterAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod RouterAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17848,8 +18657,8 @@ type RouterAggregatedListWarningData struct {
 }
 
 func (s *RouterAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod RouterAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod RouterAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17878,8 +18687,8 @@ type RouterBgp struct {
 }
 
 func (s *RouterBgp) MarshalJSON() ([]byte, error) {
-	type noMethod RouterBgp
-	raw := noMethod(*s)
+	type NoMethod RouterBgp
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17928,8 +18737,8 @@ type RouterBgpPeer struct {
 }
 
 func (s *RouterBgpPeer) MarshalJSON() ([]byte, error) {
-	type noMethod RouterBgpPeer
-	raw := noMethod(*s)
+	type NoMethod RouterBgpPeer
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -17975,8 +18784,8 @@ type RouterInterface struct {
 }
 
 func (s *RouterInterface) MarshalJSON() ([]byte, error) {
-	type noMethod RouterInterface
-	raw := noMethod(*s)
+	type NoMethod RouterInterface
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18029,8 +18838,8 @@ type RouterList struct {
 }
 
 func (s *RouterList) MarshalJSON() ([]byte, error) {
-	type noMethod RouterList
-	raw := noMethod(*s)
+	type NoMethod RouterList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18043,9 +18852,13 @@ type RouterListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -18056,7 +18869,9 @@ type RouterListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -18087,8 +18902,8 @@ type RouterListWarning struct {
 }
 
 func (s *RouterListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod RouterListWarning
-	raw := noMethod(*s)
+	type NoMethod RouterListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18124,8 +18939,8 @@ type RouterListWarningData struct {
 }
 
 func (s *RouterListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod RouterListWarningData
-	raw := noMethod(*s)
+	type NoMethod RouterListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18159,8 +18974,8 @@ type RouterStatus struct {
 }
 
 func (s *RouterStatus) MarshalJSON() ([]byte, error) {
-	type noMethod RouterStatus
-	raw := noMethod(*s)
+	type NoMethod RouterStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18220,8 +19035,8 @@ type RouterStatusBgpPeerStatus struct {
 }
 
 func (s *RouterStatusBgpPeerStatus) MarshalJSON() ([]byte, error) {
-	type noMethod RouterStatusBgpPeerStatus
-	raw := noMethod(*s)
+	type NoMethod RouterStatusBgpPeerStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18253,8 +19068,8 @@ type RouterStatusResponse struct {
 }
 
 func (s *RouterStatusResponse) MarshalJSON() ([]byte, error) {
-	type noMethod RouterStatusResponse
-	raw := noMethod(*s)
+	type NoMethod RouterStatusResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18284,8 +19099,8 @@ type RoutersPreviewResponse struct {
 }
 
 func (s *RoutersPreviewResponse) MarshalJSON() ([]byte, error) {
-	type noMethod RoutersPreviewResponse
-	raw := noMethod(*s)
+	type NoMethod RoutersPreviewResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18315,8 +19130,8 @@ type RoutersScopedList struct {
 }
 
 func (s *RoutersScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod RoutersScopedList
-	raw := noMethod(*s)
+	type NoMethod RoutersScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18330,9 +19145,13 @@ type RoutersScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -18343,7 +19162,9 @@ type RoutersScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -18374,8 +19195,8 @@ type RoutersScopedListWarning struct {
 }
 
 func (s *RoutersScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod RoutersScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod RoutersScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18411,8 +19232,8 @@ type RoutersScopedListWarningData struct {
 }
 
 func (s *RoutersScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod RoutersScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod RoutersScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18429,7 +19250,8 @@ type Rule struct {
 	//   "NO_ACTION"
 	Action string `json:"action,omitempty"`
 
-	// Conditions: Additional restrictions that must be met
+	// Conditions: Additional restrictions that must be met. All conditions
+	// must pass for the rule to match.
 	Conditions []*Condition `json:"conditions,omitempty"`
 
 	// Description: Human-readable description of the rule.
@@ -18471,8 +19293,8 @@ type Rule struct {
 }
 
 func (s *Rule) MarshalJSON() ([]byte, error) {
-	type noMethod Rule
-	raw := noMethod(*s)
+	type NoMethod Rule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18523,8 +19345,8 @@ type SSLHealthCheck struct {
 }
 
 func (s *SSLHealthCheck) MarshalJSON() ([]byte, error) {
-	type noMethod SSLHealthCheck
-	raw := noMethod(*s)
+	type NoMethod SSLHealthCheck
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18575,8 +19397,8 @@ type Scheduling struct {
 }
 
 func (s *Scheduling) MarshalJSON() ([]byte, error) {
-	type noMethod Scheduling
-	raw := noMethod(*s)
+	type NoMethod Scheduling
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18651,8 +19473,8 @@ type SecurityPolicy struct {
 }
 
 func (s *SecurityPolicy) MarshalJSON() ([]byte, error) {
-	type noMethod SecurityPolicy
-	raw := noMethod(*s)
+	type NoMethod SecurityPolicy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18701,8 +19523,8 @@ type SecurityPolicyList struct {
 }
 
 func (s *SecurityPolicyList) MarshalJSON() ([]byte, error) {
-	type noMethod SecurityPolicyList
-	raw := noMethod(*s)
+	type NoMethod SecurityPolicyList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18716,9 +19538,13 @@ type SecurityPolicyListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -18729,7 +19555,9 @@ type SecurityPolicyListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -18760,8 +19588,8 @@ type SecurityPolicyListWarning struct {
 }
 
 func (s *SecurityPolicyListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod SecurityPolicyListWarning
-	raw := noMethod(*s)
+	type NoMethod SecurityPolicyListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18797,8 +19625,8 @@ type SecurityPolicyListWarningData struct {
 }
 
 func (s *SecurityPolicyListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod SecurityPolicyListWarningData
-	raw := noMethod(*s)
+	type NoMethod SecurityPolicyListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18824,8 +19652,8 @@ type SecurityPolicyReference struct {
 }
 
 func (s *SecurityPolicyReference) MarshalJSON() ([]byte, error) {
-	type noMethod SecurityPolicyReference
-	raw := noMethod(*s)
+	type NoMethod SecurityPolicyReference
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18876,8 +19704,8 @@ type SecurityPolicyRule struct {
 }
 
 func (s *SecurityPolicyRule) MarshalJSON() ([]byte, error) {
-	type noMethod SecurityPolicyRule
-	raw := noMethod(*s)
+	type NoMethod SecurityPolicyRule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18905,8 +19733,8 @@ type SecurityPolicyRuleMatcher struct {
 }
 
 func (s *SecurityPolicyRuleMatcher) MarshalJSON() ([]byte, error) {
-	type noMethod SecurityPolicyRuleMatcher
-	raw := noMethod(*s)
+	type NoMethod SecurityPolicyRuleMatcher
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18956,8 +19784,8 @@ type SerialPortOutput struct {
 }
 
 func (s *SerialPortOutput) MarshalJSON() ([]byte, error) {
-	type noMethod SerialPortOutput
-	raw := noMethod(*s)
+	type NoMethod SerialPortOutput
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -18988,8 +19816,8 @@ type ServiceAccount struct {
 }
 
 func (s *ServiceAccount) MarshalJSON() ([]byte, error) {
-	type noMethod ServiceAccount
-	raw := noMethod(*s)
+	type NoMethod ServiceAccount
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19028,6 +19856,10 @@ type Snapshot struct {
 	// Labels: Labels to apply to this snapshot. These can be later modified
 	// by the setLabels method. Label values may be empty.
 	Labels map[string]string `json:"labels,omitempty"`
+
+	// LicenseCodes: Integer license codes indicating which licenses are
+	// attached to this snapshot.
+	LicenseCodes googleapi.Int64s `json:"licenseCodes,omitempty"`
 
 	// Licenses: [Output Only] A list of public visible licenses that apply
 	// to this snapshot. This can be because the original image had licenses
@@ -19088,7 +19920,7 @@ type Snapshot struct {
 	//   "UPLOADING"
 	Status string `json:"status,omitempty"`
 
-	// StorageBytes: [Output Only] A size of the the storage used by the
+	// StorageBytes: [Output Only] A size of the storage used by the
 	// snapshot. As snapshots share storage, this number is expected to
 	// change with snapshot creation/deletion.
 	StorageBytes int64 `json:"storageBytes,omitempty,string"`
@@ -19127,8 +19959,8 @@ type Snapshot struct {
 }
 
 func (s *Snapshot) MarshalJSON() ([]byte, error) {
-	type noMethod Snapshot
-	raw := noMethod(*s)
+	type NoMethod Snapshot
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19180,8 +20012,8 @@ type SnapshotList struct {
 }
 
 func (s *SnapshotList) MarshalJSON() ([]byte, error) {
-	type noMethod SnapshotList
-	raw := noMethod(*s)
+	type NoMethod SnapshotList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19194,9 +20026,13 @@ type SnapshotListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -19207,7 +20043,9 @@ type SnapshotListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -19238,8 +20076,8 @@ type SnapshotListWarning struct {
 }
 
 func (s *SnapshotListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod SnapshotListWarning
-	raw := noMethod(*s)
+	type NoMethod SnapshotListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19275,8 +20113,8 @@ type SnapshotListWarningData struct {
 }
 
 func (s *SnapshotListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod SnapshotListWarningData
-	raw := noMethod(*s)
+	type NoMethod SnapshotListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19343,8 +20181,8 @@ type SslCertificate struct {
 }
 
 func (s *SslCertificate) MarshalJSON() ([]byte, error) {
-	type noMethod SslCertificate
-	raw := noMethod(*s)
+	type NoMethod SslCertificate
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19396,8 +20234,8 @@ type SslCertificateList struct {
 }
 
 func (s *SslCertificateList) MarshalJSON() ([]byte, error) {
-	type noMethod SslCertificateList
-	raw := noMethod(*s)
+	type NoMethod SslCertificateList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19411,9 +20249,13 @@ type SslCertificateListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -19424,7 +20266,9 @@ type SslCertificateListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -19455,8 +20299,8 @@ type SslCertificateListWarning struct {
 }
 
 func (s *SslCertificateListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod SslCertificateListWarning
-	raw := noMethod(*s)
+	type NoMethod SslCertificateListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19492,13 +20336,30 @@ type SslCertificateListWarningData struct {
 }
 
 func (s *SslCertificateListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod SslCertificateListWarningData
-	raw := noMethod(*s)
+	type NoMethod SslCertificateListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // Subnetwork: A Subnetwork resource.
 type Subnetwork struct {
+	// AllowSubnetCidrRoutesOverlap: Whether this subnetwork can conflict
+	// with static routes. Setting this to true allows this subnetwork's
+	// primary and secondary ranges to conflict with routes that have
+	// already been configured on the corresponding network. Static routes
+	// will take precedence over the subnetwork route if the route prefix
+	// length is at least as large as the subnetwork prefix length.
+	//
+	// Also, packets destined to IPs within subnetwork may contain
+	// private/sensitive data and are prevented from leaving the virtual
+	// network. Setting this field to true will disable this feature.
+	//
+	// The default value is false and applies to all existing subnetworks
+	// and automatically created subnetworks.
+	//
+	// This field cannot be set to true at resource creation time.
+	AllowSubnetCidrRoutesOverlap bool `json:"allowSubnetCidrRoutesOverlap,omitempty"`
+
 	// CreationTimestamp: [Output Only] Creation timestamp in RFC3339 text
 	// format.
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
@@ -19507,6 +20368,12 @@ type Subnetwork struct {
 	// property when you create the resource. This field can be set only at
 	// resource creation time.
 	Description string `json:"description,omitempty"`
+
+	// Fingerprint: Fingerprint of this resource. A hash of the contents
+	// stored in this object. This field is used in optimistic locking. This
+	// field will be ignored when inserting a Subnetwork. An up-to-date
+	// fingerprint must be provided in order to update the Subnetwork.
+	Fingerprint string `json:"fingerprint,omitempty"`
 
 	// GatewayAddress: [Output Only] The gateway address for default routes
 	// to reach destination addresses outside this subnetwork. This field
@@ -19566,27 +20433,28 @@ type Subnetwork struct {
 	// server.
 	googleapi.ServerResponse `json:"-"`
 
-	// ForceSendFields is a list of field names (e.g. "CreationTimestamp")
-	// to unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
+	// ForceSendFields is a list of field names (e.g.
+	// "AllowSubnetCidrRoutesOverlap") to unconditionally include in API
+	// requests. By default, fields with empty values are omitted from API
+	// requests. However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "CreationTimestamp") to
-	// include in API requests with the JSON null value. By default, fields
-	// with empty values are omitted from API requests. However, any field
-	// with an empty value appearing in NullFields will be sent to the
-	// server as null. It is an error if a field in this list has a
-	// non-empty value. This may be used to include null fields in Patch
-	// requests.
+	// NullFields is a list of field names (e.g.
+	// "AllowSubnetCidrRoutesOverlap") to include in API requests with the
+	// JSON null value. By default, fields with empty values are omitted
+	// from API requests. However, any field with an empty value appearing
+	// in NullFields will be sent to the server as null. It is an error if a
+	// field in this list has a non-empty value. This may be used to include
+	// null fields in Patch requests.
 	NullFields []string `json:"-"`
 }
 
 func (s *Subnetwork) MarshalJSON() ([]byte, error) {
-	type noMethod Subnetwork
-	raw := noMethod(*s)
+	type NoMethod Subnetwork
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19638,8 +20506,8 @@ type SubnetworkAggregatedList struct {
 }
 
 func (s *SubnetworkAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworkAggregatedList
-	raw := noMethod(*s)
+	type NoMethod SubnetworkAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19653,9 +20521,13 @@ type SubnetworkAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -19666,7 +20538,9 @@ type SubnetworkAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -19697,8 +20571,8 @@ type SubnetworkAggregatedListWarning struct {
 }
 
 func (s *SubnetworkAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworkAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod SubnetworkAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19734,8 +20608,8 @@ type SubnetworkAggregatedListWarningData struct {
 }
 
 func (s *SubnetworkAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworkAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod SubnetworkAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19788,8 +20662,8 @@ type SubnetworkList struct {
 }
 
 func (s *SubnetworkList) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworkList
-	raw := noMethod(*s)
+	type NoMethod SubnetworkList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19802,9 +20676,13 @@ type SubnetworkListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -19815,7 +20693,9 @@ type SubnetworkListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -19846,8 +20726,8 @@ type SubnetworkListWarning struct {
 }
 
 func (s *SubnetworkListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworkListWarning
-	raw := noMethod(*s)
+	type NoMethod SubnetworkListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19883,8 +20763,8 @@ type SubnetworkListWarningData struct {
 }
 
 func (s *SubnetworkListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworkListWarningData
-	raw := noMethod(*s)
+	type NoMethod SubnetworkListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19922,8 +20802,8 @@ type SubnetworkSecondaryRange struct {
 }
 
 func (s *SubnetworkSecondaryRange) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworkSecondaryRange
-	raw := noMethod(*s)
+	type NoMethod SubnetworkSecondaryRange
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19953,8 +20833,8 @@ type SubnetworksExpandIpCidrRangeRequest struct {
 }
 
 func (s *SubnetworksExpandIpCidrRangeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworksExpandIpCidrRangeRequest
-	raw := noMethod(*s)
+	type NoMethod SubnetworksExpandIpCidrRangeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19984,8 +20864,8 @@ type SubnetworksScopedList struct {
 }
 
 func (s *SubnetworksScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworksScopedList
-	raw := noMethod(*s)
+	type NoMethod SubnetworksScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -19999,9 +20879,13 @@ type SubnetworksScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -20012,7 +20896,9 @@ type SubnetworksScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -20043,8 +20929,8 @@ type SubnetworksScopedListWarning struct {
 }
 
 func (s *SubnetworksScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworksScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod SubnetworksScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20080,8 +20966,8 @@ type SubnetworksScopedListWarningData struct {
 }
 
 func (s *SubnetworksScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworksScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod SubnetworksScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20108,8 +20994,8 @@ type SubnetworksSetPrivateIpGoogleAccessRequest struct {
 }
 
 func (s *SubnetworksSetPrivateIpGoogleAccessRequest) MarshalJSON() ([]byte, error) {
-	type noMethod SubnetworksSetPrivateIpGoogleAccessRequest
-	raw := noMethod(*s)
+	type NoMethod SubnetworksSetPrivateIpGoogleAccessRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20160,8 +21046,8 @@ type TCPHealthCheck struct {
 }
 
 func (s *TCPHealthCheck) MarshalJSON() ([]byte, error) {
-	type noMethod TCPHealthCheck
-	raw := noMethod(*s)
+	type NoMethod TCPHealthCheck
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20199,8 +21085,8 @@ type Tags struct {
 }
 
 func (s *Tags) MarshalJSON() ([]byte, error) {
-	type noMethod Tags
-	raw := noMethod(*s)
+	type NoMethod Tags
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20262,8 +21148,8 @@ type TargetHttpProxy struct {
 }
 
 func (s *TargetHttpProxy) MarshalJSON() ([]byte, error) {
-	type noMethod TargetHttpProxy
-	raw := noMethod(*s)
+	type NoMethod TargetHttpProxy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20316,8 +21202,8 @@ type TargetHttpProxyList struct {
 }
 
 func (s *TargetHttpProxyList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetHttpProxyList
-	raw := noMethod(*s)
+	type NoMethod TargetHttpProxyList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20331,9 +21217,13 @@ type TargetHttpProxyListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -20344,7 +21234,9 @@ type TargetHttpProxyListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -20375,8 +21267,8 @@ type TargetHttpProxyListWarning struct {
 }
 
 func (s *TargetHttpProxyListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetHttpProxyListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetHttpProxyListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20412,8 +21304,8 @@ type TargetHttpProxyListWarningData struct {
 }
 
 func (s *TargetHttpProxyListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetHttpProxyListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetHttpProxyListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20442,8 +21334,8 @@ type TargetHttpsProxiesSetSslCertificatesRequest struct {
 }
 
 func (s *TargetHttpsProxiesSetSslCertificatesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TargetHttpsProxiesSetSslCertificatesRequest
-	raw := noMethod(*s)
+	type NoMethod TargetHttpsProxiesSetSslCertificatesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20515,8 +21407,8 @@ type TargetHttpsProxy struct {
 }
 
 func (s *TargetHttpsProxy) MarshalJSON() ([]byte, error) {
-	type noMethod TargetHttpsProxy
-	raw := noMethod(*s)
+	type NoMethod TargetHttpsProxy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20569,8 +21461,8 @@ type TargetHttpsProxyList struct {
 }
 
 func (s *TargetHttpsProxyList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetHttpsProxyList
-	raw := noMethod(*s)
+	type NoMethod TargetHttpsProxyList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20584,9 +21476,13 @@ type TargetHttpsProxyListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -20597,7 +21493,9 @@ type TargetHttpsProxyListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -20628,8 +21526,8 @@ type TargetHttpsProxyListWarning struct {
 }
 
 func (s *TargetHttpsProxyListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetHttpsProxyListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetHttpsProxyListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20665,8 +21563,8 @@ type TargetHttpsProxyListWarningData struct {
 }
 
 func (s *TargetHttpsProxyListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetHttpsProxyListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetHttpsProxyListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20745,8 +21643,8 @@ type TargetInstance struct {
 }
 
 func (s *TargetInstance) MarshalJSON() ([]byte, error) {
-	type noMethod TargetInstance
-	raw := noMethod(*s)
+	type NoMethod TargetInstance
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20797,8 +21695,8 @@ type TargetInstanceAggregatedList struct {
 }
 
 func (s *TargetInstanceAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetInstanceAggregatedList
-	raw := noMethod(*s)
+	type NoMethod TargetInstanceAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20812,9 +21710,13 @@ type TargetInstanceAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -20825,7 +21727,9 @@ type TargetInstanceAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -20856,8 +21760,8 @@ type TargetInstanceAggregatedListWarning struct {
 }
 
 func (s *TargetInstanceAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetInstanceAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetInstanceAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20893,8 +21797,8 @@ type TargetInstanceAggregatedListWarningData struct {
 }
 
 func (s *TargetInstanceAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetInstanceAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetInstanceAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20946,8 +21850,8 @@ type TargetInstanceList struct {
 }
 
 func (s *TargetInstanceList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetInstanceList
-	raw := noMethod(*s)
+	type NoMethod TargetInstanceList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -20961,9 +21865,13 @@ type TargetInstanceListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -20974,7 +21882,9 @@ type TargetInstanceListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -21005,8 +21915,8 @@ type TargetInstanceListWarning struct {
 }
 
 func (s *TargetInstanceListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetInstanceListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetInstanceListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21042,8 +21952,8 @@ type TargetInstanceListWarningData struct {
 }
 
 func (s *TargetInstanceListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetInstanceListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetInstanceListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21074,8 +21984,8 @@ type TargetInstancesScopedList struct {
 }
 
 func (s *TargetInstancesScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetInstancesScopedList
-	raw := noMethod(*s)
+	type NoMethod TargetInstancesScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21089,9 +21999,13 @@ type TargetInstancesScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -21102,7 +22016,9 @@ type TargetInstancesScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -21133,8 +22049,8 @@ type TargetInstancesScopedListWarning struct {
 }
 
 func (s *TargetInstancesScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetInstancesScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetInstancesScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21170,8 +22086,8 @@ type TargetInstancesScopedListWarningData struct {
 }
 
 func (s *TargetInstancesScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetInstancesScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetInstancesScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21299,18 +22215,18 @@ type TargetPool struct {
 }
 
 func (s *TargetPool) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPool
-	raw := noMethod(*s)
+	type NoMethod TargetPool
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *TargetPool) UnmarshalJSON(data []byte) error {
-	type noMethod TargetPool
+	type NoMethod TargetPool
 	var s1 struct {
 		FailoverRatio gensupport.JSONFloat64 `json:"failoverRatio"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -21367,8 +22283,8 @@ type TargetPoolAggregatedList struct {
 }
 
 func (s *TargetPoolAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolAggregatedList
-	raw := noMethod(*s)
+	type NoMethod TargetPoolAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21382,9 +22298,13 @@ type TargetPoolAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -21395,7 +22315,9 @@ type TargetPoolAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -21426,8 +22348,8 @@ type TargetPoolAggregatedListWarning struct {
 }
 
 func (s *TargetPoolAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetPoolAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21463,8 +22385,8 @@ type TargetPoolAggregatedListWarningData struct {
 }
 
 func (s *TargetPoolAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetPoolAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21498,8 +22420,8 @@ type TargetPoolInstanceHealth struct {
 }
 
 func (s *TargetPoolInstanceHealth) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolInstanceHealth
-	raw := noMethod(*s)
+	type NoMethod TargetPoolInstanceHealth
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21552,8 +22474,8 @@ type TargetPoolList struct {
 }
 
 func (s *TargetPoolList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolList
-	raw := noMethod(*s)
+	type NoMethod TargetPoolList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21566,9 +22488,13 @@ type TargetPoolListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -21579,7 +22505,9 @@ type TargetPoolListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -21610,8 +22538,8 @@ type TargetPoolListWarning struct {
 }
 
 func (s *TargetPoolListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetPoolListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21647,8 +22575,8 @@ type TargetPoolListWarningData struct {
 }
 
 func (s *TargetPoolListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetPoolListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21674,8 +22602,8 @@ type TargetPoolsAddHealthCheckRequest struct {
 }
 
 func (s *TargetPoolsAddHealthCheckRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolsAddHealthCheckRequest
-	raw := noMethod(*s)
+	type NoMethod TargetPoolsAddHealthCheckRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21707,8 +22635,8 @@ type TargetPoolsAddInstanceRequest struct {
 }
 
 func (s *TargetPoolsAddInstanceRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolsAddInstanceRequest
-	raw := noMethod(*s)
+	type NoMethod TargetPoolsAddInstanceRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21739,8 +22667,8 @@ type TargetPoolsRemoveHealthCheckRequest struct {
 }
 
 func (s *TargetPoolsRemoveHealthCheckRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolsRemoveHealthCheckRequest
-	raw := noMethod(*s)
+	type NoMethod TargetPoolsRemoveHealthCheckRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21766,8 +22694,8 @@ type TargetPoolsRemoveInstanceRequest struct {
 }
 
 func (s *TargetPoolsRemoveInstanceRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolsRemoveInstanceRequest
-	raw := noMethod(*s)
+	type NoMethod TargetPoolsRemoveInstanceRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21797,8 +22725,8 @@ type TargetPoolsScopedList struct {
 }
 
 func (s *TargetPoolsScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolsScopedList
-	raw := noMethod(*s)
+	type NoMethod TargetPoolsScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21812,9 +22740,13 @@ type TargetPoolsScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -21825,7 +22757,9 @@ type TargetPoolsScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -21856,8 +22790,8 @@ type TargetPoolsScopedListWarning struct {
 }
 
 func (s *TargetPoolsScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolsScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetPoolsScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21893,8 +22827,8 @@ type TargetPoolsScopedListWarningData struct {
 }
 
 func (s *TargetPoolsScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetPoolsScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetPoolsScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21919,8 +22853,8 @@ type TargetReference struct {
 }
 
 func (s *TargetReference) MarshalJSON() ([]byte, error) {
-	type noMethod TargetReference
-	raw := noMethod(*s)
+	type NoMethod TargetReference
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21947,8 +22881,8 @@ type TargetSslProxiesSetBackendServiceRequest struct {
 }
 
 func (s *TargetSslProxiesSetBackendServiceRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TargetSslProxiesSetBackendServiceRequest
-	raw := noMethod(*s)
+	type NoMethod TargetSslProxiesSetBackendServiceRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -21979,8 +22913,8 @@ type TargetSslProxiesSetProxyHeaderRequest struct {
 }
 
 func (s *TargetSslProxiesSetProxyHeaderRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TargetSslProxiesSetProxyHeaderRequest
-	raw := noMethod(*s)
+	type NoMethod TargetSslProxiesSetProxyHeaderRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22009,8 +22943,8 @@ type TargetSslProxiesSetSslCertificatesRequest struct {
 }
 
 func (s *TargetSslProxiesSetSslCertificatesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TargetSslProxiesSetSslCertificatesRequest
-	raw := noMethod(*s)
+	type NoMethod TargetSslProxiesSetSslCertificatesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22085,8 +23019,8 @@ type TargetSslProxy struct {
 }
 
 func (s *TargetSslProxy) MarshalJSON() ([]byte, error) {
-	type noMethod TargetSslProxy
-	raw := noMethod(*s)
+	type NoMethod TargetSslProxy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22138,8 +23072,8 @@ type TargetSslProxyList struct {
 }
 
 func (s *TargetSslProxyList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetSslProxyList
-	raw := noMethod(*s)
+	type NoMethod TargetSslProxyList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22153,9 +23087,13 @@ type TargetSslProxyListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -22166,7 +23104,9 @@ type TargetSslProxyListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -22197,8 +23137,8 @@ type TargetSslProxyListWarning struct {
 }
 
 func (s *TargetSslProxyListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetSslProxyListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetSslProxyListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22234,8 +23174,8 @@ type TargetSslProxyListWarningData struct {
 }
 
 func (s *TargetSslProxyListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetSslProxyListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetSslProxyListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22262,8 +23202,8 @@ type TargetTcpProxiesSetBackendServiceRequest struct {
 }
 
 func (s *TargetTcpProxiesSetBackendServiceRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TargetTcpProxiesSetBackendServiceRequest
-	raw := noMethod(*s)
+	type NoMethod TargetTcpProxiesSetBackendServiceRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22294,8 +23234,8 @@ type TargetTcpProxiesSetProxyHeaderRequest struct {
 }
 
 func (s *TargetTcpProxiesSetProxyHeaderRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TargetTcpProxiesSetProxyHeaderRequest
-	raw := noMethod(*s)
+	type NoMethod TargetTcpProxiesSetProxyHeaderRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22365,8 +23305,8 @@ type TargetTcpProxy struct {
 }
 
 func (s *TargetTcpProxy) MarshalJSON() ([]byte, error) {
-	type noMethod TargetTcpProxy
-	raw := noMethod(*s)
+	type NoMethod TargetTcpProxy
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22418,8 +23358,8 @@ type TargetTcpProxyList struct {
 }
 
 func (s *TargetTcpProxyList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetTcpProxyList
-	raw := noMethod(*s)
+	type NoMethod TargetTcpProxyList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22433,9 +23373,13 @@ type TargetTcpProxyListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -22446,7 +23390,9 @@ type TargetTcpProxyListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -22477,8 +23423,8 @@ type TargetTcpProxyListWarning struct {
 }
 
 func (s *TargetTcpProxyListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetTcpProxyListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetTcpProxyListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22514,8 +23460,8 @@ type TargetTcpProxyListWarningData struct {
 }
 
 func (s *TargetTcpProxyListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetTcpProxyListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetTcpProxyListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22599,8 +23545,8 @@ type TargetVpnGateway struct {
 }
 
 func (s *TargetVpnGateway) MarshalJSON() ([]byte, error) {
-	type noMethod TargetVpnGateway
-	raw := noMethod(*s)
+	type NoMethod TargetVpnGateway
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22652,8 +23598,8 @@ type TargetVpnGatewayAggregatedList struct {
 }
 
 func (s *TargetVpnGatewayAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetVpnGatewayAggregatedList
-	raw := noMethod(*s)
+	type NoMethod TargetVpnGatewayAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22667,9 +23613,13 @@ type TargetVpnGatewayAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -22680,7 +23630,9 @@ type TargetVpnGatewayAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -22711,8 +23663,8 @@ type TargetVpnGatewayAggregatedListWarning struct {
 }
 
 func (s *TargetVpnGatewayAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetVpnGatewayAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetVpnGatewayAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22748,8 +23700,8 @@ type TargetVpnGatewayAggregatedListWarningData struct {
 }
 
 func (s *TargetVpnGatewayAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetVpnGatewayAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetVpnGatewayAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22802,8 +23754,8 @@ type TargetVpnGatewayList struct {
 }
 
 func (s *TargetVpnGatewayList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetVpnGatewayList
-	raw := noMethod(*s)
+	type NoMethod TargetVpnGatewayList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22817,9 +23769,13 @@ type TargetVpnGatewayListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -22830,7 +23786,9 @@ type TargetVpnGatewayListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -22861,8 +23819,8 @@ type TargetVpnGatewayListWarning struct {
 }
 
 func (s *TargetVpnGatewayListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetVpnGatewayListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetVpnGatewayListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22898,8 +23856,8 @@ type TargetVpnGatewayListWarningData struct {
 }
 
 func (s *TargetVpnGatewayListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetVpnGatewayListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetVpnGatewayListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22931,8 +23889,8 @@ type TargetVpnGatewaysScopedList struct {
 }
 
 func (s *TargetVpnGatewaysScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod TargetVpnGatewaysScopedList
-	raw := noMethod(*s)
+	type NoMethod TargetVpnGatewaysScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -22946,9 +23904,13 @@ type TargetVpnGatewaysScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -22959,7 +23921,9 @@ type TargetVpnGatewaysScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -22990,8 +23954,8 @@ type TargetVpnGatewaysScopedListWarning struct {
 }
 
 func (s *TargetVpnGatewaysScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod TargetVpnGatewaysScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod TargetVpnGatewaysScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23027,8 +23991,8 @@ type TargetVpnGatewaysScopedListWarningData struct {
 }
 
 func (s *TargetVpnGatewaysScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod TargetVpnGatewaysScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod TargetVpnGatewaysScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23059,8 +24023,8 @@ type TestFailure struct {
 }
 
 func (s *TestFailure) MarshalJSON() ([]byte, error) {
-	type noMethod TestFailure
-	raw := noMethod(*s)
+	type NoMethod TestFailure
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23088,8 +24052,8 @@ type TestPermissionsRequest struct {
 }
 
 func (s *TestPermissionsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TestPermissionsRequest
-	raw := noMethod(*s)
+	type NoMethod TestPermissionsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23120,8 +24084,8 @@ type TestPermissionsResponse struct {
 }
 
 func (s *TestPermissionsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod TestPermissionsResponse
-	raw := noMethod(*s)
+	type NoMethod TestPermissionsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23161,8 +24125,8 @@ type UDPHealthCheck struct {
 }
 
 func (s *UDPHealthCheck) MarshalJSON() ([]byte, error) {
-	type noMethod UDPHealthCheck
-	raw := noMethod(*s)
+	type NoMethod UDPHealthCheck
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23241,8 +24205,8 @@ type UrlMap struct {
 }
 
 func (s *UrlMap) MarshalJSON() ([]byte, error) {
-	type noMethod UrlMap
-	raw := noMethod(*s)
+	type NoMethod UrlMap
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23294,8 +24258,8 @@ type UrlMapList struct {
 }
 
 func (s *UrlMapList) MarshalJSON() ([]byte, error) {
-	type noMethod UrlMapList
-	raw := noMethod(*s)
+	type NoMethod UrlMapList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23308,9 +24272,13 @@ type UrlMapListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -23321,7 +24289,9 @@ type UrlMapListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -23352,8 +24322,8 @@ type UrlMapListWarning struct {
 }
 
 func (s *UrlMapListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod UrlMapListWarning
-	raw := noMethod(*s)
+	type NoMethod UrlMapListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23389,8 +24359,8 @@ type UrlMapListWarningData struct {
 }
 
 func (s *UrlMapListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod UrlMapListWarningData
-	raw := noMethod(*s)
+	type NoMethod UrlMapListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23415,8 +24385,8 @@ type UrlMapReference struct {
 }
 
 func (s *UrlMapReference) MarshalJSON() ([]byte, error) {
-	type noMethod UrlMapReference
-	raw := noMethod(*s)
+	type NoMethod UrlMapReference
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23453,8 +24423,8 @@ type UrlMapTest struct {
 }
 
 func (s *UrlMapTest) MarshalJSON() ([]byte, error) {
-	type noMethod UrlMapTest
-	raw := noMethod(*s)
+	type NoMethod UrlMapTest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23492,8 +24462,8 @@ type UrlMapValidationResult struct {
 }
 
 func (s *UrlMapValidationResult) MarshalJSON() ([]byte, error) {
-	type noMethod UrlMapValidationResult
-	raw := noMethod(*s)
+	type NoMethod UrlMapValidationResult
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23519,8 +24489,8 @@ type UrlMapsValidateRequest struct {
 }
 
 func (s *UrlMapsValidateRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UrlMapsValidateRequest
-	raw := noMethod(*s)
+	type NoMethod UrlMapsValidateRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23549,8 +24519,8 @@ type UrlMapsValidateResponse struct {
 }
 
 func (s *UrlMapsValidateResponse) MarshalJSON() ([]byte, error) {
-	type noMethod UrlMapsValidateResponse
-	raw := noMethod(*s)
+	type NoMethod UrlMapsValidateResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23592,8 +24562,8 @@ type UsageExportLocation struct {
 }
 
 func (s *UsageExportLocation) MarshalJSON() ([]byte, error) {
-	type noMethod UsageExportLocation
-	raw := noMethod(*s)
+	type NoMethod UsageExportLocation
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23707,8 +24677,8 @@ type VpnTunnel struct {
 }
 
 func (s *VpnTunnel) MarshalJSON() ([]byte, error) {
-	type noMethod VpnTunnel
-	raw := noMethod(*s)
+	type NoMethod VpnTunnel
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23760,8 +24730,8 @@ type VpnTunnelAggregatedList struct {
 }
 
 func (s *VpnTunnelAggregatedList) MarshalJSON() ([]byte, error) {
-	type noMethod VpnTunnelAggregatedList
-	raw := noMethod(*s)
+	type NoMethod VpnTunnelAggregatedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23775,9 +24745,13 @@ type VpnTunnelAggregatedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -23788,7 +24762,9 @@ type VpnTunnelAggregatedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -23819,8 +24795,8 @@ type VpnTunnelAggregatedListWarning struct {
 }
 
 func (s *VpnTunnelAggregatedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod VpnTunnelAggregatedListWarning
-	raw := noMethod(*s)
+	type NoMethod VpnTunnelAggregatedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23856,8 +24832,8 @@ type VpnTunnelAggregatedListWarningData struct {
 }
 
 func (s *VpnTunnelAggregatedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod VpnTunnelAggregatedListWarningData
-	raw := noMethod(*s)
+	type NoMethod VpnTunnelAggregatedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23910,8 +24886,8 @@ type VpnTunnelList struct {
 }
 
 func (s *VpnTunnelList) MarshalJSON() ([]byte, error) {
-	type noMethod VpnTunnelList
-	raw := noMethod(*s)
+	type NoMethod VpnTunnelList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -23924,9 +24900,13 @@ type VpnTunnelListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -23937,7 +24917,9 @@ type VpnTunnelListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -23968,8 +24950,8 @@ type VpnTunnelListWarning struct {
 }
 
 func (s *VpnTunnelListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod VpnTunnelListWarning
-	raw := noMethod(*s)
+	type NoMethod VpnTunnelListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24005,8 +24987,8 @@ type VpnTunnelListWarningData struct {
 }
 
 func (s *VpnTunnelListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod VpnTunnelListWarningData
-	raw := noMethod(*s)
+	type NoMethod VpnTunnelListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24036,8 +25018,8 @@ type VpnTunnelsScopedList struct {
 }
 
 func (s *VpnTunnelsScopedList) MarshalJSON() ([]byte, error) {
-	type noMethod VpnTunnelsScopedList
-	raw := noMethod(*s)
+	type NoMethod VpnTunnelsScopedList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24051,9 +25033,13 @@ type VpnTunnelsScopedListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -24064,7 +25050,9 @@ type VpnTunnelsScopedListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -24095,8 +25083,8 @@ type VpnTunnelsScopedListWarning struct {
 }
 
 func (s *VpnTunnelsScopedListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod VpnTunnelsScopedListWarning
-	raw := noMethod(*s)
+	type NoMethod VpnTunnelsScopedListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24132,8 +25120,8 @@ type VpnTunnelsScopedListWarningData struct {
 }
 
 func (s *VpnTunnelsScopedListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod VpnTunnelsScopedListWarningData
-	raw := noMethod(*s)
+	type NoMethod VpnTunnelsScopedListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24185,8 +25173,8 @@ type XpnHostList struct {
 }
 
 func (s *XpnHostList) MarshalJSON() ([]byte, error) {
-	type noMethod XpnHostList
-	raw := noMethod(*s)
+	type NoMethod XpnHostList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24199,9 +25187,13 @@ type XpnHostListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -24212,7 +25204,9 @@ type XpnHostListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -24243,8 +25237,8 @@ type XpnHostListWarning struct {
 }
 
 func (s *XpnHostListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod XpnHostListWarning
-	raw := noMethod(*s)
+	type NoMethod XpnHostListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24280,8 +25274,8 @@ type XpnHostListWarningData struct {
 }
 
 func (s *XpnHostListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod XpnHostListWarningData
-	raw := noMethod(*s)
+	type NoMethod XpnHostListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24317,8 +25311,8 @@ type XpnResourceId struct {
 }
 
 func (s *XpnResourceId) MarshalJSON() ([]byte, error) {
-	type noMethod XpnResourceId
-	raw := noMethod(*s)
+	type NoMethod XpnResourceId
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24388,8 +25382,8 @@ type Zone struct {
 }
 
 func (s *Zone) MarshalJSON() ([]byte, error) {
-	type noMethod Zone
-	raw := noMethod(*s)
+	type NoMethod Zone
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24441,8 +25435,8 @@ type ZoneList struct {
 }
 
 func (s *ZoneList) MarshalJSON() ([]byte, error) {
-	type noMethod ZoneList
-	raw := noMethod(*s)
+	type NoMethod ZoneList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24455,9 +25449,13 @@ type ZoneListWarning struct {
 	// Possible values:
 	//   "CLEANUP_FAILED"
 	//   "DEPRECATED_RESOURCE_USED"
+	//   "DEPRECATED_TYPE_USED"
 	//   "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+	//   "EXPERIMENTAL_TYPE_USED"
+	//   "EXTERNAL_API_WARNING"
 	//   "FIELD_VALUE_OVERRIDEN"
 	//   "INJECTED_KERNELS_DEPRECATED"
+	//   "MISSING_TYPE_DEPENDENCY"
 	//   "NEXT_HOP_ADDRESS_NOT_ASSIGNED"
 	//   "NEXT_HOP_CANNOT_IP_FORWARD"
 	//   "NEXT_HOP_INSTANCE_NOT_FOUND"
@@ -24468,7 +25466,9 @@ type ZoneListWarning struct {
 	//   "REQUIRED_TOS_AGREEMENT"
 	//   "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING"
 	//   "RESOURCE_NOT_DELETED"
+	//   "SCHEMA_VALIDATION_IGNORED"
 	//   "SINGLE_INSTANCE_PROPERTY_TEMPLATE"
+	//   "UNDECLARED_PROPERTIES"
 	//   "UNREACHABLE"
 	Code string `json:"code,omitempty"`
 
@@ -24499,8 +25499,8 @@ type ZoneListWarning struct {
 }
 
 func (s *ZoneListWarning) MarshalJSON() ([]byte, error) {
-	type noMethod ZoneListWarning
-	raw := noMethod(*s)
+	type NoMethod ZoneListWarning
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24536,8 +25536,8 @@ type ZoneListWarningData struct {
 }
 
 func (s *ZoneListWarningData) MarshalJSON() ([]byte, error) {
-	type noMethod ZoneListWarningData
-	raw := noMethod(*s)
+	type NoMethod ZoneListWarningData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24572,8 +25572,8 @@ type ZoneSetLabelsRequest struct {
 }
 
 func (s *ZoneSetLabelsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod ZoneSetLabelsRequest
-	raw := noMethod(*s)
+	type NoMethod ZoneSetLabelsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -24751,7 +25751,7 @@ func (c *AcceleratorTypesAggregatedListCall) Do(opts ...googleapi.CallOption) (*
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -24942,7 +25942,7 @@ func (c *AcceleratorTypesGetCall) Do(opts ...googleapi.CallOption) (*Accelerator
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -25169,7 +26169,7 @@ func (c *AcceleratorTypesListCall) Do(opts ...googleapi.CallOption) (*Accelerato
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -25429,7 +26429,7 @@ func (c *AddressesAggregatedListCall) Do(opts ...googleapi.CallOption) (*Address
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -25625,7 +26625,7 @@ func (c *AddressesDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -25792,7 +26792,7 @@ func (c *AddressesGetCall) Do(opts ...googleapi.CallOption) (*Address, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -25965,7 +26965,7 @@ func (c *AddressesInsertCall) Do(opts ...googleapi.CallOption) (*Operation, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -26192,7 +27192,7 @@ func (c *AddressesListCall) Do(opts ...googleapi.CallOption) (*AddressList, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -26403,7 +27403,7 @@ func (c *AddressesSetLabelsCall) Do(opts ...googleapi.CallOption) (*Operation, e
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -26566,7 +27566,7 @@ func (c *AddressesTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Tes
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -26792,7 +27792,7 @@ func (c *AutoscalersAggregatedListCall) Do(opts ...googleapi.CallOption) (*Autos
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -26987,7 +27987,7 @@ func (c *AutoscalersDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -27154,7 +28154,7 @@ func (c *AutoscalersGetCall) Do(opts ...googleapi.CallOption) (*Autoscaler, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -27326,7 +28326,7 @@ func (c *AutoscalersInsertCall) Do(opts ...googleapi.CallOption) (*Operation, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -27552,7 +28552,7 @@ func (c *AutoscalersListCall) Do(opts ...googleapi.CallOption) (*AutoscalerList,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -27768,7 +28768,7 @@ func (c *AutoscalersPatchCall) Do(opts ...googleapi.CallOption) (*Operation, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -27929,7 +28929,7 @@ func (c *AutoscalersTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*T
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -28111,7 +29111,7 @@ func (c *AutoscalersUpdateCall) Do(opts ...googleapi.CallOption) (*Operation, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -28280,7 +29280,7 @@ func (c *BackendBucketsDeleteCall) Do(opts ...googleapi.CallOption) (*Operation,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -28436,7 +29436,7 @@ func (c *BackendBucketsGetCall) Do(opts ...googleapi.CallOption) (*BackendBucket
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -28597,7 +29597,7 @@ func (c *BackendBucketsInsertCall) Do(opts ...googleapi.CallOption) (*Operation,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -28812,7 +29812,7 @@ func (c *BackendBucketsListCall) Do(opts ...googleapi.CallOption) (*BackendBucke
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -29013,7 +30013,7 @@ func (c *BackendBucketsPatchCall) Do(opts ...googleapi.CallOption) (*Operation, 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -29184,7 +30184,7 @@ func (c *BackendBucketsUpdateCall) Do(opts ...googleapi.CallOption) (*Operation,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -29407,7 +30407,7 @@ func (c *BackendServicesAggregatedListCall) Do(opts ...googleapi.CallOption) (*B
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -29600,7 +30600,7 @@ func (c *BackendServicesDeleteCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -29757,7 +30757,7 @@ func (c *BackendServicesGetCall) Do(opts ...googleapi.CallOption) (*BackendServi
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -29903,7 +30903,7 @@ func (c *BackendServicesGetHealthCall) Do(opts ...googleapi.CallOption) (*Backen
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -30069,7 +31069,7 @@ func (c *BackendServicesInsertCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -30285,7 +31285,7 @@ func (c *BackendServicesListCall) Do(opts ...googleapi.CallOption) (*BackendServ
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -30490,7 +31490,7 @@ func (c *BackendServicesPatchCall) Do(opts ...googleapi.CallOption) (*Operation,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -30661,7 +31661,7 @@ func (c *BackendServicesSetSecurityPolicyCall) Do(opts ...googleapi.CallOption) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -30812,7 +31812,7 @@ func (c *BackendServicesTestIamPermissionsCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -30982,7 +31982,7 @@ func (c *BackendServicesUpdateCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -31205,7 +32205,7 @@ func (c *DiskTypesAggregatedListCall) Do(opts ...googleapi.CallOption) (*DiskTyp
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -31397,7 +32397,7 @@ func (c *DiskTypesGetCall) Do(opts ...googleapi.CallOption) (*DiskType, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -31625,7 +32625,7 @@ func (c *DiskTypesListCall) Do(opts ...googleapi.CallOption) (*DiskTypeList, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -31885,7 +32885,7 @@ func (c *DisksAggregatedListCall) Do(opts ...googleapi.CallOption) (*DiskAggrega
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -32094,7 +33094,7 @@ func (c *DisksCreateSnapshotCall) Do(opts ...googleapi.CallOption) (*Operation, 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -32276,7 +33276,7 @@ func (c *DisksDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -32443,7 +33443,7 @@ func (c *DisksGetCall) Do(opts ...googleapi.CallOption) (*Disk, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -32626,7 +33626,7 @@ func (c *DisksInsertCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -32858,7 +33858,7 @@ func (c *DisksListCall) Do(opts ...googleapi.CallOption) (*DiskList, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -33068,7 +34068,7 @@ func (c *DisksResizeCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -33250,7 +34250,7 @@ func (c *DisksSetLabelsCall) Do(opts ...googleapi.CallOption) (*Operation, error
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -33413,7 +34413,7 @@ func (c *DisksTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*TestPer
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -33581,7 +34581,7 @@ func (c *FirewallsDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -33737,7 +34737,7 @@ func (c *FirewallsGetCall) Do(opts ...googleapi.CallOption) (*Firewall, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -33899,7 +34899,7 @@ func (c *FirewallsInsertCall) Do(opts ...googleapi.CallOption) (*Operation, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -34115,7 +35115,7 @@ func (c *FirewallsListCall) Do(opts ...googleapi.CallOption) (*FirewallList, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -34317,7 +35317,7 @@ func (c *FirewallsPatchCall) Do(opts ...googleapi.CallOption) (*Operation, error
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -34469,7 +35469,7 @@ func (c *FirewallsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Tes
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -34639,7 +35639,7 @@ func (c *FirewallsUpdateCall) Do(opts ...googleapi.CallOption) (*Operation, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -34862,7 +35862,7 @@ func (c *ForwardingRulesAggregatedListCall) Do(opts ...googleapi.CallOption) (*F
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -35058,7 +36058,7 @@ func (c *ForwardingRulesDeleteCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -35225,7 +36225,7 @@ func (c *ForwardingRulesGetCall) Do(opts ...googleapi.CallOption) (*ForwardingRu
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -35398,7 +36398,7 @@ func (c *ForwardingRulesInsertCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -35625,7 +36625,7 @@ func (c *ForwardingRulesListCall) Do(opts ...googleapi.CallOption) (*ForwardingR
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -35836,7 +36836,7 @@ func (c *ForwardingRulesSetLabelsCall) Do(opts ...googleapi.CallOption) (*Operat
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -36019,7 +37019,7 @@ func (c *ForwardingRulesSetTargetCall) Do(opts ...googleapi.CallOption) (*Operat
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -36182,7 +37182,7 @@ func (c *ForwardingRulesTestIamPermissionsCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -36350,7 +37350,7 @@ func (c *GlobalAddressesDeleteCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -36507,7 +37507,7 @@ func (c *GlobalAddressesGetCall) Do(opts ...googleapi.CallOption) (*Address, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -36669,7 +37669,7 @@ func (c *GlobalAddressesInsertCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -36884,7 +37884,7 @@ func (c *GlobalAddressesListCall) Do(opts ...googleapi.CallOption) (*AddressList
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -37065,7 +38065,7 @@ func (c *GlobalAddressesSetLabelsCall) Do(opts ...googleapi.CallOption) (*Operat
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -37212,7 +38212,7 @@ func (c *GlobalAddressesTestIamPermissionsCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -37372,7 +38372,7 @@ func (c *GlobalForwardingRulesDeleteCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -37529,7 +38529,7 @@ func (c *GlobalForwardingRulesGetCall) Do(opts ...googleapi.CallOption) (*Forwar
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -37691,7 +38691,7 @@ func (c *GlobalForwardingRulesInsertCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -37907,7 +38907,7 @@ func (c *GlobalForwardingRulesListCall) Do(opts ...googleapi.CallOption) (*Forwa
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -38088,7 +39088,7 @@ func (c *GlobalForwardingRulesSetLabelsCall) Do(opts ...googleapi.CallOption) (*
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -38255,7 +39255,7 @@ func (c *GlobalForwardingRulesSetTargetCall) Do(opts ...googleapi.CallOption) (*
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -38407,7 +39407,7 @@ func (c *GlobalForwardingRulesTestIamPermissionsCall) Do(opts ...googleapi.CallO
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -38626,7 +39626,7 @@ func (c *GlobalOperationsAggregatedListCall) Do(opts ...googleapi.CallOption) (*
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -38924,7 +39924,7 @@ func (c *GlobalOperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -39141,7 +40141,7 @@ func (c *GlobalOperationsListCall) Do(opts ...googleapi.CallOption) (*OperationL
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -39333,7 +40333,7 @@ func (c *HealthChecksDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, e
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -39489,7 +40489,7 @@ func (c *HealthChecksGetCall) Do(opts ...googleapi.CallOption) (*HealthCheck, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -39650,7 +40650,7 @@ func (c *HealthChecksInsertCall) Do(opts ...googleapi.CallOption) (*Operation, e
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -39865,7 +40865,7 @@ func (c *HealthChecksListCall) Do(opts ...googleapi.CallOption) (*HealthCheckLis
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -40066,7 +41066,7 @@ func (c *HealthChecksPatchCall) Do(opts ...googleapi.CallOption) (*Operation, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -40218,7 +41218,7 @@ func (c *HealthChecksTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -40385,7 +41385,7 @@ func (c *HealthChecksUpdateCall) Do(opts ...googleapi.CallOption) (*Operation, e
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -40549,7 +41549,7 @@ func (c *HttpHealthChecksDeleteCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -40706,7 +41706,7 @@ func (c *HttpHealthChecksGetCall) Do(opts ...googleapi.CallOption) (*HttpHealthC
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -40868,7 +41868,7 @@ func (c *HttpHealthChecksInsertCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -41084,7 +42084,7 @@ func (c *HttpHealthChecksListCall) Do(opts ...googleapi.CallOption) (*HttpHealth
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -41286,7 +42286,7 @@ func (c *HttpHealthChecksPatchCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -41438,7 +42438,7 @@ func (c *HttpHealthChecksTestIamPermissionsCall) Do(opts ...googleapi.CallOption
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -41606,7 +42606,7 @@ func (c *HttpHealthChecksUpdateCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -41769,7 +42769,7 @@ func (c *HttpsHealthChecksDeleteCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -41925,7 +42925,7 @@ func (c *HttpsHealthChecksGetCall) Do(opts ...googleapi.CallOption) (*HttpsHealt
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -42086,7 +43086,7 @@ func (c *HttpsHealthChecksInsertCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -42301,7 +43301,7 @@ func (c *HttpsHealthChecksListCall) Do(opts ...googleapi.CallOption) (*HttpsHeal
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -42502,7 +43502,7 @@ func (c *HttpsHealthChecksPatchCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -42654,7 +43654,7 @@ func (c *HttpsHealthChecksTestIamPermissionsCall) Do(opts ...googleapi.CallOptio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -42821,7 +43821,7 @@ func (c *HttpsHealthChecksUpdateCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -42985,7 +43985,7 @@ func (c *ImagesDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -43156,7 +44156,7 @@ func (c *ImagesDeprecateCall) Do(opts ...googleapi.CallOption) (*Operation, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -43316,7 +44316,7 @@ func (c *ImagesGetCall) Do(opts ...googleapi.CallOption) (*Image, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -43468,7 +44468,7 @@ func (c *ImagesGetFromFamilyCall) Do(opts ...googleapi.CallOption) (*Image, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -43637,7 +44637,7 @@ func (c *ImagesInsertCall) Do(opts ...googleapi.CallOption) (*Operation, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -43696,8 +44696,8 @@ type ImagesListCall struct {
 	header_      http.Header
 }
 
-// List: Retrieves the list of private images available to the specified
-// project. Private images are images you create that belong to your
+// List: Retrieves the list of custom images available to the specified
+// project. Custom images are images you create that belong to your
 // project. This method does not get any images that belong to other
 // projects, including publicly-available images, like Debian 8. If you
 // want to get a list of publicly-available images, use this method to
@@ -43866,12 +44866,12 @@ func (c *ImagesListCall) Do(opts ...googleapi.CallOption) (*ImageList, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves the list of private images available to the specified project. Private images are images you create that belong to your project. This method does not get any images that belong to other projects, including publicly-available images, like Debian 8. If you want to get a list of publicly-available images, use this method to make a request to the respective image project, such as debian-cloud or windows-cloud.",
+	//   "description": "Retrieves the list of custom images available to the specified project. Custom images are images you create that belong to your project. This method does not get any images that belong to other projects, including publicly-available images, like Debian 8. If you want to get a list of publicly-available images, use this method to make a request to the respective image project, such as debian-cloud or windows-cloud.",
 	//   "httpMethod": "GET",
 	//   "id": "compute.images.list",
 	//   "parameterOrder": [
@@ -44047,7 +45047,7 @@ func (c *ImagesSetLabelsCall) Do(opts ...googleapi.CallOption) (*Operation, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -44194,7 +45194,7 @@ func (c *ImagesTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*TestPe
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -44379,7 +45379,7 @@ func (c *InstanceGroupManagersAbandonInstancesCall) Do(opts ...googleapi.CallOpt
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -44609,7 +45609,7 @@ func (c *InstanceGroupManagersAggregatedListCall) Do(opts ...googleapi.CallOptio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -44807,7 +45807,7 @@ func (c *InstanceGroupManagersDeleteCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -44998,7 +45998,7 @@ func (c *InstanceGroupManagersDeleteInstancesCall) Do(opts ...googleapi.CallOpti
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -45167,7 +46167,7 @@ func (c *InstanceGroupManagersGetCall) Do(opts ...googleapi.CallOption) (*Instan
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -45345,7 +46345,7 @@ func (c *InstanceGroupManagersInsertCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -45570,7 +46570,7 @@ func (c *InstanceGroupManagersListCall) Do(opts ...googleapi.CallOption) (*Insta
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -45784,7 +46784,7 @@ func (c *InstanceGroupManagersListManagedInstancesCall) Do(opts ...googleapi.Cal
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -46002,7 +47002,7 @@ func (c *InstanceGroupManagersPatchCall) Do(opts ...googleapi.CallOption) (*Oper
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -46195,7 +47195,7 @@ func (c *InstanceGroupManagersRecreateInstancesCall) Do(opts ...googleapi.CallOp
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -46378,7 +47378,7 @@ func (c *InstanceGroupManagersResizeCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -46576,7 +47576,7 @@ func (c *InstanceGroupManagersResizeAdvancedCall) Do(opts ...googleapi.CallOptio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -46755,7 +47755,7 @@ func (c *InstanceGroupManagersSetAutoHealingPoliciesCall) Do(opts ...googleapi.C
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -46936,7 +47936,7 @@ func (c *InstanceGroupManagersSetInstanceTemplateCall) Do(opts ...googleapi.Call
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -47121,7 +48121,7 @@ func (c *InstanceGroupManagersSetTargetPoolsCall) Do(opts ...googleapi.CallOptio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -47282,7 +48282,7 @@ func (c *InstanceGroupManagersTestIamPermissionsCall) Do(opts ...googleapi.CallO
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -47463,7 +48463,7 @@ func (c *InstanceGroupManagersUpdateCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -47644,7 +48644,7 @@ func (c *InstanceGroupsAddInstancesCall) Do(opts ...googleapi.CallOption) (*Oper
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -47873,7 +48873,7 @@ func (c *InstanceGroupsAggregatedListCall) Do(opts ...googleapi.CallOption) (*In
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -48071,7 +49071,7 @@ func (c *InstanceGroupsDeleteCall) Do(opts ...googleapi.CallOption) (*Operation,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -48236,7 +49236,7 @@ func (c *InstanceGroupsGetCall) Do(opts ...googleapi.CallOption) (*InstanceGroup
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -48406,7 +49406,7 @@ func (c *InstanceGroupsInsertCall) Do(opts ...googleapi.CallOption) (*Operation,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -48631,7 +49631,7 @@ func (c *InstanceGroupsListCall) Do(opts ...googleapi.CallOption) (*InstanceGrou
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -48888,7 +49888,7 @@ func (c *InstanceGroupsListInstancesCall) Do(opts ...googleapi.CallOption) (*Ins
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -49112,7 +50112,7 @@ func (c *InstanceGroupsRemoveInstancesCall) Do(opts ...googleapi.CallOption) (*O
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -49291,7 +50291,7 @@ func (c *InstanceGroupsSetNamedPortsCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -49452,7 +50452,7 @@ func (c *InstanceGroupsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -49624,7 +50624,7 @@ func (c *InstanceTemplatesDeleteCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -49781,7 +50781,7 @@ func (c *InstanceTemplatesGetCall) Do(opts ...googleapi.CallOption) (*InstanceTe
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -49946,7 +50946,7 @@ func (c *InstanceTemplatesInsertCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -50162,7 +51162,7 @@ func (c *InstanceTemplatesListCall) Do(opts ...googleapi.CallOption) (*InstanceT
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -50343,7 +51343,7 @@ func (c *InstanceTemplatesTestIamPermissionsCall) Do(opts ...googleapi.CallOptio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -50515,7 +51515,7 @@ func (c *InstancesAddAccessConfigCall) Do(opts ...googleapi.CallOption) (*Operat
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -50753,7 +51753,7 @@ func (c *InstancesAggregatedListCall) Do(opts ...googleapi.CallOption) (*Instanc
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -50959,7 +51959,7 @@ func (c *InstancesAttachDiskCall) Do(opts ...googleapi.CallOption) (*Operation, 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -51135,7 +52135,7 @@ func (c *InstancesDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -51310,7 +52310,7 @@ func (c *InstancesDeleteAccessConfigCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -51497,7 +52497,7 @@ func (c *InstancesDetachDiskCall) Do(opts ...googleapi.CallOption) (*Operation, 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -51672,7 +52672,7 @@ func (c *InstancesGetCall) Do(opts ...googleapi.CallOption) (*Instance, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -51854,7 +52854,7 @@ func (c *InstancesGetSerialPortOutputCall) Do(opts ...googleapi.CallOption) (*Se
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -51960,6 +52960,22 @@ func (c *InstancesInsertCall) RequestId(requestId string) *InstancesInsertCall {
 	return c
 }
 
+// SourceInstanceTemplate sets the optional parameter
+// "sourceInstanceTemplate": Specifies instance template to create the
+// instance.
+//
+// This field is optional. It can be a full or partial URL. For example,
+// the following are all valid URLs to an instance template:
+// -
+// https://www.googleapis.com/compute/v1/projects/project/global/global/instanceTemplates/instanceTemplate
+// - projects/project/global/global/instanceTemplates/instanceTemplate
+//
+// - global/instancesTemplates/instanceTemplate
+func (c *InstancesInsertCall) SourceInstanceTemplate(sourceInstanceTemplate string) *InstancesInsertCall {
+	c.urlParams_.Set("sourceInstanceTemplate", sourceInstanceTemplate)
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -52042,7 +53058,7 @@ func (c *InstancesInsertCall) Do(opts ...googleapi.CallOption) (*Operation, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -52064,6 +53080,11 @@ func (c *InstancesInsertCall) Do(opts ...googleapi.CallOption) (*Operation, erro
 	//     },
 	//     "requestId": {
 	//       "description": "An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed.\n\nFor example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.\n\nThe request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "sourceInstanceTemplate": {
+	//       "description": "Specifies instance template to create the instance.\n\nThis field is optional. It can be a full or partial URL. For example, the following are all valid URLs to an instance template:  \n- https://www.googleapis.com/compute/v1/projects/project/global/global/instanceTemplates/instanceTemplate \n- projects/project/global/global/instanceTemplates/instanceTemplate \n- global/instancesTemplates/instanceTemplate",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -52269,7 +53290,7 @@ func (c *InstancesListCall) Do(opts ...googleapi.CallOption) (*InstanceList, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -52535,7 +53556,7 @@ func (c *InstancesListReferrersCall) Do(opts ...googleapi.CallOption) (*Instance
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -52748,7 +53769,7 @@ func (c *InstancesResetCall) Do(opts ...googleapi.CallOption) (*Operation, error
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -52790,6 +53811,190 @@ func (c *InstancesResetCall) Do(opts ...googleapi.CallOption) (*Operation, error
 	//     }
 	//   },
 	//   "path": "{project}/zones/{zone}/instances/{instance}/reset",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instances.setDeletionProtection":
+
+type InstancesSetDeletionProtectionCall struct {
+	s          *Service
+	project    string
+	zone       string
+	resource   string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+	header_    http.Header
+}
+
+// SetDeletionProtection: Sets deletion protection on the instance.
+func (r *InstancesService) SetDeletionProtection(project string, zone string, resource string) *InstancesSetDeletionProtectionCall {
+	c := &InstancesSetDeletionProtectionCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	c.resource = resource
+	return c
+}
+
+// DeletionProtection sets the optional parameter "deletionProtection":
+// Whether the resource should be protected against deletion.
+func (c *InstancesSetDeletionProtectionCall) DeletionProtection(deletionProtection bool) *InstancesSetDeletionProtectionCall {
+	c.urlParams_.Set("deletionProtection", fmt.Sprint(deletionProtection))
+	return c
+}
+
+// RequestId sets the optional parameter "requestId": An optional
+// request ID to identify requests. Specify a unique request ID so that
+// if you must retry your request, the server will know to ignore the
+// request if it has already been completed.
+//
+// For example, consider a situation where you make an initial request
+// and the request times out. If you make the request again with the
+// same request ID, the server can check if original operation with the
+// same request ID was received, and if so, will ignore the second
+// request. This prevents clients from accidentally creating duplicate
+// commitments.
+//
+// The request ID must be a valid UUID with the exception that zero UUID
+// is not supported (00000000-0000-0000-0000-000000000000).
+func (c *InstancesSetDeletionProtectionCall) RequestId(requestId string) *InstancesSetDeletionProtectionCall {
+	c.urlParams_.Set("requestId", requestId)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstancesSetDeletionProtectionCall) Fields(s ...googleapi.Field) *InstancesSetDeletionProtectionCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *InstancesSetDeletionProtectionCall) Context(ctx context.Context) *InstancesSetDeletionProtectionCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *InstancesSetDeletionProtectionCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *InstancesSetDeletionProtectionCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instances/{resource}/setDeletionProtection")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project":  c.project,
+		"zone":     c.zone,
+		"resource": c.resource,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "compute.instances.setDeletionProtection" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *InstancesSetDeletionProtectionCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Sets deletion protection on the instance.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instances.setDeletionProtection",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "resource"
+	//   ],
+	//   "parameters": {
+	//     "deletionProtection": {
+	//       "default": "true",
+	//       "description": "Whether the resource should be protected against deletion.",
+	//       "location": "query",
+	//       "type": "boolean"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed.\n\nFor example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.\n\nThe request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "resource": {
+	//       "description": "Name of the resource for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instances/{resource}/setDeletionProtection",
 	//   "response": {
 	//     "$ref": "Operation"
 	//   },
@@ -52923,7 +54128,7 @@ func (c *InstancesSetDiskAutoDeleteCall) Do(opts ...googleapi.CallOption) (*Oper
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -53117,7 +54322,7 @@ func (c *InstancesSetLabelsCall) Do(opts ...googleapi.CallOption) (*Operation, e
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -53299,7 +54504,7 @@ func (c *InstancesSetMachineResourcesCall) Do(opts ...googleapi.CallOption) (*Op
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -53481,7 +54686,7 @@ func (c *InstancesSetMachineTypeCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -53664,7 +54869,7 @@ func (c *InstancesSetMetadataCall) Do(opts ...googleapi.CallOption) (*Operation,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -53848,7 +55053,7 @@ func (c *InstancesSetMinCpuPlatformCall) Do(opts ...googleapi.CallOption) (*Oper
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -54030,7 +55235,7 @@ func (c *InstancesSetSchedulingCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -54213,7 +55418,7 @@ func (c *InstancesSetServiceAccountCall) Do(opts ...googleapi.CallOption) (*Oper
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -54396,7 +55601,7 @@ func (c *InstancesSetTagsCall) Do(opts ...googleapi.CallOption) (*Operation, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -54573,7 +55778,7 @@ func (c *InstancesStartCall) Do(opts ...googleapi.CallOption) (*Operation, error
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -54753,7 +55958,7 @@ func (c *InstancesStartWithEncryptionKeyCall) Do(opts ...googleapi.CallOption) (
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -54823,11 +56028,10 @@ type InstancesStopCall struct {
 
 // Stop: Stops a running instance, shutting it down cleanly, and allows
 // you to restart the instance at a later time. Stopped instances do not
-// incur per-minute, virtual machine usage charges while they are
-// stopped, but any resources that the virtual machine is using, such as
-// persistent disks and static IP addresses, will continue to be charged
-// until they are deleted. For more information, see Stopping an
-// instance.
+// incur VM usage charges while they are stopped. However, resources
+// that the VM is using, such as persistent disks and static IP
+// addresses, will continue to be charged until they are deleted. For
+// more information, see Stopping an instance.
 // For details, see https://cloud.google.com/compute/docs/reference/latest/instances/stop
 func (r *InstancesService) Stop(project string, zone string, instance string) *InstancesStopCall {
 	c := &InstancesStopCall{s: r.s, urlParams_: make(gensupport.URLParams)}
@@ -54934,12 +56138,12 @@ func (c *InstancesStopCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
 	// {
-	//   "description": "Stops a running instance, shutting it down cleanly, and allows you to restart the instance at a later time. Stopped instances do not incur per-minute, virtual machine usage charges while they are stopped, but any resources that the virtual machine is using, such as persistent disks and static IP addresses, will continue to be charged until they are deleted. For more information, see Stopping an instance.",
+	//   "description": "Stops a running instance, shutting it down cleanly, and allows you to restart the instance at a later time. Stopped instances do not incur VM usage charges while they are stopped. However, resources that the VM is using, such as persistent disks and static IP addresses, will continue to be charged until they are deleted. For more information, see Stopping an instance.",
 	//   "httpMethod": "POST",
 	//   "id": "compute.instances.stop",
 	//   "parameterOrder": [
@@ -55094,7 +56298,7 @@ func (c *InstancesTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Tes
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -55141,6 +56345,388 @@ func (c *InstancesTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Tes
 	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instances.updateAccessConfig":
+
+type InstancesUpdateAccessConfigCall struct {
+	s            *Service
+	project      string
+	zone         string
+	instance     string
+	accessconfig *AccessConfig
+	urlParams_   gensupport.URLParams
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// UpdateAccessConfig: Updates the specified access config from an
+// instance's network interface with the data included in the request.
+// This method supports PATCH semantics and uses the JSON merge patch
+// format and processing rules.
+func (r *InstancesService) UpdateAccessConfig(project string, zone string, instance string, networkInterface string, accessconfig *AccessConfig) *InstancesUpdateAccessConfigCall {
+	c := &InstancesUpdateAccessConfigCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	c.instance = instance
+	c.urlParams_.Set("networkInterface", networkInterface)
+	c.accessconfig = accessconfig
+	return c
+}
+
+// RequestId sets the optional parameter "requestId": An optional
+// request ID to identify requests. Specify a unique request ID so that
+// if you must retry your request, the server will know to ignore the
+// request if it has already been completed.
+//
+// For example, consider a situation where you make an initial request
+// and the request times out. If you make the request again with the
+// same request ID, the server can check if original operation with the
+// same request ID was received, and if so, will ignore the second
+// request. This prevents clients from accidentally creating duplicate
+// commitments.
+//
+// The request ID must be a valid UUID with the exception that zero UUID
+// is not supported (00000000-0000-0000-0000-000000000000).
+func (c *InstancesUpdateAccessConfigCall) RequestId(requestId string) *InstancesUpdateAccessConfigCall {
+	c.urlParams_.Set("requestId", requestId)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstancesUpdateAccessConfigCall) Fields(s ...googleapi.Field) *InstancesUpdateAccessConfigCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *InstancesUpdateAccessConfigCall) Context(ctx context.Context) *InstancesUpdateAccessConfigCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *InstancesUpdateAccessConfigCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *InstancesUpdateAccessConfigCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.accessconfig)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instances/{instance}/updateAccessConfig")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project":  c.project,
+		"zone":     c.zone,
+		"instance": c.instance,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "compute.instances.updateAccessConfig" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *InstancesUpdateAccessConfigCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Updates the specified access config from an instance's network interface with the data included in the request. This method supports PATCH semantics and uses the JSON merge patch format and processing rules.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.instances.updateAccessConfig",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instance",
+	//     "networkInterface"
+	//   ],
+	//   "parameters": {
+	//     "instance": {
+	//       "description": "The instance name for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "networkInterface": {
+	//       "description": "The name of the network interface where the access config is attached.",
+	//       "location": "query",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed.\n\nFor example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.\n\nThe request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instances/{instance}/updateAccessConfig",
+	//   "request": {
+	//     "$ref": "AccessConfig"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
+}
+
+// method id "compute.instances.updateNetworkInterface":
+
+type InstancesUpdateNetworkInterfaceCall struct {
+	s                *Service
+	project          string
+	zone             string
+	instance         string
+	networkinterface *NetworkInterface
+	urlParams_       gensupport.URLParams
+	ctx_             context.Context
+	header_          http.Header
+}
+
+// UpdateNetworkInterface: Updates an instance's network interface. This
+// method follows PATCH semantics.
+func (r *InstancesService) UpdateNetworkInterface(project string, zone string, instance string, networkInterface string, networkinterface *NetworkInterface) *InstancesUpdateNetworkInterfaceCall {
+	c := &InstancesUpdateNetworkInterfaceCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.zone = zone
+	c.instance = instance
+	c.urlParams_.Set("networkInterface", networkInterface)
+	c.networkinterface = networkinterface
+	return c
+}
+
+// RequestId sets the optional parameter "requestId": An optional
+// request ID to identify requests. Specify a unique request ID so that
+// if you must retry your request, the server will know to ignore the
+// request if it has already been completed.
+//
+// For example, consider a situation where you make an initial request
+// and the request times out. If you make the request again with the
+// same request ID, the server can check if original operation with the
+// same request ID was received, and if so, will ignore the second
+// request. This prevents clients from accidentally creating duplicate
+// commitments.
+//
+// The request ID must be a valid UUID with the exception that zero UUID
+// is not supported (00000000-0000-0000-0000-000000000000).
+func (c *InstancesUpdateNetworkInterfaceCall) RequestId(requestId string) *InstancesUpdateNetworkInterfaceCall {
+	c.urlParams_.Set("requestId", requestId)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *InstancesUpdateNetworkInterfaceCall) Fields(s ...googleapi.Field) *InstancesUpdateNetworkInterfaceCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *InstancesUpdateNetworkInterfaceCall) Context(ctx context.Context) *InstancesUpdateNetworkInterfaceCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *InstancesUpdateNetworkInterfaceCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *InstancesUpdateNetworkInterfaceCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.networkinterface)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/zones/{zone}/instances/{instance}/updateNetworkInterface")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("PATCH", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project":  c.project,
+		"zone":     c.zone,
+		"instance": c.instance,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "compute.instances.updateNetworkInterface" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *InstancesUpdateNetworkInterfaceCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Updates an instance's network interface. This method follows PATCH semantics.",
+	//   "httpMethod": "PATCH",
+	//   "id": "compute.instances.updateNetworkInterface",
+	//   "parameterOrder": [
+	//     "project",
+	//     "zone",
+	//     "instance",
+	//     "networkInterface"
+	//   ],
+	//   "parameters": {
+	//     "instance": {
+	//       "description": "The instance name for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "networkInterface": {
+	//       "description": "The name of the network interface to update.",
+	//       "location": "query",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed.\n\nFor example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.\n\nThe request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "zone": {
+	//       "description": "The name of the zone for this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/zones/{zone}/instances/{instance}/updateNetworkInterface",
+	//   "request": {
+	//     "$ref": "NetworkInterface"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
 
@@ -55322,7 +56908,7 @@ func (c *InterconnectAttachmentsAggregatedListCall) Do(opts ...googleapi.CallOpt
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -55517,7 +57103,7 @@ func (c *InterconnectAttachmentsDeleteCall) Do(opts ...googleapi.CallOption) (*O
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -55683,7 +57269,7 @@ func (c *InterconnectAttachmentsGetCall) Do(opts ...googleapi.CallOption) (*Inte
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -55855,7 +57441,7 @@ func (c *InterconnectAttachmentsInsertCall) Do(opts ...googleapi.CallOption) (*O
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -56081,7 +57667,7 @@ func (c *InterconnectAttachmentsListCall) Do(opts ...googleapi.CallOption) (*Int
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -56273,7 +57859,7 @@ func (c *InterconnectAttachmentsTestIamPermissionsCall) Do(opts ...googleapi.Cal
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -56437,7 +58023,7 @@ func (c *InterconnectLocationsGetCall) Do(opts ...googleapi.CallOption) (*Interc
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -56653,7 +58239,7 @@ func (c *InterconnectLocationsListCall) Do(opts ...googleapi.CallOption) (*Inter
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -56845,7 +58431,7 @@ func (c *InterconnectsDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -57001,7 +58587,7 @@ func (c *InterconnectsGetCall) Do(opts ...googleapi.CallOption) (*Interconnect, 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -57162,7 +58748,7 @@ func (c *InterconnectsInsertCall) Do(opts ...googleapi.CallOption) (*Operation, 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -57377,7 +58963,7 @@ func (c *InterconnectsListCall) Do(opts ...googleapi.CallOption) (*InterconnectL
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -57578,7 +59164,7 @@ func (c *InterconnectsPatchCall) Do(opts ...googleapi.CallOption) (*Operation, e
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -57730,7 +59316,7 @@ func (c *InterconnectsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -57769,6 +59355,318 @@ func (c *InterconnectsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (
 	//     "https://www.googleapis.com/auth/cloud-platform",
 	//     "https://www.googleapis.com/auth/compute",
 	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.licenseCodes.get":
+
+type LicenseCodesGetCall struct {
+	s            *Service
+	project      string
+	licenseCode  string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// Get: Return a specified license code. License codes are mirrored
+// across all projects that have permissions to read the License Code.
+func (r *LicenseCodesService) Get(project string, licenseCode string) *LicenseCodesGetCall {
+	c := &LicenseCodesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.licenseCode = licenseCode
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *LicenseCodesGetCall) Fields(s ...googleapi.Field) *LicenseCodesGetCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *LicenseCodesGetCall) IfNoneMatch(entityTag string) *LicenseCodesGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *LicenseCodesGetCall) Context(ctx context.Context) *LicenseCodesGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *LicenseCodesGetCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *LicenseCodesGetCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/licenseCodes/{licenseCode}")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project":     c.project,
+		"licenseCode": c.licenseCode,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "compute.licenseCodes.get" call.
+// Exactly one of *LicenseCode or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *LicenseCode.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *LicenseCodesGetCall) Do(opts ...googleapi.CallOption) (*LicenseCode, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &LicenseCode{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Return a specified license code. License codes are mirrored across all projects that have permissions to read the License Code.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.licenseCodes.get",
+	//   "parameterOrder": [
+	//     "project",
+	//     "licenseCode"
+	//   ],
+	//   "parameters": {
+	//     "licenseCode": {
+	//       "description": "Number corresponding to the License code resource to return.",
+	//       "location": "path",
+	//       "pattern": "[0-9]{0,61}?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/licenseCodes/{licenseCode}",
+	//   "response": {
+	//     "$ref": "LicenseCode"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// method id "compute.licenses.delete":
+
+type LicensesDeleteCall struct {
+	s          *Service
+	project    string
+	license    string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+	header_    http.Header
+}
+
+// Delete: Deletes the specified license.
+func (r *LicensesService) Delete(project string, license string) *LicensesDeleteCall {
+	c := &LicensesDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.license = license
+	return c
+}
+
+// RequestId sets the optional parameter "requestId": An optional
+// request ID to identify requests. Specify a unique request ID so that
+// if you must retry your request, the server will know to ignore the
+// request if it has already been completed.
+//
+// For example, consider a situation where you make an initial request
+// and the request times out. If you make the request again with the
+// same request ID, the server can check if original operation with the
+// same request ID was received, and if so, will ignore the second
+// request. This prevents clients from accidentally creating duplicate
+// commitments.
+//
+// The request ID must be a valid UUID with the exception that zero UUID
+// is not supported (00000000-0000-0000-0000-000000000000).
+func (c *LicensesDeleteCall) RequestId(requestId string) *LicensesDeleteCall {
+	c.urlParams_.Set("requestId", requestId)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *LicensesDeleteCall) Fields(s ...googleapi.Field) *LicensesDeleteCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *LicensesDeleteCall) Context(ctx context.Context) *LicensesDeleteCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *LicensesDeleteCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *LicensesDeleteCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/licenses/{license}")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("DELETE", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+		"license": c.license,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "compute.licenses.delete" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *LicensesDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Deletes the specified license.",
+	//   "httpMethod": "DELETE",
+	//   "id": "compute.licenses.delete",
+	//   "parameterOrder": [
+	//     "project",
+	//     "license"
+	//   ],
+	//   "parameters": {
+	//     "license": {
+	//       "description": "Name of the license resource to delete.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed.\n\nFor example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.\n\nThe request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+	//       "location": "query",
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/licenses/{license}",
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
 	//   ]
 	// }
 
@@ -57885,7 +59783,7 @@ func (c *LicensesGetCall) Do(opts ...googleapi.CallOption) (*License, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -57924,6 +59822,424 @@ func (c *LicensesGetCall) Do(opts ...googleapi.CallOption) (*License, error) {
 	//   ]
 	// }
 
+}
+
+// method id "compute.licenses.insert":
+
+type LicensesInsertCall struct {
+	s          *Service
+	project    string
+	license    *License
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+	header_    http.Header
+}
+
+// Insert: Create a License resource in the specified project.
+func (r *LicensesService) Insert(project string, license *License) *LicensesInsertCall {
+	c := &LicensesInsertCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.license = license
+	return c
+}
+
+// RequestId sets the optional parameter "requestId": An optional
+// request ID to identify requests. Specify a unique request ID so that
+// if you must retry your request, the server will know to ignore the
+// request if it has already been completed.
+//
+// For example, consider a situation where you make an initial request
+// and the request times out. If you make the request again with the
+// same request ID, the server can check if original operation with the
+// same request ID was received, and if so, will ignore the second
+// request. This prevents clients from accidentally creating duplicate
+// commitments.
+//
+// The request ID must be a valid UUID with the exception that zero UUID
+// is not supported (00000000-0000-0000-0000-000000000000).
+func (c *LicensesInsertCall) RequestId(requestId string) *LicensesInsertCall {
+	c.urlParams_.Set("requestId", requestId)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *LicensesInsertCall) Fields(s ...googleapi.Field) *LicensesInsertCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *LicensesInsertCall) Context(ctx context.Context) *LicensesInsertCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *LicensesInsertCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *LicensesInsertCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.license)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/licenses")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("POST", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "compute.licenses.insert" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *LicensesInsertCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Create a License resource in the specified project.",
+	//   "httpMethod": "POST",
+	//   "id": "compute.licenses.insert",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed.\n\nFor example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.\n\nThe request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+	//       "location": "query",
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/licenses",
+	//   "request": {
+	//     "$ref": "License"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/devstorage.full_control",
+	//     "https://www.googleapis.com/auth/devstorage.read_only",
+	//     "https://www.googleapis.com/auth/devstorage.read_write"
+	//   ]
+	// }
+
+}
+
+// method id "compute.licenses.list":
+
+type LicensesListCall struct {
+	s            *Service
+	project      string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// List: Retrieves the list of licenses available in the specified
+// project. This method does not get any licenses that belong to other
+// projects, including licenses attached to publicly-available images,
+// like Debian 8. If you want to get a list of publicly-available
+// licenses, use this method to make a request to the respective image
+// project, such as debian-cloud or windows-cloud.
+func (r *LicensesService) List(project string) *LicensesListCall {
+	c := &LicensesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	return c
+}
+
+// Filter sets the optional parameter "filter": Sets a filter
+// {expression} for filtering listed resources. Your {expression} must
+// be in the format: field_name comparison_string literal_string.
+//
+// The field_name is the name of the field you want to compare. Only
+// atomic field types are supported (string, number, boolean). The
+// comparison_string must be either eq (equals) or ne (not equals). The
+// literal_string is the string value to filter to. The literal value
+// must be valid for the type of field you are filtering by (string,
+// number, boolean). For string fields, the literal value is interpreted
+// as a regular expression using RE2 syntax. The literal value must
+// match the entire field.
+//
+// For example, to filter for instances that do not have a name of
+// example-instance, you would use name ne example-instance.
+//
+// You can filter on nested fields. For example, you could filter on
+// instances that have set the scheduling.automaticRestart field to
+// true. Use filtering on nested fields to take advantage of labels to
+// organize and search for results based on label values.
+//
+// To filter on multiple expressions, provide each separate expression
+// within parentheses. For example, (scheduling.automaticRestart eq
+// true) (zone eq us-central1-f). Multiple expressions are treated as
+// AND expressions, meaning that resources must match all expressions to
+// pass the filters.
+func (c *LicensesListCall) Filter(filter string) *LicensesListCall {
+	c.urlParams_.Set("filter", filter)
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": The maximum
+// number of results per page that should be returned. If the number of
+// available results is larger than maxResults, Compute Engine returns a
+// nextPageToken that can be used to get the next page of results in
+// subsequent list requests. Acceptable values are 0 to 500, inclusive.
+// (Default: 500)
+func (c *LicensesListCall) MaxResults(maxResults int64) *LicensesListCall {
+	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
+	return c
+}
+
+// OrderBy sets the optional parameter "orderBy": Sorts list results by
+// a certain order. By default, results are returned in alphanumerical
+// order based on the resource name.
+//
+// You can also sort results in descending order based on the creation
+// timestamp using orderBy="creationTimestamp desc". This sorts results
+// based on the creationTimestamp field in reverse chronological order
+// (newest result first). Use this to sort resources like operations so
+// that the newest operation is returned first.
+//
+// Currently, only sorting by name or creationTimestamp desc is
+// supported.
+func (c *LicensesListCall) OrderBy(orderBy string) *LicensesListCall {
+	c.urlParams_.Set("orderBy", orderBy)
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Specifies a page
+// token to use. Set pageToken to the nextPageToken returned by a
+// previous list request to get the next page of results.
+func (c *LicensesListCall) PageToken(pageToken string) *LicensesListCall {
+	c.urlParams_.Set("pageToken", pageToken)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *LicensesListCall) Fields(s ...googleapi.Field) *LicensesListCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *LicensesListCall) IfNoneMatch(entityTag string) *LicensesListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *LicensesListCall) Context(ctx context.Context) *LicensesListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *LicensesListCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *LicensesListCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/global/licenses")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project": c.project,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "compute.licenses.list" call.
+// Exactly one of *LicensesListResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *LicensesListResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *LicensesListCall) Do(opts ...googleapi.CallOption) (*LicensesListResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &LicensesListResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Retrieves the list of licenses available in the specified project. This method does not get any licenses that belong to other projects, including licenses attached to publicly-available images, like Debian 8. If you want to get a list of publicly-available licenses, use this method to make a request to the respective image project, such as debian-cloud or windows-cloud.",
+	//   "httpMethod": "GET",
+	//   "id": "compute.licenses.list",
+	//   "parameterOrder": [
+	//     "project"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "description": "Sets a filter {expression} for filtering listed resources. Your {expression} must be in the format: field_name comparison_string literal_string.\n\nThe field_name is the name of the field you want to compare. Only atomic field types are supported (string, number, boolean). The comparison_string must be either eq (equals) or ne (not equals). The literal_string is the string value to filter to. The literal value must be valid for the type of field you are filtering by (string, number, boolean). For string fields, the literal value is interpreted as a regular expression using RE2 syntax. The literal value must match the entire field.\n\nFor example, to filter for instances that do not have a name of example-instance, you would use name ne example-instance.\n\nYou can filter on nested fields. For example, you could filter on instances that have set the scheduling.automaticRestart field to true. Use filtering on nested fields to take advantage of labels to organize and search for results based on label values.\n\nTo filter on multiple expressions, provide each separate expression within parentheses. For example, (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple expressions are treated as AND expressions, meaning that resources must match all expressions to pass the filters.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "default": "500",
+	//       "description": "The maximum number of results per page that should be returned. If the number of available results is larger than maxResults, Compute Engine returns a nextPageToken that can be used to get the next page of results in subsequent list requests. Acceptable values are 0 to 500, inclusive. (Default: 500)",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "minimum": "0",
+	//       "type": "integer"
+	//     },
+	//     "orderBy": {
+	//       "description": "Sorts list results by a certain order. By default, results are returned in alphanumerical order based on the resource name.\n\nYou can also sort results in descending order based on the creation timestamp using orderBy=\"creationTimestamp desc\". This sorts results based on the creationTimestamp field in reverse chronological order (newest result first). Use this to sort resources like operations so that the newest operation is returned first.\n\nCurrently, only sorting by name or creationTimestamp desc is supported.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "pageToken": {
+	//       "description": "Specifies a page token to use. Set pageToken to the nextPageToken returned by a previous list request to get the next page of results.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/global/licenses",
+	//   "response": {
+	//     "$ref": "LicensesListResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute",
+	//     "https://www.googleapis.com/auth/compute.readonly"
+	//   ]
+	// }
+
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *LicensesListCall) Pages(ctx context.Context, f func(*LicensesListResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
 }
 
 // method id "compute.machineTypes.aggregatedList":
@@ -58101,7 +60417,7 @@ func (c *MachineTypesAggregatedListCall) Do(opts ...googleapi.CallOption) (*Mach
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -58293,7 +60609,7 @@ func (c *MachineTypesGetCall) Do(opts ...googleapi.CallOption) (*MachineType, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -58521,7 +60837,7 @@ func (c *MachineTypesListCall) Do(opts ...googleapi.CallOption) (*MachineTypeLis
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -58728,7 +61044,7 @@ func (c *NetworksAddPeeringCall) Do(opts ...googleapi.CallOption) (*Operation, e
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -58892,7 +61208,7 @@ func (c *NetworksDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, error
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -59049,7 +61365,7 @@ func (c *NetworksGetCall) Do(opts ...googleapi.CallOption) (*Network, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -59211,7 +61527,7 @@ func (c *NetworksInsertCall) Do(opts ...googleapi.CallOption) (*Operation, error
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -59427,7 +61743,7 @@ func (c *NetworksListCall) Do(opts ...googleapi.CallOption) (*NetworkList, error
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -59627,7 +61943,7 @@ func (c *NetworksPatchCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -59797,7 +62113,7 @@ func (c *NetworksRemovePeeringCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -59961,7 +62277,7 @@ func (c *NetworksSwitchToCustomModeCall) Do(opts ...googleapi.CallOption) (*Oper
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -60110,7 +62426,7 @@ func (c *NetworksTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Test
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -60266,7 +62582,7 @@ func (c *ProjectsDisableXpnHostCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -60423,7 +62739,7 @@ func (c *ProjectsDisableXpnResourceCall) Do(opts ...googleapi.CallOption) (*Oper
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -60575,7 +62891,7 @@ func (c *ProjectsEnableXpnHostCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -60733,7 +63049,7 @@ func (c *ProjectsEnableXpnResourceCall) Do(opts ...googleapi.CallOption) (*Opera
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -60881,7 +63197,7 @@ func (c *ProjectsGetCall) Do(opts ...googleapi.CallOption) (*Project, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -61022,7 +63338,7 @@ func (c *ProjectsGetXpnHostCall) Do(opts ...googleapi.CallOption) (*Project, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -61186,7 +63502,7 @@ func (c *ProjectsGetXpnResourcesCall) Do(opts ...googleapi.CallOption) (*Project
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -61383,7 +63699,7 @@ func (c *ProjectsListXpnHostsCall) Do(opts ...googleapi.CallOption) (*XpnHostLis
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -61577,7 +63893,7 @@ func (c *ProjectsMoveDiskCall) Do(opts ...googleapi.CallOption) (*Operation, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -61737,7 +64053,7 @@ func (c *ProjectsMoveInstanceCall) Do(opts ...googleapi.CallOption) (*Operation,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -61898,7 +64214,7 @@ func (c *ProjectsSetCommonInstanceMetadataCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -62061,7 +64377,7 @@ func (c *ProjectsSetUsageExportBucketCall) Do(opts ...googleapi.CallOption) (*Op
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -62222,7 +64538,7 @@ func (c *RegionAutoscalersDeleteCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -62388,7 +64704,7 @@ func (c *RegionAutoscalersGetCall) Do(opts ...googleapi.CallOption) (*Autoscaler
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -62560,7 +64876,7 @@ func (c *RegionAutoscalersInsertCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -62786,7 +65102,7 @@ func (c *RegionAutoscalersListCall) Do(opts ...googleapi.CallOption) (*RegionAut
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -63002,7 +65318,7 @@ func (c *RegionAutoscalersPatchCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -63163,7 +65479,7 @@ func (c *RegionAutoscalersTestIamPermissionsCall) Do(opts ...googleapi.CallOptio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -63345,7 +65661,7 @@ func (c *RegionAutoscalersUpdateCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -63517,7 +65833,7 @@ func (c *RegionBackendServicesDeleteCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -63683,7 +65999,7 @@ func (c *RegionBackendServicesGetCall) Do(opts ...googleapi.CallOption) (*Backen
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -63839,7 +66155,7 @@ func (c *RegionBackendServicesGetHealthCall) Do(opts ...googleapi.CallOption) (*
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -64016,7 +66332,7 @@ func (c *RegionBackendServicesInsertCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -64242,7 +66558,7 @@ func (c *RegionBackendServicesListCall) Do(opts ...googleapi.CallOption) (*Backe
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -64457,7 +66773,7 @@ func (c *RegionBackendServicesPatchCall) Do(opts ...googleapi.CallOption) (*Oper
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -64620,7 +66936,7 @@ func (c *RegionBackendServicesTestIamPermissionsCall) Do(opts ...googleapi.CallO
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -64800,7 +67116,7 @@ func (c *RegionBackendServicesUpdateCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -65030,7 +67346,7 @@ func (c *RegionCommitmentsAggregatedListCall) Do(opts ...googleapi.CallOption) (
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -65221,7 +67537,7 @@ func (c *RegionCommitmentsGetCall) Do(opts ...googleapi.CallOption) (*Commitment
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -65393,7 +67709,7 @@ func (c *RegionCommitmentsInsertCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -65619,7 +67935,7 @@ func (c *RegionCommitmentsListCall) Do(opts ...googleapi.CallOption) (*Commitmen
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -65845,7 +68161,7 @@ func (c *RegionInstanceGroupManagersAbandonInstancesCall) Do(opts ...googleapi.C
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -66018,7 +68334,7 @@ func (c *RegionInstanceGroupManagersDeleteCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -66209,7 +68525,7 @@ func (c *RegionInstanceGroupManagersDeleteInstancesCall) Do(opts ...googleapi.Ca
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -66377,7 +68693,7 @@ func (c *RegionInstanceGroupManagersGetCall) Do(opts ...googleapi.CallOption) (*
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -66554,7 +68870,7 @@ func (c *RegionInstanceGroupManagersInsertCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -66779,7 +69095,7 @@ func (c *RegionInstanceGroupManagersListCall) Do(opts ...googleapi.CallOption) (
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -66991,7 +69307,7 @@ func (c *RegionInstanceGroupManagersListManagedInstancesCall) Do(opts ...googlea
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -67209,7 +69525,7 @@ func (c *RegionInstanceGroupManagersPatchCall) Do(opts ...googleapi.CallOption) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -67402,7 +69718,7 @@ func (c *RegionInstanceGroupManagersRecreateInstancesCall) Do(opts ...googleapi.
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -67586,7 +69902,7 @@ func (c *RegionInstanceGroupManagersResizeCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -67772,7 +70088,7 @@ func (c *RegionInstanceGroupManagersSetAutoHealingPoliciesCall) Do(opts ...googl
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -67953,7 +70269,7 @@ func (c *RegionInstanceGroupManagersSetInstanceTemplateCall) Do(opts ...googleap
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -68134,7 +70450,7 @@ func (c *RegionInstanceGroupManagersSetTargetPoolsCall) Do(opts ...googleapi.Cal
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -68295,7 +70611,7 @@ func (c *RegionInstanceGroupManagersTestIamPermissionsCall) Do(opts ...googleapi
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -68476,7 +70792,7 @@ func (c *RegionInstanceGroupManagersUpdateCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -68643,7 +70959,7 @@ func (c *RegionInstanceGroupsGetCall) Do(opts ...googleapi.CallOption) (*Instanc
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -68868,7 +71184,7 @@ func (c *RegionInstanceGroupsListCall) Do(opts ...googleapi.CallOption) (*Region
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -69129,7 +71445,7 @@ func (c *RegionInstanceGroupsListInstancesCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -69349,7 +71665,7 @@ func (c *RegionInstanceGroupsSetNamedPortsCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -69510,7 +71826,7 @@ func (c *RegionInstanceGroupsTestIamPermissionsCall) Do(opts ...googleapi.CallOp
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -69796,7 +72112,7 @@ func (c *RegionOperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -70024,7 +72340,7 @@ func (c *RegionOperationsListCall) Do(opts ...googleapi.CallOption) (*OperationL
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -70221,7 +72537,7 @@ func (c *RegionsGetCall) Do(opts ...googleapi.CallOption) (*Region, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -70438,7 +72754,7 @@ func (c *RegionsListCall) Do(opts ...googleapi.CallOption) (*RegionList, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -70689,7 +73005,7 @@ func (c *RoutersAggregatedListCall) Do(opts ...googleapi.CallOption) (*RouterAgg
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -70884,7 +73200,7 @@ func (c *RoutersDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -71051,7 +73367,7 @@ func (c *RoutersGetCall) Do(opts ...googleapi.CallOption) (*Router, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -71214,7 +73530,7 @@ func (c *RoutersGetRouterStatusCall) Do(opts ...googleapi.CallOption) (*RouterSt
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -71386,7 +73702,7 @@ func (c *RoutersInsertCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -71612,7 +73928,7 @@ func (c *RoutersListCall) Do(opts ...googleapi.CallOption) (*RouterList, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -71824,7 +74140,7 @@ func (c *RoutersPatchCall) Do(opts ...googleapi.CallOption) (*Operation, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -71988,7 +74304,7 @@ func (c *RoutersPreviewCall) Do(opts ...googleapi.CallOption) (*RoutersPreviewRe
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -72147,7 +74463,7 @@ func (c *RoutersTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*TestP
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -72325,7 +74641,7 @@ func (c *RoutersUpdateCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -72497,7 +74813,7 @@ func (c *RoutesDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -72654,7 +74970,7 @@ func (c *RoutesGetCall) Do(opts ...googleapi.CallOption) (*Route, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -72816,7 +75132,7 @@ func (c *RoutesInsertCall) Do(opts ...googleapi.CallOption) (*Operation, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -73032,7 +75348,7 @@ func (c *RoutesListCall) Do(opts ...googleapi.CallOption) (*RouteList, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -73213,7 +75529,7 @@ func (c *RoutesTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*TestPe
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -73372,7 +75688,7 @@ func (c *SecurityPoliciesDeleteCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -73528,7 +75844,7 @@ func (c *SecurityPoliciesGetCall) Do(opts ...googleapi.CallOption) (*SecurityPol
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -73689,7 +76005,7 @@ func (c *SecurityPoliciesInsertCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -73904,7 +76220,7 @@ func (c *SecurityPoliciesListCall) Do(opts ...googleapi.CallOption) (*SecurityPo
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -74104,7 +76420,7 @@ func (c *SecurityPoliciesPatchCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -74256,7 +76572,7 @@ func (c *SecurityPoliciesTestIamPermissionsCall) Do(opts ...googleapi.CallOption
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -74422,7 +76738,7 @@ func (c *SnapshotsDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -74579,7 +76895,7 @@ func (c *SnapshotsGetCall) Do(opts ...googleapi.CallOption) (*Snapshot, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -74796,7 +77112,7 @@ func (c *SnapshotsListCall) Do(opts ...googleapi.CallOption) (*SnapshotList, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -74977,7 +77293,7 @@ func (c *SnapshotsSetLabelsCall) Do(opts ...googleapi.CallOption) (*Operation, e
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -75124,7 +77440,7 @@ func (c *SnapshotsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Tes
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -75283,7 +77599,7 @@ func (c *SslCertificatesDeleteCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -75439,7 +77755,7 @@ func (c *SslCertificatesGetCall) Do(opts ...googleapi.CallOption) (*SslCertifica
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -75600,7 +77916,7 @@ func (c *SslCertificatesInsertCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -75815,7 +78131,7 @@ func (c *SslCertificatesListCall) Do(opts ...googleapi.CallOption) (*SslCertific
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -75996,7 +78312,7 @@ func (c *SslCertificatesTestIamPermissionsCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -76214,7 +78530,7 @@ func (c *SubnetworksAggregatedListCall) Do(opts ...googleapi.CallOption) (*Subne
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -76409,7 +78725,7 @@ func (c *SubnetworksDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -76588,7 +78904,7 @@ func (c *SubnetworksExpandIpCidrRangeCall) Do(opts ...googleapi.CallOption) (*Op
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -76758,7 +79074,7 @@ func (c *SubnetworksGetCall) Do(opts ...googleapi.CallOption) (*Subnetwork, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -76921,7 +79237,7 @@ func (c *SubnetworksGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -77093,7 +79409,7 @@ func (c *SubnetworksInsertCall) Do(opts ...googleapi.CallOption) (*Operation, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -77319,7 +79635,7 @@ func (c *SubnetworksListCall) Do(opts ...googleapi.CallOption) (*SubnetworkList,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -77402,6 +79718,191 @@ func (c *SubnetworksListCall) Pages(ctx context.Context, f func(*SubnetworkList)
 		}
 		c.PageToken(x.NextPageToken)
 	}
+}
+
+// method id "compute.subnetworks.patch":
+
+type SubnetworksPatchCall struct {
+	s           *Service
+	project     string
+	region      string
+	subnetwork  string
+	subnetwork2 *Subnetwork
+	urlParams_  gensupport.URLParams
+	ctx_        context.Context
+	header_     http.Header
+}
+
+// Patch: Patches the specified subnetwork with the data included in the
+// request. Only the following fields within the subnetwork resource can
+// be specified in the request: secondary_ip_range and
+// allow_subnet_cidr_routes_overlap. It is also mandatory to specify the
+// current fingeprint of the subnetwork resource being patched.
+func (r *SubnetworksService) Patch(project string, region string, subnetwork string, subnetwork2 *Subnetwork) *SubnetworksPatchCall {
+	c := &SubnetworksPatchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.project = project
+	c.region = region
+	c.subnetwork = subnetwork
+	c.subnetwork2 = subnetwork2
+	return c
+}
+
+// RequestId sets the optional parameter "requestId": An optional
+// request ID to identify requests. Specify a unique request ID so that
+// if you must retry your request, the server will know to ignore the
+// request if it has already been completed.
+//
+// For example, consider a situation where you make an initial request
+// and the request times out. If you make the request again with the
+// same request ID, the server can check if original operation with the
+// same request ID was received, and if so, will ignore the second
+// request. This prevents clients from accidentally creating duplicate
+// commitments.
+//
+// The request ID must be a valid UUID with the exception that zero UUID
+// is not supported (00000000-0000-0000-0000-000000000000).
+func (c *SubnetworksPatchCall) RequestId(requestId string) *SubnetworksPatchCall {
+	c.urlParams_.Set("requestId", requestId)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *SubnetworksPatchCall) Fields(s ...googleapi.Field) *SubnetworksPatchCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *SubnetworksPatchCall) Context(ctx context.Context) *SubnetworksPatchCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *SubnetworksPatchCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *SubnetworksPatchCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.subnetwork2)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	urls := googleapi.ResolveRelative(c.s.BasePath, "{project}/regions/{region}/subnetworks/{subnetwork}")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("PATCH", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"project":    c.project,
+		"region":     c.region,
+		"subnetwork": c.subnetwork,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "compute.subnetworks.patch" call.
+// Exactly one of *Operation or error will be non-nil. Any non-2xx
+// status code is an error. Response headers are in either
+// *Operation.ServerResponse.Header or (if a response was returned at
+// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
+// to check whether the returned error was because
+// http.StatusNotModified was returned.
+func (c *SubnetworksPatchCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Operation{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Patches the specified subnetwork with the data included in the request. Only the following fields within the subnetwork resource can be specified in the request: secondary_ip_range and allow_subnet_cidr_routes_overlap. It is also mandatory to specify the current fingeprint of the subnetwork resource being patched.",
+	//   "httpMethod": "PATCH",
+	//   "id": "compute.subnetworks.patch",
+	//   "parameterOrder": [
+	//     "project",
+	//     "region",
+	//     "subnetwork"
+	//   ],
+	//   "parameters": {
+	//     "project": {
+	//       "description": "Project ID for this request.",
+	//       "location": "path",
+	//       "pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "region": {
+	//       "description": "Name of the region scoping this request.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "requestId": {
+	//       "description": "An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed.\n\nFor example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments.\n\nThe request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "subnetwork": {
+	//       "description": "Name of the Subnetwork resource to patch.",
+	//       "location": "path",
+	//       "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "{project}/regions/{region}/subnetworks/{subnetwork}",
+	//   "request": {
+	//     "$ref": "Subnetwork"
+	//   },
+	//   "response": {
+	//     "$ref": "Operation"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/compute"
+	//   ]
+	// }
+
 }
 
 // method id "compute.subnetworks.setIamPolicy":
@@ -77511,7 +80012,7 @@ func (c *SubnetworksSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Policy,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -77689,7 +80190,7 @@ func (c *SubnetworksSetPrivateIpGoogleAccessCall) Do(opts ...googleapi.CallOptio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -77852,7 +80353,7 @@ func (c *SubnetworksTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*T
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -78020,7 +80521,7 @@ func (c *TargetHttpProxiesDeleteCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -78177,7 +80678,7 @@ func (c *TargetHttpProxiesGetCall) Do(opts ...googleapi.CallOption) (*TargetHttp
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -78339,7 +80840,7 @@ func (c *TargetHttpProxiesInsertCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -78555,7 +81056,7 @@ func (c *TargetHttpProxiesListCall) Do(opts ...googleapi.CallOption) (*TargetHtt
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -78755,7 +81256,7 @@ func (c *TargetHttpProxiesSetUrlMapCall) Do(opts ...googleapi.CallOption) (*Oper
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -78907,7 +81408,7 @@ func (c *TargetHttpProxiesTestIamPermissionsCall) Do(opts ...googleapi.CallOptio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -79066,7 +81567,7 @@ func (c *TargetHttpsProxiesDeleteCall) Do(opts ...googleapi.CallOption) (*Operat
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -79222,7 +81723,7 @@ func (c *TargetHttpsProxiesGetCall) Do(opts ...googleapi.CallOption) (*TargetHtt
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -79383,7 +81884,7 @@ func (c *TargetHttpsProxiesInsertCall) Do(opts ...googleapi.CallOption) (*Operat
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -79598,7 +82099,7 @@ func (c *TargetHttpsProxiesListCall) Do(opts ...googleapi.CallOption) (*TargetHt
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -79797,7 +82298,7 @@ func (c *TargetHttpsProxiesSetSslCertificatesCall) Do(opts ...googleapi.CallOpti
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -79967,7 +82468,7 @@ func (c *TargetHttpsProxiesSetUrlMapCall) Do(opts ...googleapi.CallOption) (*Ope
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -80119,7 +82620,7 @@ func (c *TargetHttpsProxiesTestIamPermissionsCall) Do(opts ...googleapi.CallOpti
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -80338,7 +82839,7 @@ func (c *TargetInstancesAggregatedListCall) Do(opts ...googleapi.CallOption) (*T
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -80534,7 +83035,7 @@ func (c *TargetInstancesDeleteCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -80702,7 +83203,7 @@ func (c *TargetInstancesGetCall) Do(opts ...googleapi.CallOption) (*TargetInstan
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -80875,7 +83376,7 @@ func (c *TargetInstancesInsertCall) Do(opts ...googleapi.CallOption) (*Operation
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -81102,7 +83603,7 @@ func (c *TargetInstancesListCall) Do(opts ...googleapi.CallOption) (*TargetInsta
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -81294,7 +83795,7 @@ func (c *TargetInstancesTestIamPermissionsCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -81472,7 +83973,7 @@ func (c *TargetPoolsAddHealthCheckCall) Do(opts ...googleapi.CallOption) (*Opera
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -81654,7 +84155,7 @@ func (c *TargetPoolsAddInstanceCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -81885,7 +84386,7 @@ func (c *TargetPoolsAggregatedListCall) Do(opts ...googleapi.CallOption) (*Targe
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -82081,7 +84582,7 @@ func (c *TargetPoolsDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -82249,7 +84750,7 @@ func (c *TargetPoolsGetCall) Do(opts ...googleapi.CallOption) (*TargetPool, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -82406,7 +84907,7 @@ func (c *TargetPoolsGetHealthCall) Do(opts ...googleapi.CallOption) (*TargetPool
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -82582,7 +85083,7 @@ func (c *TargetPoolsInsertCall) Do(opts ...googleapi.CallOption) (*Operation, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -82809,7 +85310,7 @@ func (c *TargetPoolsListCall) Do(opts ...googleapi.CallOption) (*TargetPoolList,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -83020,7 +85521,7 @@ func (c *TargetPoolsRemoveHealthCheckCall) Do(opts ...googleapi.CallOption) (*Op
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -83202,7 +85703,7 @@ func (c *TargetPoolsRemoveInstanceCall) Do(opts ...googleapi.CallOption) (*Opera
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -83391,7 +85892,7 @@ func (c *TargetPoolsSetBackupCall) Do(opts ...googleapi.CallOption) (*Operation,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -83560,7 +86061,7 @@ func (c *TargetPoolsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*T
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -83727,7 +86228,7 @@ func (c *TargetSslProxiesDeleteCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -83883,7 +86384,7 @@ func (c *TargetSslProxiesGetCall) Do(opts ...googleapi.CallOption) (*TargetSslPr
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -84044,7 +86545,7 @@ func (c *TargetSslProxiesInsertCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -84259,7 +86760,7 @@ func (c *TargetSslProxiesListCall) Do(opts ...googleapi.CallOption) (*TargetSslP
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -84458,7 +86959,7 @@ func (c *TargetSslProxiesSetBackendServiceCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -84628,7 +87129,7 @@ func (c *TargetSslProxiesSetProxyHeaderCall) Do(opts ...googleapi.CallOption) (*
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -84798,7 +87299,7 @@ func (c *TargetSslProxiesSetSslCertificatesCall) Do(opts ...googleapi.CallOption
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -84950,7 +87451,7 @@ func (c *TargetSslProxiesTestIamPermissionsCall) Do(opts ...googleapi.CallOption
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -85109,7 +87610,7 @@ func (c *TargetTcpProxiesDeleteCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -85265,7 +87766,7 @@ func (c *TargetTcpProxiesGetCall) Do(opts ...googleapi.CallOption) (*TargetTcpPr
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -85426,7 +87927,7 @@ func (c *TargetTcpProxiesInsertCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -85641,7 +88142,7 @@ func (c *TargetTcpProxiesListCall) Do(opts ...googleapi.CallOption) (*TargetTcpP
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -85840,7 +88341,7 @@ func (c *TargetTcpProxiesSetBackendServiceCall) Do(opts ...googleapi.CallOption)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -86010,7 +88511,7 @@ func (c *TargetTcpProxiesSetProxyHeaderCall) Do(opts ...googleapi.CallOption) (*
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -86232,7 +88733,7 @@ func (c *TargetVpnGatewaysAggregatedListCall) Do(opts ...googleapi.CallOption) (
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -86427,7 +88928,7 @@ func (c *TargetVpnGatewaysDeleteCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -86594,7 +89095,7 @@ func (c *TargetVpnGatewaysGetCall) Do(opts ...googleapi.CallOption) (*TargetVpnG
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -86766,7 +89267,7 @@ func (c *TargetVpnGatewaysInsertCall) Do(opts ...googleapi.CallOption) (*Operati
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -86992,7 +89493,7 @@ func (c *TargetVpnGatewaysListCall) Do(opts ...googleapi.CallOption) (*TargetVpn
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -87184,7 +89685,7 @@ func (c *TargetVpnGatewaysTestIamPermissionsCall) Do(opts ...googleapi.CallOptio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -87352,7 +89853,7 @@ func (c *UrlMapsDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -87509,7 +90010,7 @@ func (c *UrlMapsGetCall) Do(opts ...googleapi.CallOption) (*UrlMap, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -87671,7 +90172,7 @@ func (c *UrlMapsInsertCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -87834,7 +90335,7 @@ func (c *UrlMapsInvalidateCacheCall) Do(opts ...googleapi.CallOption) (*Operatio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -88058,7 +90559,7 @@ func (c *UrlMapsListCall) Do(opts ...googleapi.CallOption) (*UrlMapList, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -88260,7 +90761,7 @@ func (c *UrlMapsPatchCall) Do(opts ...googleapi.CallOption) (*Operation, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -88412,7 +90913,7 @@ func (c *UrlMapsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*TestP
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -88580,7 +91081,7 @@ func (c *UrlMapsUpdateCall) Do(opts ...googleapi.CallOption) (*Operation, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -88734,7 +91235,7 @@ func (c *UrlMapsValidateCall) Do(opts ...googleapi.CallOption) (*UrlMapsValidate
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -88951,7 +91452,7 @@ func (c *VpnTunnelsAggregatedListCall) Do(opts ...googleapi.CallOption) (*VpnTun
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -89146,7 +91647,7 @@ func (c *VpnTunnelsDeleteCall) Do(opts ...googleapi.CallOption) (*Operation, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -89313,7 +91814,7 @@ func (c *VpnTunnelsGetCall) Do(opts ...googleapi.CallOption) (*VpnTunnel, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -89485,7 +91986,7 @@ func (c *VpnTunnelsInsertCall) Do(opts ...googleapi.CallOption) (*Operation, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -89711,7 +92212,7 @@ func (c *VpnTunnelsListCall) Do(opts ...googleapi.CallOption) (*VpnTunnelList, e
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -89903,7 +92404,7 @@ func (c *VpnTunnelsTestIamPermissionsCall) Do(opts ...googleapi.CallOption) (*Te
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -90189,7 +92690,7 @@ func (c *ZoneOperationsGetCall) Do(opts ...googleapi.CallOption) (*Operation, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -90417,7 +92918,7 @@ func (c *ZoneOperationsListCall) Do(opts ...googleapi.CallOption) (*OperationLis
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -90614,7 +93115,7 @@ func (c *ZonesGetCall) Do(opts ...googleapi.CallOption) (*Zone, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -90831,7 +93332,7 @@ func (c *ZonesListCall) Do(opts ...googleapi.CallOption) (*ZoneList, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
