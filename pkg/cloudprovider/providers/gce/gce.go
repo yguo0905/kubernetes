@@ -106,6 +106,7 @@ type GCECloud struct {
 	serviceBeta      *computebeta.Service
 	serviceAlpha     *computealpha.Service
 	containerService *container.Service
+	tpuService       *tpuService
 	client           clientset.Interface
 	clientBuilder    controller.ControllerClientBuilder
 	eventBroadcaster record.EventBroadcaster
@@ -412,6 +413,11 @@ func CreateGCECloud(config *CloudConfig) (*GCECloud, error) {
 	}
 	containerService.UserAgent = userAgent
 
+	tpuService, err := newTPUService(client)
+	if err != nil {
+		return nil, err
+	}
+
 	// ProjectID and.NetworkProjectID may be project number or name.
 	projID, netProjID := tryConvertToProjectNames(config.ProjectID, config.NetworkProjectID, service)
 	onXPN := projID != netProjID
@@ -476,6 +482,7 @@ func CreateGCECloud(config *CloudConfig) (*GCECloud, error) {
 		serviceAlpha:             serviceAlpha,
 		serviceBeta:              serviceBeta,
 		containerService:         containerService,
+		tpuService:               tpuService,
 		projectID:                projID,
 		networkProjectID:         netProjID,
 		onXPN:                    onXPN,
