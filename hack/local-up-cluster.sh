@@ -750,6 +750,8 @@ EOF
     ${CONTROLPLANE_SUDO} "${GO_OUT}/hyperkube" scheduler \
       --v=${LOG_LEVEL} \
       --kubeconfig "$CERT_DIR"/scheduler.kubeconfig \
+      --use-legacy-policy-config \
+      --policy-config-file=/usr/local/google/home/ygg/go/src/k8s.io/kubernetes/scheduler-policy.json \
       --master="https://${API_HOST}:${API_SECURE_PORT}" >"${SCHEDULER_LOG}" 2>&1 &
     SCHEDULER_PID=$!
 }
