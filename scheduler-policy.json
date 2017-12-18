@@ -37,7 +37,7 @@
       "enableHttps": false,
       "weight": 1,
       "httpTimeout": 600000000000,
-      "nodeCacheCapable": true
+      "nodeCacheCapable": false
     }
   ],
   "hardPodAffinitySymmetricWeight" : 10
