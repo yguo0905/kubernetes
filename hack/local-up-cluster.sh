@@ -774,6 +774,12 @@ EOF
       --policy-config-file=/usr/local/google/home/ygg/go/src/k8s.io/kubernetes/scheduler-policy.json \
       --master="https://${API_HOST}:${API_SECURE_PORT}" >"${SCHEDULER_LOG}" 2>&1 &
     SCHEDULER_PID=$!
+
+
+    # --policy-configmap=kube-scheduler-policy-configmap \
+
+    #${KUBECTL} --kubeconfig="${CERT_DIR}/admin.kubeconfig" \
+    #  create -f "/usr/local/google/home/ygg/go/src/k8s.io/tpu-scheduler/kube-scheduler-policy-configmap.yaml"
 }
 
 function start_kubedns {
