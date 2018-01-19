@@ -460,8 +460,10 @@ func BuildGenericConfig(s *options.ServerRunOptions, proxyTransport *http.Transp
 			if err != nil {
 				return nil, err
 			}
-			if proxyTransport != nil && proxyTransport.Dial != nil {
-				ret.Dial = proxyTransport.Dial
+			if !strings.HasPrefix(server, "localhost") {
+				if proxyTransport != nil && proxyTransport.Dial != nil {
+					ret.Dial = proxyTransport.Dial
+				}
 			}
 			return ret, err
 		})
