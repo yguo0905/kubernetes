@@ -1,0 +1,44 @@
+{
+  "kind" : "Policy",
+  "apiVersion" : "v1",
+  "predicates" : [
+    {"name": "PodFitsPorts"},
+    {"name": "PodFitsHostPorts"},
+    {"name": "PodFitsResources"},
+    {"name": "HostName"},
+    {"name": "MatchNodeSelector"},
+    {"name": "NoVolumeZoneConflict"},
+    {"name": "MaxGCEPDVolumeCount"},
+    {"name": "MatchInterPodAffinity"},
+    {"name": "NoDiskConflict"},
+    {"name": "GeneralPredicates"},
+    {"name": "PodToleratesNodeTaints"},
+    {"name": "CheckNodeMemoryPressure"},
+    {"name": "CheckNodeDiskPressure"}
+  ],
+  "priorities" : [
+    {"name": "ServiceSpreadingPriority", "weight": 1},
+    {"name": "EqualPriority", "weight": 1},
+    {"name": "ImageLocalityPriority", "weight": 1},
+    {"name": "MostRequestedPriority", "weight": 1},
+    {"name": "SelectorSpreadPriority", "weight": 1},
+    {"name": "InterPodAffinityPriority", "weight": 1},
+    {"name": "LeastRequestedPriority", "weight": 1},
+    {"name": "BalancedResourceAllocation", "weight": 1},
+    {"name": "NodePreferAvoidPodsPriority", "weight": 10000},
+    {"name": "NodeAffinityPriority", "weight": 1},
+    {"name": "TaintTolerationPriority", "weight": 1}
+  ],
+  "extenders": [
+    {
+      "urlPrefix": "http://127.0.0.1:8095/",
+      "filterVerb": "filter",
+      "bindVerb": "bind",
+      "enableHttps": false,
+      "weight": 1,
+      "httpTimeout": 600000000000,
+      "nodeCacheCapable": false
+    }
+  ],
+  "hardPodAffinitySymmetricWeight" : 10
+}
