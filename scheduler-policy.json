@@ -36,7 +36,7 @@
       "bindVerb": "bind",
       "enableHttps": false,
       "weight": 1,
-      "httpTimeout": 600000000000,
+      "httpTimeout": 50000000000,
       "nodeCacheCapable": false
     }
   ],
