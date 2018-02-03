@@ -346,7 +346,7 @@ EOF
 #   env-var GO15VENDOREXPERIMENT=1
 #   current directory is within GOPATH
 kube::golang::setup_env() {
-  kube::golang::verify_go_version
+  #kube::golang::verify_go_version
 
   kube::golang::create_gopath_tree
 
