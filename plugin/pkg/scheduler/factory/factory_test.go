@@ -26,6 +26,7 @@ import (
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/informers"
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
@@ -133,6 +134,62 @@ func TestCreateFromConfig(t *testing.T) {
 	hpa := factory.GetHardPodAffinitySymmetricWeight()
 	if hpa != v1.DefaultHardPodAffinitySymmetricWeight {
 		t.Errorf("Wrong hardPodAffinitySymmetricWeight, ecpected: %d, got: %d", v1.DefaultHardPodAffinitySymmetricWeight, hpa)
+	}
+}
+
+// Test configures a scheduler from a policy that does not contain any
+// predicates or priorities.
+// The predicates or priorities from DefaultProvider will be used.
+func TestCreateFromConfigWithEmptyPredicatesAndPriorities(t *testing.T) {
+	handler := utiltesting.FakeHandler{
+		StatusCode:   500,
+		ResponseBody: "",
+		T:            t,
+	}
+	server := httptest.NewServer(&handler)
+	defer server.Close()
+	client := clientset.NewForConfigOrDie(&restclient.Config{Host: server.URL, ContentConfig: restclient.ContentConfig{GroupVersion: &legacyscheme.Registry.GroupOrDie(v1.GroupName).GroupVersion}})
+	informerFactory := informers.NewSharedInformerFactory(client, 0)
+	factory := NewConfigFactory(
+		v1.DefaultSchedulerName,
+		client,
+		informerFactory.Core().V1().Nodes(),
+		informerFactory.Core().V1().Pods(),
+		informerFactory.Core().V1().PersistentVolumes(),
+		informerFactory.Core().V1().PersistentVolumeClaims(),
+		informerFactory.Core().V1().ReplicationControllers(),
+		informerFactory.Extensions().V1beta1().ReplicaSets(),
+		informerFactory.Apps().V1beta1().StatefulSets(),
+		informerFactory.Core().V1().Services(),
+		informerFactory.Policy().V1beta1().PodDisruptionBudgets(),
+		informerFactory.Storage().V1().StorageClasses(),
+		v1.DefaultHardPodAffinitySymmetricWeight,
+		enableEquivalenceCache,
+	)
+
+	RegisterFitPredicate("PredicateOne", PredicateOne)
+	RegisterPriorityFunction("PriorityOne", PriorityOne, 1)
+
+	RegisterAlgorithmProvider(DefaultProvider, sets.NewString("PredicateOne"), sets.NewString("PriorityOne"))
+
+	configData := []byte(`{
+		"kind" : "Policy",
+		"apiVersion" : "v1"
+	}`)
+	var policy schedulerapi.Policy
+	if err := runtime.DecodeInto(latestschedulerapi.Codec, configData, &policy); err != nil {
+		t.Fatalf("Invalid configuration: %v", err)
+	}
+
+	config, err := factory.CreateFromConfig(policy)
+	if err != nil {
+		t.Fatalf("Failed to create scheduler from configuration: %v", err)
+	}
+	if _, found := config.Algorithm.Predicates()["PredicateOne"]; !found {
+		t.Errorf("Expected predicate PredicateOne from %q", DefaultProvider)
+	}
+	if len(config.Algorithm.Prioritizers()) != 1 || config.Algorithm.Prioritizers()[0].Name != "PriorityOne" {
+		t.Errorf("Expected priority PriorityOne from %q", DefaultProvider)
 	}
 }
 
